@@ -3,6 +3,7 @@
 /build
 /manifest.mf
 /nbproject
+/abc
 /.idea
 /*.iml
 /out
