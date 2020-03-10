@@ -94,6 +94,7 @@ public class PrimaryController implements Initializable, BaseController {
         // Set the color and round the corners of the search bar 
         searchBarBackground.setStyle("-fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + "; -fx-background-color: " + Info.forgroundColor + ";");
 
+
         // BACKGROUND
         // Set the color of the shade in the background
         backgroundShade.setFill(Paint.valueOf(Info.backgroundShadeColor));

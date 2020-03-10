@@ -16,8 +16,8 @@ public class Info {
 
     public static String fontColor1 = "#FFFFFF";
 
-    public static String accentStartColor = "#d21e1e"; //  #F25C54 mint green ish      #57ffcd
-    public static String accentEndColor = "#d21e1e"; //  #F7B267   light blue ish      #74c5ff
+    public static String accentStartColor = "#F25C54"; //  #F25C54 mint green ish      #57ffcd
+    public static String accentEndColor = "#F7B267"; //  #F7B267   light blue ish      #74c5ff
 
     public static LinearGradient accentGradient;
 

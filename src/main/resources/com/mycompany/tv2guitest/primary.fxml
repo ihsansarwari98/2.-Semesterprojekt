@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -60,14 +61,18 @@
                            </VBox.margin>
                            <children>
                               <Polygon fx:id="sideBarTopColor1" fill="#bdbdbd00" points="0.0, 12.0, 350.0, 12.0, 350.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
-                              <VBox fx:id="programListVBox" spacing="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+                              <VBox fx:id="programListVBox" spacing="20.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
                                  <children>
                                     <Label maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="24.0" prefWidth="237.0" text="Mine Produktioner" textFill="WHITE">
                                        <font>
                                           <Font name="Roboto Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <VBox fx:id="programList" spacing="20.0" VBox.vgrow="ALWAYS" />
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+                                       <content>
+                                          <VBox fx:id="programList" spacing="20.0" />
+                                       </content>
+                                    </ScrollPane>
                                  </children>
                               </VBox>
                            </children>

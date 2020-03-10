@@ -23,6 +23,7 @@ public class App extends Application {
 
         // Makes the background transparent
         scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+        scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
 
         // Makes the navigation bar transparent
         stage.initStyle(StageStyle.TRANSPARENT);
