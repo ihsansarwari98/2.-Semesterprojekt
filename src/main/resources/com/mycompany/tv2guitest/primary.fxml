@@ -68,7 +68,7 @@
                                           <Font name="Roboto Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+                                    <ScrollPane fx:id="productionScrollPane" fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
                                        <content>
                                           <VBox fx:id="programList" spacing="20.0" />
                                        </content>
@@ -97,61 +97,87 @@
             <AnchorPane fx:id="backgroundAP" style="-fx-background-color: ffffff;" HBox.hgrow="ALWAYS">
                <children>
                   <Polygon fx:id="backgroundShade" fill="#f7f7f7" points="1013.0, 621.0, 1013.0, 0.0, 132.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <BorderPane layoutX="280.0" layoutY="219.0" onMousePressed="#handleDeselect" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <center>
-                        <AnchorPane fx:id="searchBarBackground" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="500.0" style="-fx-background-color: #242424; -fx-background-radius: 25; -fx-border-radius: 25;" BorderPane.alignment="CENTER">
-                           <cursor>
-                              <Cursor fx:constant="TEXT" />
-                           </cursor>
-                           <children>
-                              <HBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <BorderPane prefHeight="25.0" prefWidth="25.0" HBox.hgrow="NEVER">
-                                       <center>
-                                          <ImageView fitHeight="18.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-                                             <image>
-                                                <Image url="@Images/searchIcon_white.png" />
-                                             </image>
-                                             <BorderPane.margin>
-                                                <Insets />
-                                             </BorderPane.margin>
-                                          </ImageView>
-                                       </center>
-                                       <HBox.margin>
-                                          <Insets left="10.0" />
-                                       </HBox.margin>
-                                    </BorderPane>
-                                    <TextField fx:id="textFieldSearchBar" onAction="#handleSearch" prefHeight="40.0" prefWidth="213.0" promptText="Søg efter TV-serie eller film..." style="-fx-background-color: transparent; -fx-text-fill: white;" HBox.hgrow="ALWAYS">
-                                       <font>
-                                          <Font name="Roboto" size="16.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="-15.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                    <BorderPane accessibleRole="BUTTON" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#handleSearch" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #444444; -fx-background-radius: 25; -fx-border-radius: 25;" HBox.hgrow="NEVER">
-                                       <center>
-                                          <Label graphicTextGap="0.0" text="Søg" textAlignment="CENTER" textFill="#f7f7f7">
-                                             <font>
-                                                <Font name="Roboto" size="16.0" />
-                                             </font>
-                                          </Label>
-                                       </center>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                       <HBox.margin>
-                                          <Insets bottom="4.0" right="4.0" top="4.0" />
-                                       </HBox.margin>
-                                    </BorderPane>
-                                 </children>
-                              </HBox>
-                           </children>
+                  <BorderPane layoutX="280.0" layoutY="219.0" onMousePressed="#handleDeselect" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+                     <top>
+                        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <BorderPane.margin>
                               <Insets />
                            </BorderPane.margin>
-                        </AnchorPane>
-                     </center>
+                           <children>
+                              <Rectangle fx:id="searchRectangleBG" arcHeight="40.0" arcWidth="40.0" cache="true" cacheHint="SPEED" height="200.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="500.0" StackPane.alignment="TOP_CENTER">
+                                 <fill>
+                                    <LinearGradient endX="1.0" startY="1.0">
+                                       <stops>
+                                          <Stop color="#62ffff" />
+                                          <Stop color="#00ffcc" offset="1.0" />
+                                       </stops>
+                                    </LinearGradient>
+                                 </fill>
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Rectangle>
+                              <VBox StackPane.alignment="TOP_CENTER">
+                                 <children>
+                                    <AnchorPane fx:id="searchBarBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="500.0" style="-fx-background-color: #242424; -fx-background-radius: 25; -fx-border-radius: 25;">
+                                       <cursor>
+                                          <Cursor fx:constant="TEXT" />
+                                       </cursor>
+                                       <children>
+                                          <HBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <BorderPane prefHeight="25.0" prefWidth="25.0" HBox.hgrow="NEVER">
+                                                   <center>
+                                                      <ImageView fitHeight="18.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                                                         <image>
+                                                            <Image url="@Images/searchIcon_white.png" />
+                                                         </image>
+                                                         <BorderPane.margin>
+                                                            <Insets />
+                                                         </BorderPane.margin>
+                                                      </ImageView>
+                                                   </center>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </BorderPane>
+                                                <TextField fx:id="textFieldSearchBar" onAction="#handleSearch" prefHeight="40.0" prefWidth="213.0" promptText="Søg efter TV-serie eller film..." style="-fx-background-color: transparent; -fx-text-fill: white;" HBox.hgrow="ALWAYS">
+                                                   <font>
+                                                      <Font name="Roboto" size="16.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="-15.0" />
+                                                   </HBox.margin>
+                                                </TextField>
+                                                <BorderPane accessibleRole="BUTTON" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#handleSearch" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: #444444; -fx-background-radius: 25; -fx-border-radius: 25;" HBox.hgrow="NEVER">
+                                                   <center>
+                                                      <Label graphicTextGap="0.0" text="Søg" textAlignment="CENTER" textFill="#f7f7f7">
+                                                         <font>
+                                                            <Font name="Roboto" size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </center>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <HBox.margin>
+                                                      <Insets bottom="4.0" right="4.0" top="4.0" />
+                                                   </HBox.margin>
+                                                </BorderPane>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </AnchorPane>
+                                    <ScrollPane fx:id="searchResultScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-border-color: transparent;" visible="false" VBox.vgrow="ALWAYS">
+                                       <content>
+                                          <VBox fx:id="searchResults" />
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </StackPane>
+                     </top>
                   </BorderPane>
                   <AnchorPane fx:id="menuCurve" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>

@@ -3,6 +3,7 @@ package com.mycompany.tv2guitest;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.animation.Interpolator;
@@ -10,13 +11,18 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
@@ -29,6 +35,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class PrimaryController implements Initializable, BaseController {
@@ -47,6 +54,8 @@ public class PrimaryController implements Initializable, BaseController {
     private AnchorPane backgroundAP;
     @FXML
     private VBox sidePanelBackground;
+    @FXML
+    private ScrollPane productionScrollPane;
     @FXML
     private Label nameLabel;
     @FXML
@@ -73,14 +82,55 @@ public class PrimaryController implements Initializable, BaseController {
     private Rectangle minimizeRectangle;
     @FXML
     private Circle loginCircle;
+    @FXML
+    private Rectangle searchRectangleBG;
+    @FXML
+    private ScrollPane searchResultScrollPane;
+    @FXML
+    private VBox searchResults;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setProperties();
+        updateProperties();
         Info.sidePanelOn = true;
+
+        // TRASH FOR TESTING
+        Info.productions.add(new Program("1", Program.Status.Red));
+        Info.productions.add(new Program("2", Program.Status.Red));
+        Info.productions.add(new Program("2", Program.Status.Red));
+        Info.productions.add(new Program("3", Program.Status.Red));
+        Info.productions.add(new Program("3", Program.Status.Red));
+        Info.productions.add(new Program("3", Program.Status.Red));
+        Info.productions.add(new Program("4", Program.Status.Red));
+        Info.productions.add(new Program("4", Program.Status.Red));
+        Info.productions.add(new Program("4", Program.Status.Red));
+        Info.productions.add(new Program("4", Program.Status.Red));
+        Info.productions.add(new Program("5", Program.Status.Red));
+        Info.productions.add(new Program("5", Program.Status.Red));
+        Info.productions.add(new Program("5", Program.Status.Red));
+        Info.productions.add(new Program("5", Program.Status.Red));
+        Info.productions.add(new Program("5", Program.Status.Red));
+        Info.productions.add(new Program("6", Program.Status.Red));
+        Info.productions.add(new Program("6", Program.Status.Red));
+        Info.productions.add(new Program("6", Program.Status.Red));
+        Info.productions.add(new Program("6", Program.Status.Red));
+        Info.productions.add(new Program("6", Program.Status.Red));
+        Info.productions.add(new Program("6", Program.Status.Red));
+        Info.productions.add(new Program("Pulp Fiction", Program.Status.Red));
+        Info.productions.add(new Program("Taxidermlia", Program.Status.Red));
+        Info.productions.add(new Program("Naked Lunch", Program.Status.Red));
+        Info.productions.add(new Program("There Will Be Blood", Program.Status.Red));
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), (ActionEvent event) -> {
+            // this code will be called every second
+            updateEverySecond();
+        }));
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
-    private void setProperties() {
+    private void updateProperties() {
         Info.updateColors();
         // BUTTONS
         // Set the color of the buttons
@@ -93,7 +143,7 @@ public class PrimaryController implements Initializable, BaseController {
         // SEARCH BAR
         // Set the color and round the corners of the search bar 
         searchBarBackground.setStyle("-fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + "; -fx-background-color: " + Info.forgroundColor + ";");
-
+        searchRectangleBG.setFill(Info.accentGradient);
 
         // BACKGROUND
         // Set the color of the shade in the background
@@ -112,15 +162,83 @@ public class PrimaryController implements Initializable, BaseController {
         // Set the color of side bar background
         sidePanelBackground.setStyle("-fx-background-color: " + Info.forgroundColor + ";");
 
-        /*
-        for (int i = 0; i < programList.getChildren().size(); i++) {
-            programList.getChildren().get(i).setStyle("-fx-text-fill: " + backgroundColor + ";-fx-font-size: " + fontSizeDefault + ";");
-
-        }
-         */
     }
 
-    // Handles what happends when you enter a search on the search bar
+    private void updateEverySecond() {
+        if (textFieldSearchBar.isFocused()) {
+            wordSearch();
+        }
+
+        // TODO: remove later
+        updateProductionList();
+
+    }
+
+    private String tempUserSearch = "";
+
+    private void wordSearch() {
+        String userSearch = textFieldSearchBar.getText().toLowerCase();
+
+        // Only updates when a change is made in the textField
+        if (!userSearch.equals(tempUserSearch)) {
+            tempUserSearch = userSearch;
+            if (!userSearch.isBlank()) {
+                searchResults.getChildren().clear();
+                for (int i = 0; i < Info.productions.size(); i++) {
+                    String title = Info.productions.get(i).getTitle().toLowerCase();
+                    // if the text written in the searchbar is equal to any result in the production list // DATABASE
+                    if (title.contains(userSearch)) { // DATABASE
+                        AnchorPane ap0 = new AnchorPane();
+                        Label titleText = new Label(Info.productions.get(i).getTitle());
+
+                        searchResults.getChildren().add(ap0);
+                        ap0.getChildren().addAll(titleText);
+
+                        searchRectangleBG.setVisible(true);
+                        searchResultScrollPane.setVisible(true);
+
+                        titleText.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+
+                    }
+                    calculateSearchResults();
+                }
+
+                // Goes through each Label and AnchorPane and sets the style accordingly
+                for (int i = 0; i < searchResults.getChildren().size(); i++) {
+                    AnchorPane ap0 = (AnchorPane) searchResults.getChildren().get(i);
+                    Label titleText = (Label) ap0.getChildren().get(0);
+
+                    titleText.setAlignment(Pos.CENTER_LEFT);
+                    searchResults.setAlignment(Pos.CENTER_LEFT);
+                    searchResults.setSpacing(10);
+                    ap0.setCursor(Cursor.HAND);
+                    titleText.setPadding(new Insets(0, 0, 0, 50));
+
+                    ap0.setOnMouseEntered(this::handleSearchMenuHoveringEnter);
+                    ap0.setOnMouseExited(this::handleSearchMenuHoveringExit);
+                    ap0.setOnMouseClicked(this::handleSearchMenuHoveringClicked);
+
+                }
+            }
+        } else if (userSearch.isBlank()) {
+            searchRectangleBG.setVisible(false);
+            searchResultScrollPane.setVisible(false);
+        }
+    }
+
+    private void calculateSearchResults() {
+
+        int searchResultSize = searchResults.getChildren().size();
+        double height = searchRectangleBG.getHeight();
+
+        if (searchResultSize <= 0) {
+            searchRectangleBG.setHeight(searchBarBackground.getHeight()); // no results
+        } else if (searchResultSize <= 3) { // Maximum amount of search results shown
+            searchRectangleBG.setHeight(searchBarBackground.getHeight() + 12 + (36 * searchResultSize));
+        }
+    }
+
+    // Handles what happens when you enter a search on the search bar
     @FXML
     private void handleSearch() {
 
@@ -147,20 +265,19 @@ public class PrimaryController implements Initializable, BaseController {
             Info.productions.add(new Program(programTitle, Program.Status.Red));
 
             updateProductionList();
-
-
-        } else if (!"".equals(textFieldSearchBar.getText().trim())) {
-            nameLabel.setText(textFieldSearchBar.getText());
         }
+
         textFieldSearchBar.clear();
 
-        System.out.println(Info.productions);
-        setProperties();
+        updateProperties();
     }
 
     @FXML
     private void handleDeselect() {
         backgroundAP.requestFocus();
+        searchRectangleBG.setVisible(false);
+        searchResultScrollPane.setVisible(false);
+        calculateSearchResults();
     }
 
     @FXML
@@ -184,7 +301,6 @@ public class PrimaryController implements Initializable, BaseController {
         }
     }
 
-
     private void updateProductionList() {
 
         Collections.sort(Info.productions);
@@ -202,6 +318,7 @@ public class PrimaryController implements Initializable, BaseController {
             hb.getChildren().addAll(circle, title);
             hb.setSpacing(25);
             hb.setAlignment(Pos.CENTER_LEFT);
+            title.setCursor(Cursor.HAND);
 
             if (Info.productions.get(i).getStatus() == Program.Status.Red) {
                 circle.setFill(Paint.valueOf(Info.statusRed)); // DATABASE
@@ -232,6 +349,28 @@ public class PrimaryController implements Initializable, BaseController {
     private void sidePanelOff() {
         menuCurve.setOpacity(0);
         animateSidePanel(0);
+    }
+
+    public void handleSearchMenuHoveringClicked(MouseEvent event) {
+        AnchorPane ap0 = ((AnchorPane) event.getSource());
+        Label text = (Label) ap0.getChildren().get(0);
+        System.out.println(text.getText());
+    }
+
+    public void handleSearchMenuHoveringEnter(MouseEvent event) {
+        AnchorPane ap0 = ((AnchorPane) event.getSource());
+        Label text = (Label) ap0.getChildren().get(0);
+        text.setStyle("-fx-text-fill: white; -fx-font-size: " + Info.fontSizeDefault + ";");
+        //ap0.setStyle("-fx-background-color: rgba(0,0,0,0.20) ; -fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + ";");
+        // TODO: Få ap0 til at blive inden for "searchRectangleBG"
+    }
+
+    public void handleSearchMenuHoveringExit(MouseEvent event) {
+        AnchorPane ap0 = ((AnchorPane) event.getSource());
+        Label text = (Label) ap0.getChildren().get(0);
+        text.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+        //ap0.setStyle("-fx-background-color: transparent;");
+
     }
 
     @Override
