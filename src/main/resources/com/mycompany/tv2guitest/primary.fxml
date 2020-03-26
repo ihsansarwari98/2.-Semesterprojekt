@@ -104,7 +104,7 @@
                               <Insets />
                            </BorderPane.margin>
                            <children>
-                              <Rectangle fx:id="searchRectangleBG" arcHeight="40.0" arcWidth="40.0" cache="true" cacheHint="SPEED" height="200.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="500.0" StackPane.alignment="TOP_CENTER">
+                              <Rectangle fx:id="searchRectangleBG" arcHeight="40.0" arcWidth="40.0" cache="true" cacheHint="SPEED" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="500.0" StackPane.alignment="TOP_CENTER">
                                  <fill>
                                     <LinearGradient endX="1.0" startY="1.0">
                                        <stops>

@@ -1,5 +1,6 @@
 package com.mycompany.tv2guitest;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Program implements Comparable<Program> {
@@ -7,11 +8,16 @@ public class Program implements Comparable<Program> {
     private String title;
     private Date deadline;
     private Status status;
+    private ArrayList<Credit> credits = new ArrayList<>();
 
     public Program(String title, Status status) {
         this.title = title;
         this.deadline = new Date();
         this.status = status;
+    }
+
+    public void addCredit(String name, String role) {
+        credits.add(new Credit(name, role));
     }
 
     @Override
@@ -46,5 +52,9 @@ public class Program implements Comparable<Program> {
 
     public Date getDeadline() {
         return deadline;
+    }
+
+    public ArrayList getCredits() {
+        return credits;
     }
 }

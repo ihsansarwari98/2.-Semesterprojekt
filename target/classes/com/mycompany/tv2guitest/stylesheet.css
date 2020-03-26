@@ -39,7 +39,7 @@
 .scroll-bar:vertical .thumb {
     -fx-background-color: white /*#242424*/;
     -fx-background-radius: 5em;
-    -fx-pref-width: 40px;
-    -fx-background-insets: 5, 30, 0;
+    -fx-pref-width: 4px;
+    -fx-background-insets: 5, 0, 0;
 }
 
