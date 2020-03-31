@@ -13,4 +13,12 @@ public class Credit {
     public String toString() {
         return name + " is " + role;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getRole() {
+        return role;
+    }
 }

@@ -3,7 +3,6 @@ package com.mycompany.tv2guitest;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.animation.Interpolator;
@@ -17,28 +16,23 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.BlendMode;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
-public class PrimaryController implements Initializable, BaseController {
+public class PrimaryController implements Initializable {
 
     @FXML
     private VBox programList;
@@ -88,38 +82,50 @@ public class PrimaryController implements Initializable, BaseController {
     private ScrollPane searchResultScrollPane;
     @FXML
     private VBox searchResults;
+    @FXML
+    private Label descriptionTitleText;
+    @FXML
+    private ScrollPane descriptionScrollPane;
+    @FXML
+    private VBox descriptionVBox;
+
+    // idk what im doing
+    private PersistenceHandler persistanceHandler;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateProperties();
         Info.sidePanelOn = true;
+        // idk
+        persistanceHandler = PersistenceHandler.getInstance();
 
         // TRASH FOR TESTING
-        Info.productions.add(new Program("1", Program.Status.Red));
-        Info.productions.add(new Program("2", Program.Status.Red));
-        Info.productions.add(new Program("2", Program.Status.Red));
-        Info.productions.add(new Program("3", Program.Status.Red));
-        Info.productions.add(new Program("3", Program.Status.Red));
-        Info.productions.add(new Program("3", Program.Status.Red));
-        Info.productions.add(new Program("4", Program.Status.Red));
-        Info.productions.add(new Program("4", Program.Status.Red));
-        Info.productions.add(new Program("4", Program.Status.Red));
-        Info.productions.add(new Program("4", Program.Status.Red));
-        Info.productions.add(new Program("5", Program.Status.Red));
-        Info.productions.add(new Program("5", Program.Status.Red));
-        Info.productions.add(new Program("5", Program.Status.Red));
-        Info.productions.add(new Program("5", Program.Status.Red));
-        Info.productions.add(new Program("5", Program.Status.Red));
-        Info.productions.add(new Program("6", Program.Status.Red));
-        Info.productions.add(new Program("6", Program.Status.Red));
-        Info.productions.add(new Program("6", Program.Status.Red));
-        Info.productions.add(new Program("6", Program.Status.Red));
-        Info.productions.add(new Program("6", Program.Status.Red));
-        Info.productions.add(new Program("6", Program.Status.Red));
-        Info.productions.add(new Program("Pulp Fiction", Program.Status.Red));
-        Info.productions.add(new Program("Taxidermlia", Program.Status.Red));
-        Info.productions.add(new Program("Naked Lunch", Program.Status.Red));
-        Info.productions.add(new Program("There Will Be Blood", Program.Status.Red));
+        Info.productions.add(new Production("1", Production.Status.Red));
+        Info.productions.add(new Production("2", Production.Status.Red));
+        Info.productions.add(new Production("2", Production.Status.Red));
+        Info.productions.add(new Production("3", Production.Status.Red));
+        Info.productions.add(new Production("3", Production.Status.Red));
+        Info.productions.add(new Production("3", Production.Status.Red));
+        Info.productions.add(new Production("4", Production.Status.Red));
+        Info.productions.add(new Production("4", Production.Status.Red));
+        Info.productions.add(new Production("4", Production.Status.Red));
+        Info.productions.add(new Production("4", Production.Status.Red));
+        Info.productions.add(new Production("5", Production.Status.Red));
+        Info.productions.add(new Production("5", Production.Status.Red));
+        Info.productions.add(new Production("5", Production.Status.Red));
+        Info.productions.add(new Production("5", Production.Status.Red));
+        Info.productions.add(new Production("5", Production.Status.Red));
+        Info.productions.add(new Production("6", Production.Status.Red));
+        Info.productions.add(new Production("6", Production.Status.Red));
+        Info.productions.add(new Production("6", Production.Status.Red));
+        Info.productions.add(new Production("6", Production.Status.Red));
+        Info.productions.add(new Production("6", Production.Status.Red));
+        Info.productions.add(new Production("6", Production.Status.Red));
+        Info.productions.add(new Production("Pulp Fiction", Production.Status.Red));
+        Info.productions.add(new Production("Taxidermlia", Production.Status.Red));
+        Info.productions.add(new Production("Naked Lunch", Production.Status.Red));
+        Info.productions.add(new Production("There Will Be Blood", Production.Status.Red));
+        /////
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), (ActionEvent event) -> {
             // this code will be called every second
@@ -167,11 +173,47 @@ public class PrimaryController implements Initializable, BaseController {
     private void updateEverySecond() {
         if (textFieldSearchBar.isFocused()) {
             wordSearch();
+
+
         }
+
+        handleSearchFocus();
+
 
         // TODO: remove later
         updateProductionList();
+    }
 
+    private void showCreditList(Production program) {
+        descriptionVBox.getChildren().clear();
+
+        for (int i = 0; i < program.getCredits().size(); i++) {
+            Credit credit = (Credit)program.getCredits().get(i);
+            Label name = new Label(credit.getName());
+
+            descriptionVBox.getChildren().add(name);
+            name.setAlignment(Pos.TOP_CENTER);
+            name.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+            name.applyCss();
+        }
+    }
+    
+    private void handleSearchFocus() {
+        for (int i = 0; i < searchResults.getChildren().size(); i++) {
+            AnchorPane ap = (AnchorPane)searchResults.getChildren().get(i);
+            Label titleText = (Label)ap.getChildren().get(0);
+            if (titleText.isFocused()) {
+                titleText.setOnKeyPressed(e -> {
+                    if (e.getCode() == KeyCode.ENTER) {
+                        textFieldSearchBar.setText(titleText.getText());
+                        handleSearch();
+                    }
+                });
+                titleText.setStyle("-fx-text-fill: white; -fx-font-size: " + Info.fontSizeDefault + ";"); // same as hover
+            } else {
+                titleText.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+            }
+        }
     }
 
     private String tempUserSearch = "";
@@ -221,6 +263,7 @@ public class PrimaryController implements Initializable, BaseController {
                     titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
                     titleText.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
                     titleText.setAlignment(Pos.CENTER_LEFT);
+                    titleText.setFocusTraversable(true);
 
                     ap.setOnMouseEntered(this::handleSearchMenuHoveringEnter);
                     ap.setOnMouseExited(this::handleSearchMenuHoveringExit);
@@ -253,14 +296,6 @@ public class PrimaryController implements Initializable, BaseController {
     @FXML
     private void handleSearch() { // TODO: REWORK EVERYTHING
 
-        for (int i = 0; i < Info.productions.size(); i++) {
-            if (textFieldSearchBar.getText().equals(Info.productions.get(i).getTitle())) {
-                System.out.println(Info.productions.get(i).getCredits());
-
-            }
-
-        }
-
         String startColorCommand = "!startColor ";
         String endColorCommand = "!endColor ";
         String switchColorCommand = "!switchColor";
@@ -284,7 +319,7 @@ public class PrimaryController implements Initializable, BaseController {
 
         } else if ((textFieldSearchBar.getText().startsWith(addProgramCommand))) {
             String programTitle = textFieldSearchBar.getText().substring(addProgramCommand.length());
-            Info.productions.add(new Program(programTitle, Program.Status.Red));
+            Info.productions.add(new Production(programTitle, Production.Status.Red));
 
             updateProductionList();
         } else if (textFieldSearchBar.getText().startsWith(addCreditCommand)) {
@@ -307,10 +342,20 @@ public class PrimaryController implements Initializable, BaseController {
                     System.out.println(Info.productions.get(i).getCredits());
                 }
             }
+        } else {
+            if (Info.getProgram(textFieldSearchBar.getText()) != null) {
+                Production program = Info.getProgram(textFieldSearchBar.getText());
+                System.out.println(program);
+                System.out.println(Info.productions);
+                descriptionTitleText.setText(program.getTitle());
+                showCreditList(program);
+            } else {
+                System.out.println("Production doesn't exist in the database");
+            }
         }
 
         textFieldSearchBar.clear();
-
+        handleDeselect();
         updateProperties();
     }
 
@@ -324,7 +369,14 @@ public class PrimaryController implements Initializable, BaseController {
 
     @FXML
     private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
+        /*
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("secondary.fxml"));
+        AnchorPane view = fxmlLoader.load();
+        sidePanelBackground.getChildren().add(view);
+
+        //App.setRoot("secondary");
+         */
+        System.out.println(PersistenceHandler.getUsers());
     }
 
     @FXML
@@ -346,7 +398,6 @@ public class PrimaryController implements Initializable, BaseController {
     private void updateProductionList() {
 
         Collections.sort(Info.productions);
-
         programList.getChildren().clear();
 
         for (int i = 0; i < Info.productions.size(); i++) {
@@ -362,9 +413,9 @@ public class PrimaryController implements Initializable, BaseController {
             hb.setAlignment(Pos.CENTER_LEFT);
             title.setCursor(Cursor.HAND);
 
-            if (Info.productions.get(i).getStatus() == Program.Status.Red) {
+            if (Info.productions.get(i).getStatus() == Production.Status.Red) {
                 circle.setFill(Paint.valueOf(Info.statusRed)); // DATABASE
-            } else if (Info.productions.get(i).getStatus() == Program.Status.Yellow) {
+            } else if (Info.productions.get(i).getStatus() == Production.Status.Yellow) {
                 circle.setFill(Paint.valueOf(Info.statusYellow)); // DATABASE
             } else {
                 circle.setFill(Paint.valueOf(Info.statusGreen)); // DATABASE
@@ -393,12 +444,24 @@ public class PrimaryController implements Initializable, BaseController {
         animateSidePanel(0);
     }
 
+    /////////////////////////////////////////////////////
+/*
+    if (enter is clicked && isSearching) {
+        Label firstElement = (Label)searchResults.getChildren().get(0);
+        Info.getProgram(firstElement.getText());
+    }
+*/
+    /////////////////////////////////////////////////////
+
+    @FXML
     public void handleSearchMenuHoveringClicked(MouseEvent event) {
         AnchorPane ap = ((AnchorPane) event.getSource());
         Label titleText = (Label) ap.getChildren().get(0);
         textFieldSearchBar.setText(titleText.getText());
+        handleSearch();
     }
 
+    @FXML
     public void handleSearchMenuHoveringEnter(MouseEvent event) {
         AnchorPane ap = ((AnchorPane) event.getSource());
         Label titleText = (Label) ap.getChildren().get(0);
@@ -407,6 +470,7 @@ public class PrimaryController implements Initializable, BaseController {
         // TODO: Få ap til at blive inden for "searchRectangleBG"
     }
 
+    @FXML
     public void handleSearchMenuHoveringExit(MouseEvent event) {
         AnchorPane ap = ((AnchorPane) event.getSource());
         Label titleText = (Label) ap.getChildren().get(0);
@@ -415,45 +479,45 @@ public class PrimaryController implements Initializable, BaseController {
 
     }
 
-    @Override
+    @FXML
     public void handleTopDragClicked(MouseEvent event) {
         if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
             maximizeButtonAction();
         }
     }
 
-    @Override
+    @FXML
     public void handleTopDragDragged(MouseEvent event) {
         App.stage.setX(event.getScreenX() + App.xOffset);
         App.stage.setY(event.getScreenY() + App.yOffset);
     }
 
-    @Override
+    @FXML
     public void handleTopDragPressed(MouseEvent event) {
         App.xOffset = App.stage.getX() - event.getScreenX();
         App.yOffset = App.stage.getY() - event.getScreenY();
     }
 
-    @Override
+    @FXML
     public void handleButtonHoveringEnter(MouseEvent event) {
         StackPane hoveredObject = ((StackPane) event.getSource());
         hoveredObject.setScaleX(hoveredObject.getScaleX() + Info.scaleAmount);
         hoveredObject.setScaleY(hoveredObject.getScaleY() + Info.scaleAmount);
     }
 
-    @Override
+    @FXML
     public void handleButtonHoveringExit(MouseEvent event) {
         StackPane hoveredObject = ((StackPane) event.getSource());
         hoveredObject.setScaleX(hoveredObject.getScaleX() - Info.scaleAmount);
         hoveredObject.setScaleY(hoveredObject.getScaleY() - Info.scaleAmount);
     }
 
-    @Override
+    @FXML
     public void minimizeButtonAction() {
         App.stage.setIconified(true);
     }
 
-    @Override
+    @FXML
     public void maximizeButtonAction() {
         if (!App.stage.isMaximized()) {
             System.out.println("fullscreen");
@@ -464,7 +528,7 @@ public class PrimaryController implements Initializable, BaseController {
         }
     }
 
-    @Override
+    @FXML
     public void closeButtonAction() {
         Platform.exit();
     }

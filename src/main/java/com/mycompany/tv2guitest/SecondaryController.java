@@ -24,10 +24,6 @@ import javafx.scene.shape.Rectangle;
 public class SecondaryController implements Initializable {   
 
     @FXML
-    private AnchorPane backgroundAP;
-    @FXML
-    private Polygon backgroundShade;
-    @FXML
     private AnchorPane usernameBackground;
     @FXML
     private AnchorPane passwordBackground;
@@ -41,20 +37,6 @@ public class SecondaryController implements Initializable {
     private Circle loginCircle1;
     @FXML
     private Circle loginCircle2;
-    @FXML
-    private Rectangle minimizeRectangle;
-    @FXML
-    private Rectangle maximizeRectangle;
-    @FXML
-    private StackPane closeButton;
-    @FXML
-    private Rectangle closeRectangle1;
-    @FXML
-    private Rectangle closeRectangle2;
-    @FXML
-    private AnchorPane topDragBar;
-    @FXML
-    private StackPane loginButton;
     @FXML
     private Rectangle loginRectangle;
 
@@ -73,24 +55,11 @@ public class SecondaryController implements Initializable {
         // Set the color of the buttons
         loginRectangle.setFill(accentGradient);
 
-        closeRectangle1.setFill(accentGradient);
-        closeRectangle2.setFill(accentGradient);
-        maximizeRectangle.setFill(accentGradient);
-        minimizeRectangle.setFill(accentGradient);
-
         usernameBackground.setStyle("-fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + "; -fx-background-color: " + Info.forgroundColor + ";");
         passwordBackground.setStyle("-fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + "; -fx-background-color: " + Info.forgroundColor + ";");
 
-        // BACKGROUND
-        // Set the color of the shade in the background
-        backgroundShade.setFill(Paint.valueOf(Info.backgroundShadeColor));
-        backgroundAP.setStyle("-fx-background-color: " + Info.backgroundColor + ";");
     }
-    
-    @FXML
-    private void handleDeselect() {
-        backgroundAP.requestFocus();
-    }
+
 
     @FXML
     private void handleButtonHoveringEnter(MouseEvent event) {

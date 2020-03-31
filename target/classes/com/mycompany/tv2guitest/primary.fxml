@@ -23,13 +23,13 @@
    <children>
       <HBox layoutX="-263.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-          <AnchorPane fx:id="sideBar" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="720.0" prefWidth="320.0">
+          <AnchorPane fx:id="sideBar" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="720.0" prefWidth="320.0" HBox.hgrow="SOMETIMES">
                <children>
                   <VBox fx:id="sidePanelBackground" nodeOrientation="LEFT_TO_RIGHT" prefWidth="0.0" style="-fx-background-color: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane>
+                        <AnchorPane maxHeight="325.0" prefHeight="0.0" prefWidth="350.0" VBox.vgrow="NEVER">
                            <children>
-                              <Polygon fx:id="sideBarTopColor" points="0.0, 163.0, 350.0, 91.0, 350.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0">
+                              <Polygon fx:id="sideBarTopColor" points="0.0, 163.0, 350.0, 91.0, 350.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <fill>
                                     <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
                                        <stops>
@@ -39,14 +39,14 @@
                                     </LinearGradient>
                                  </fill>
                               </Polygon>
-                              <VBox spacing="2.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="30.0">
+                              <VBox prefWidth="260.0" spacing="2.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="30.0">
                                  <children>
                                     <Label fx:id="nameLabel" text="Michael Bille Jensen Frandsen" textFill="WHITE" wrapText="true" VBox.vgrow="NEVER">
                                        <font>
                                           <Font name="Roboto Bold" size="24.0" />
                                        </font>
                                     </Label>
-                                    <Label maxWidth="-Infinity" prefWidth="180.0" text="Producer" textFill="#242424" wrapText="true">
+                                    <Label text="Producer" textFill="#242424" wrapText="true">
                                        <font>
                                           <Font name="Roboto" size="16.0" />
                                        </font>
@@ -61,9 +61,9 @@
                            </VBox.margin>
                            <children>
                               <Polygon fx:id="sideBarTopColor1" fill="#bdbdbd00" points="0.0, 12.0, 350.0, 12.0, 350.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
-                              <VBox fx:id="programListVBox" spacing="20.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+                              <VBox fx:id="programListVBox" prefHeight="89.0" prefWidth="290.0" spacing="20.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
                                  <children>
-                                    <Label maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="24.0" prefWidth="237.0" text="Mine Produktioner" textFill="WHITE">
+                                    <Label text="Mine Produktioner" textFill="WHITE" wrapText="true" VBox.vgrow="NEVER">
                                        <font>
                                           <Font name="Roboto Bold" size="20.0" />
                                        </font>
@@ -97,7 +97,23 @@
             <AnchorPane fx:id="backgroundAP" style="-fx-background-color: ffffff;" HBox.hgrow="ALWAYS">
                <children>
                   <Polygon fx:id="backgroundShade" fill="#f7f7f7" points="1013.0, 621.0, 1013.0, 0.0, 132.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <BorderPane layoutX="280.0" layoutY="219.0" onMousePressed="#handleDeselect" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+                  <AnchorPane fx:id="menuCurve" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <StackPane alignment="BOTTOM_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                           <children>
+                              <Rectangle fx:id="buttomCurveColor" fill="#242424" height="25.0" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" width="25.0" />
+                              <Circle fx:id="buttomCurveOverlap" fill="WHITE" radius="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                           </children>
+                        </StackPane>
+                        <StackPane alignment="TOP_LEFT">
+                           <children>
+                              <Rectangle fx:id="topCurveColor" fill="#74c5ff" height="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+                              <Circle fx:id="topCurveOverlap" fill="WHITE" radius="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </AnchorPane>
+                  <BorderPane layoutX="280.0" layoutY="219.0" onMousePressed="#handleDeselect" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
                      <top>
                         <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <BorderPane.margin>
@@ -178,23 +194,23 @@
                            </children>
                         </StackPane>
                      </top>
+                     <center>
+                        <VBox alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
+                           <children>
+                              <Label fx:id="descriptionTitleText" alignment="TOP_CENTER" text="Title" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Roboto Bold" size="48.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="descriptionScrollPane" fitToHeight="true" fitToWidth="true" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                 <content>
+                                    <VBox fx:id="descriptionVBox" alignment="TOP_CENTER" spacing="20.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                     </center>
                   </BorderPane>
-                  <AnchorPane fx:id="menuCurve" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <StackPane alignment="BOTTOM_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-                           <children>
-                              <Rectangle fx:id="buttomCurveColor" fill="#242424" height="25.0" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" width="25.0" />
-                              <Circle fx:id="buttomCurveOverlap" fill="WHITE" radius="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-                           </children>
-                        </StackPane>
-                        <StackPane alignment="TOP_LEFT">
-                           <children>
-                              <Rectangle fx:id="topCurveColor" fill="#74c5ff" height="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
-                              <Circle fx:id="topCurveOverlap" fill="WHITE" radius="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-                           </children>
-                        </StackPane>
-                     </children>
-                  </AnchorPane>
                   <HBox layoutY="40.0" spacing="16.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
                      <children>
                         <StackPane onMouseClicked="#minimizeButtonAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">

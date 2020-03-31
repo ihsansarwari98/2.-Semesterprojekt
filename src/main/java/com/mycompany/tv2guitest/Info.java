@@ -2,7 +2,6 @@ package com.mycompany.tv2guitest;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.converter.PaintConverter;
 import javafx.scene.paint.*;
 
 public class Info {
@@ -36,7 +35,17 @@ public class Info {
 
     public static boolean sidePanelOn;
 
-    public static ObservableList<Program> productions = FXCollections.observableArrayList(); // DATABASE
+    public static ObservableList<Production> productions = FXCollections.observableArrayList(); // DATABASE
+
+    public static Production getProgram(String title) {
+        Production temp = null;
+        for (Production production : productions) {
+            if (title.equals(production.getTitle())) {
+                temp = production;
+            }
+        }
+        return temp;
+    }
 
     public static void updateColors() {
         // Create the stops

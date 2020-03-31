@@ -6,188 +6,103 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.tv2guitest.SecondaryController">
+<AnchorPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.tv2guitest.SecondaryController">
    <children>
-      <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane fx:id="backgroundAP" style="-fx-background-color: ffffff;" HBox.hgrow="ALWAYS">
+            <AnchorPane fx:id="usernameBackground" prefHeight="40.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-radius: 25;" VBox.vgrow="NEVER">
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
                <children>
-                  <Polygon fx:id="backgroundShade" fill="#f7f7f7" points="1013.0, 621.0, 1013.0, 0.0, 132.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <BorderPane layoutX="280.0" layoutY="219.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <center>
-                        <VBox alignment="CENTER" onMousePressed="#handleDeselect" spacing="10.0" BorderPane.alignment="TOP_CENTER">
-                           <children>
-                              <AnchorPane fx:id="usernameBackground" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" style="-fx-background-color: #242424; -fx-background-radius: 25; -fx-border-radius: 25;">
-                                 <cursor>
-                                    <Cursor fx:constant="TEXT" />
-                                 </cursor>
-                                 <children>
-                                    <TextField fx:id="usernameText" onAction="#usernameAction" promptText="Username" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-highlight-text-fill: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <font>
-                                          <Font name="Roboto" size="16.0" />
-                                       </font>
-                                       <padding>
-                                          <Insets left="30.0" />
-                                       </padding>
-                                    </TextField>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane fx:id="passwordBackground" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" style="-fx-background-color: #242424; -fx-background-radius: 25; -fx-border-radius: 25;">
-                                 <children>
-                                    <PasswordField fx:id="passwordText" onAction="#passwordAction" promptText="Password" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-highlight-text-fill: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <font>
-                                          <Font name="Roboto" size="16.0" />
-                                       </font>
-                                       <padding>
-                                          <Insets left="30.0" />
-                                       </padding>
-                                    </PasswordField>
-                                 </children>
-                              </AnchorPane>
-                              <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" spacing="5.0" VBox.vgrow="NEVER">
-                                 <children>
-                                    <Circle fx:id="loginCircle" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
-                                       <fill>
-                                          <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
-                                             <stops>
-                                                <Stop color="#57ffcd" />
-                                                <Stop color="#74c5ff" offset="1.0" />
-                                             </stops>
-                                          </LinearGradient>
-                                       </fill>
-                                    </Circle>
-                                    <Circle fx:id="loginCircle1" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
-                                       <fill>
-                                          <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
-                                             <stops>
-                                                <Stop color="#57ffcd" />
-                                                <Stop color="#74c5ff" offset="1.0" />
-                                             </stops>
-                                          </LinearGradient>
-                                       </fill>
-                                    </Circle>
-                                    <Circle fx:id="loginCircle2" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
-                                       <fill>
-                                          <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
-                                             <stops>
-                                                <Stop color="#57ffcd" />
-                                                <Stop color="#74c5ff" offset="1.0" />
-                                             </stops>
-                                          </LinearGradient>
-                                       </fill>
-                                    </Circle>
-                                 </children>
-                              </HBox>
-                              <StackPane fx:id="loginButton" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#loginAction" prefHeight="0.0" prefWidth="0.0">
-                                 <children>
-                                    <Rectangle fx:id="loginRectangle" arcHeight="40.0" arcWidth="40.0" height="40.0" stroke="BLACK" strokeLineCap="ROUND" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="108.0">
-                                       <fill>
-                                          <LinearGradient endX="1.0" endY="0.10952380952380958" startY="0.9476190476190476">
-                                             <stops>
-                                                <Stop color="#57ffcd" />
-                                                <Stop color="#74c5ff" offset="1.0" />
-                                             </stops>
-                                          </LinearGradient>
-                                       </fill>
-                                    </Rectangle>
-                                    <Label text="Log In" textFill="WHITE">
-                                       <font>
-                                          <Font name="Roboto Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </StackPane>
-                           </children>
-                        </VBox>
-                     </center>
-                  </BorderPane>
-                  <HBox layoutY="40.0" spacing="16.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
-                     <children>
-                        <StackPane onMouseClicked="#minimizeAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
-                           <children>
-                              <Rectangle fx:id="minimizeRectangle" arcHeight="5.0" arcWidth="5.0" height="4.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="18.0" StackPane.alignment="BOTTOM_CENTER">
-                                 <fill>
-                                    <LinearGradient endX="1.0" endY="0.13809523809523805" startY="0.9095238095238095">
-                                       <stops>
-                                          <Stop color="#57ffcd" />
-                                          <Stop color="#74c5ff" offset="1.0" />
-                                       </stops>
-                                    </LinearGradient>
-                                 </fill>
-                                 <StackPane.margin>
-                                    <Insets bottom="1.0" />
-                                 </StackPane.margin>
-                              </Rectangle>
-                           </children>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </StackPane>
-                        <StackPane onMouseClicked="#maximizeAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
-                           <children>
-                              <Rectangle fx:id="maximizeRectangle" arcHeight="5.0" arcWidth="5.0" height="18.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="18.0">
-                                 <fill>
-                                    <LinearGradient endX="1.0" endY="0.13809523809523805" startY="0.9095238095238095">
-                                       <stops>
-                                          <Stop color="#57ffcd" />
-                                          <Stop color="#74c5ff" offset="1.0" />
-                                       </stops>
-                                    </LinearGradient>
-                                 </fill>
-                              </Rectangle>
-                           </children>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </StackPane>
-                        <StackPane fx:id="closeButton" onMouseClicked="#closeButtonAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Rectangle fx:id="closeRectangle1" arcHeight="5.0" arcWidth="5.0" height="5.0" rotate="45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="22.0">
-                                 <fill>
-                                    <LinearGradient endX="1.0" endY="0.07142857142857142" startY="1.0">
-                                       <stops>
-                                          <Stop color="#57ffcd" />
-                                          <Stop color="#1f93ff" offset="0.5208753011810247" />
-                                          <Stop color="#74c5ff" offset="1.0" />
-                                       </stops>
-                                    </LinearGradient>
-                                 </fill>
-                              </Rectangle>
-                              <Rectangle fx:id="closeRectangle2" arcHeight="5.0" arcWidth="5.0" height="5.0" rotate="-45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="22.0">
-                                 <fill>
-                                    <LinearGradient endX="1.0" endY="0.07142857142857142" startY="1.0">
-                                       <stops>
-                                          <Stop color="#57ffcd" />
-                                          <Stop color="#74c5ff" offset="1.0" />
-                                       </stops>
-                                    </LinearGradient>
-                                 </fill>
-                              </Rectangle>
-                           </children>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </StackPane>
-                     </children>
-                  </HBox>
+                  <TextField fx:id="usernameText" onAction="#usernameAction" promptText="Username" style="-fx-background-color: transparent; -fx-text-fill: #242424; -fx-highlight-text-fill: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="Roboto" size="16.0" />
+                     </font>
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                  </TextField>
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="passwordBackground" prefHeight="40.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-radius: 25;" VBox.vgrow="NEVER">
+               <children>
+                  <PasswordField fx:id="passwordText" onAction="#passwordAction" promptText="Password" style="-fx-background-color: white; -fx-text-fill: #242424; -fx-highlight-text-fill: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="Roboto" size="16.0" />
+                     </font>
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                  </PasswordField>
+               </children>
+            </AnchorPane>
+            <HBox alignment="CENTER" spacing="5.0" VBox.vgrow="NEVER">
+               <children>
+                  <Circle fx:id="loginCircle" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+                     <fill>
+                        <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
+                           <stops>
+                              <Stop color="#57ffcd" />
+                              <Stop color="#74c5ff" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Circle>
+                  <Circle fx:id="loginCircle1" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+                     <fill>
+                        <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
+                           <stops>
+                              <Stop color="#57ffcd" />
+                              <Stop color="#74c5ff" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Circle>
+                  <Circle fx:id="loginCircle2" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+                     <fill>
+                        <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
+                           <stops>
+                              <Stop color="#57ffcd" />
+                              <Stop color="#74c5ff" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Circle>
+               </children>
+            </HBox>
+            <StackPane fx:id="loginButton" onMouseClicked="#loginAction">
+               <children>
+                  <Rectangle fx:id="loginRectangle" arcHeight="40.0" arcWidth="40.0" height="40.0" stroke="BLACK" strokeLineCap="ROUND" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="100.0">
+                     <fill>
+                        <LinearGradient endX="1.0" endY="0.10952380952380958" startY="0.9476190476190476">
+                           <stops>
+                              <Stop color="#57ffcd" />
+                              <Stop color="#74c5ff" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Rectangle>
+                  <Label text="Log In" textFill="WHITE">
+                     <font>
+                        <Font name="Roboto Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </StackPane>
          </children>
-      </HBox>
-      <AnchorPane fx:id="topDragBar" onMouseDragged="#handleTopDragDragged" onMousePressed="#handleTopDragPressed" prefHeight="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      </VBox>
    </children>
 </AnchorPane>
