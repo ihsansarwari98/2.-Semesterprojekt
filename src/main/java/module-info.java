@@ -1,10 +1,10 @@
-module com.mycompany.tv2guitest {
+module com.mycompany.creditsystem {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.base;
     requires java.sql;
     requires postgresql;
 
-    opens com.mycompany.tv2guitest to javafx.fxml;
-    exports com.mycompany.tv2guitest;
+    opens com.mycompany.creditsystem to javafx.fxml, javafx.graphics;
+    exports com.mycompany.creditsystem;
 }

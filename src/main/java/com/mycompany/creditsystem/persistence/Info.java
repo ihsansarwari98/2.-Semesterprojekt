@@ -1,4 +1,4 @@
-package com.mycompany.tv2guitest;
+package com.mycompany.tv2guitest.persistence;
 
 import com.mycompany.tv2guitest.domain.Production;
 import javafx.collections.FXCollections;
@@ -28,7 +28,6 @@ public class Info {
     public static String forgroundColor = "#242424"; // #242424
 
     public static int sideBarWidth = 320;
-    public static double sideBarAnimation = 0.5;
     public static int roundAmount = 25;
     public static double scaleAmount = 0.15;
 
@@ -38,7 +37,7 @@ public class Info {
 
     public static ObservableList<Production> productions = FXCollections.observableArrayList(); // DATABASE
 
-    public static Production getProgram(String title) {
+    public static Production getProduction(String title) {
         Production temp = null;
         for (Production production : productions) {
             if (title.equals(production.getTitle())) {

@@ -1,4 +1,4 @@
-package com.mycompany.tv2guitest;
+package com.mycompany.tv2guitest.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +9,7 @@ public class Production implements Comparable<Production> {
     private Date deadline;
     private Status status;
     private ArrayList<Credit> credits = new ArrayList<>();
+    private ArrayList<Producer> assosiatedProducers = new ArrayList<>();
 
     public Production(String title, Status status) {
         this.title = title;
@@ -16,8 +17,8 @@ public class Production implements Comparable<Production> {
         this.status = status;
     }
 
-    public void addCredit(String name, String role) {
-        credits.add(new Credit(name, role));
+    public void addCredit(Credit credit) {
+        credits.add(credit);
     }
 
     @Override

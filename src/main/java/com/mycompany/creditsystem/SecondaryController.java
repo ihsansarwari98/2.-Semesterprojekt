@@ -1,10 +1,11 @@
-package com.mycompany.tv2guitest;
+package com.mycompany.creditsystem;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.mycompany.tv2guitest.persistence.Info;
+import com.mycompany.creditsystem.persistence.Info;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

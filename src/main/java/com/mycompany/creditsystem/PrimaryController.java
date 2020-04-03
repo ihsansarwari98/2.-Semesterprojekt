@@ -1,14 +1,15 @@
-package com.mycompany.tv2guitest;
+package com.mycompany.creditsystem;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
-import com.mycompany.tv2guitest.domain.Credit;
-import com.mycompany.tv2guitest.domain.Production;
-import com.mycompany.tv2guitest.persistence.Info;
-import com.mycompany.tv2guitest.persistence.PersistenceHandler;
+import com.mycompany.creditsystem.domain.Credit;
+import com.mycompany.creditsystem.domain.Production;
+import com.mycompany.creditsystem.persistence.Info;
+import com.mycompany.creditsystem.persistence.PersistenceHandler;
+
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -94,6 +95,8 @@ public class PrimaryController implements Initializable {
     private VBox descriptionVBoxName;
     @FXML
     private VBox descriptionVBoxRole;
+    @FXML
+    private Rectangle descriptionRectangleSplitter;
 
     // idk what im doing
     private PersistenceHandler persistanceHandler;
@@ -131,9 +134,9 @@ public class PrimaryController implements Initializable {
         Info.productions.add(new Production("Taxidermlia", Production.Status.Red));
         Info.productions.add(new Production("Naked Lunch", Production.Status.Red));
         Info.productions.add(new Production("There Will Be Blood", Production.Status.Red));
-        Info.getProduction("There Will Be Blood").addCredit("John Mogensen","VFX");
-        Info.getProduction("There Will Be Blood").addCredit("Teis Larsen","Actor");
-        Info.getProduction("There Will Be Blood").addCredit("Lars Vilbo","Dressing");
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
         /////
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), (ActionEvent event) -> {
@@ -177,6 +180,9 @@ public class PrimaryController implements Initializable {
         // Set the color of side bar background
         sidePanelBackground.setStyle("-fx-background-color: " + Info.forgroundColor + ";");
 
+        // DESCRIPTION
+        descriptionRectangleSplitter.setFill(Info.accentGradient);
+
     }
 
     private void updateEverySecond() {
@@ -204,6 +210,7 @@ public class PrimaryController implements Initializable {
 
             descriptionVBoxName.getChildren().add(name);
             descriptionVBoxRole.getChildren().add(role);
+
 
             name.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
             role.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
@@ -340,7 +347,7 @@ public class PrimaryController implements Initializable {
 
             for (int i = 0; i < Info.productions.size(); i++) {
                 if (content[0].equals(Info.productions.get(i).getTitle())) {
-                    Info.productions.get(i).addCredit(content[1], content[2]);
+                    Info.productions.get(i).addCredit(new Credit(content[1], content[2]));
                     System.out.println("added " + content[1] + " with the role " + content[2] + " to " + Info.productions.get(i).getTitle());
                 }
             }
@@ -388,7 +395,7 @@ public class PrimaryController implements Initializable {
 
         //App.setRoot("secondary");
          */
-        System.out.println(PersistenceHandler.getUsers());
+        //System.out.println(PersistenceHandler.getUsers());
     }
 
     @FXML

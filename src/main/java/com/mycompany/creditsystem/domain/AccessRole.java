@@ -1,4 +1,4 @@
-package com.mycompany.tv2guitest;
+package com.mycompany.tv2guitest.domain;
 
 public enum AccessRole {
     publicUser,

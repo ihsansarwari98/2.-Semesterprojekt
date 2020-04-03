@@ -1,4 +1,4 @@
-package com.mycompany.tv2guitest;
+package com.mycompany.creditsystem;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

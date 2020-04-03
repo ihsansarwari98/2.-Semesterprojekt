@@ -1,4 +1,7 @@
-package com.mycompany.tv2guitest;
+package com.mycompany.tv2guitest.persistence;
+
+import com.mycompany.tv2guitest.domain.Production;
+import com.mycompany.tv2guitest.domain.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -34,6 +37,7 @@ public class PersistenceHandler {
             if (connection == null) System.exit(-1);
         }
     }
+    /*
 
     public static List<User> getUsers() {
         try {
@@ -41,7 +45,8 @@ public class PersistenceHandler {
             ResultSet sqlReturnValues = stmt.executeQuery();
             int rowcount = 0;
             List<User> returnValue = new ArrayList<>();
-            while (sqlReturnValues.next()){
+            while (sqlReturnValues.next()) {
+                // Title
                 returnValue.add(new User(sqlReturnValues.getString(1), sqlReturnValues.getString(2)));
             }
             return returnValue;
@@ -63,4 +68,6 @@ public class PersistenceHandler {
             return false;
         }
     }
+    
+     */
 }
