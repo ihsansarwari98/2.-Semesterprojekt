@@ -5,6 +5,10 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
+import com.mycompany.tv2guitest.domain.Credit;
+import com.mycompany.tv2guitest.domain.Production;
+import com.mycompany.tv2guitest.persistence.Info;
+import com.mycompany.tv2guitest.persistence.PersistenceHandler;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -87,7 +91,9 @@ public class PrimaryController implements Initializable {
     @FXML
     private ScrollPane descriptionScrollPane;
     @FXML
-    private VBox descriptionVBox;
+    private VBox descriptionVBoxName;
+    @FXML
+    private VBox descriptionVBoxRole;
 
     // idk what im doing
     private PersistenceHandler persistanceHandler;
@@ -125,6 +131,9 @@ public class PrimaryController implements Initializable {
         Info.productions.add(new Production("Taxidermlia", Production.Status.Red));
         Info.productions.add(new Production("Naked Lunch", Production.Status.Red));
         Info.productions.add(new Production("There Will Be Blood", Production.Status.Red));
+        Info.getProduction("There Will Be Blood").addCredit("John Mogensen","VFX");
+        Info.getProduction("There Will Be Blood").addCredit("Teis Larsen","Actor");
+        Info.getProduction("There Will Be Blood").addCredit("Lars Vilbo","Dressing");
         /////
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), (ActionEvent event) -> {
@@ -185,16 +194,19 @@ public class PrimaryController implements Initializable {
     }
 
     private void showCreditList(Production program) {
-        descriptionVBox.getChildren().clear();
+        descriptionVBoxName.getChildren().clear();
+        descriptionVBoxRole.getChildren().clear();
 
         for (int i = 0; i < program.getCredits().size(); i++) {
             Credit credit = (Credit)program.getCredits().get(i);
             Label name = new Label(credit.getName());
+            Label role = new Label(credit.getRole());
 
-            descriptionVBox.getChildren().add(name);
-            name.setAlignment(Pos.TOP_CENTER);
+            descriptionVBoxName.getChildren().add(name);
+            descriptionVBoxRole.getChildren().add(role);
+
             name.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-            name.applyCss();
+            role.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
         }
     }
     
@@ -343,8 +355,8 @@ public class PrimaryController implements Initializable {
                 }
             }
         } else {
-            if (Info.getProgram(textFieldSearchBar.getText()) != null) {
-                Production program = Info.getProgram(textFieldSearchBar.getText());
+            if (Info.getProduction(textFieldSearchBar.getText()) != null) {
+                Production program = Info.getProduction(textFieldSearchBar.getText());
                 System.out.println(program);
                 System.out.println(Info.productions);
                 descriptionTitleText.setText(program.getTitle());

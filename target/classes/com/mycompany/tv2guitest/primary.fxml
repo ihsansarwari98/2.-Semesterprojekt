@@ -204,8 +204,16 @@
                               </Label>
                               <ScrollPane fx:id="descriptionScrollPane" fitToHeight="true" fitToWidth="true" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                                  <content>
-                                    <VBox fx:id="descriptionVBox" alignment="TOP_CENTER" spacing="20.0" />
+                                    <HBox alignment="TOP_CENTER" spacing="20.0">
+                                       <children>
+                                          <VBox fx:id="descriptionVBoxName" alignment="TOP_RIGHT" fillWidth="false" spacing="20.0" HBox.hgrow="ALWAYS" />
+                                          <VBox fx:id="descriptionVBoxRole" fillWidth="false" spacing="20.0" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
                                  </content>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
                               </ScrollPane>
                            </children>
                         </VBox>

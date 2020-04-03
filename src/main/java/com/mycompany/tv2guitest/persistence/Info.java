@@ -1,5 +1,6 @@
 package com.mycompany.tv2guitest;
 
+import com.mycompany.tv2guitest.domain.Production;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.*;

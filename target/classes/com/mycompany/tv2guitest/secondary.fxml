@@ -36,7 +36,7 @@
             </AnchorPane>
             <AnchorPane fx:id="passwordBackground" prefHeight="40.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-radius: 25;" VBox.vgrow="NEVER">
                <children>
-                  <PasswordField fx:id="passwordText" onAction="#passwordAction" promptText="Password" style="-fx-background-color: white; -fx-text-fill: #242424; -fx-highlight-text-fill: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <PasswordField fx:id="passwordText" onAction="#passwordAction" promptText="Password" style="-fx-background-color: transparent; -fx-text-fill: #242424; -fx-highlight-text-fill: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font name="Roboto" size="16.0" />
                      </font>

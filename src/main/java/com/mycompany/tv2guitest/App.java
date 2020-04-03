@@ -11,10 +11,10 @@ import javafx.stage.StageStyle;
 
 public class App extends Application {
 
-    static Scene scene;
-    static Stage stage;
-    static double xOffset = 0;
-    static double yOffset = 0;
+    public static Scene scene;
+    public static Stage stage;
+    public static double xOffset = 0;
+    public static double yOffset = 0;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -34,7 +34,7 @@ public class App extends Application {
 
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
