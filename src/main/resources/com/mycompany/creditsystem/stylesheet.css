@@ -1,3 +1,8 @@
+* {
+    -fx-color-dark: #242424;
+    -fx-color-white: #FFFFFF;
+}
+
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
@@ -16,30 +21,36 @@
 .increment-button, .decrement-button {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
+    -fx-background-radius: 0em;
 }
 
-.scroll-bar:horizontal *.increment-arrow,
-.scroll-bar:horizontal *.decrement-arrow {
+.scroll-bar:horizontal *.increment-arrow, .scroll-bar:horizontal *.decrement-arrow {
     -fx-background-color: transparent;
 }
 
-.scroll-bar:vertical *.increment-arrow,
-.scroll-bar:vertical *.decrement-arrow {
+.scroll-bar:vertical *.increment-arrow, .scroll-bar:vertical *.decrement-arrow {
     -fx-background-color: transparent;
 }
 
-.scroll-bar:horizontal .track,
-.scroll-bar:vertical .track{
+.scroll-bar:horizontal .track, .scroll-bar:vertical .track{
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-background-radius: 5em;
+    -fx-background-radius: 0em;
 }
 
-.scroll-bar:horizontal .thumb,
-.scroll-bar:vertical .thumb {
-    -fx-background-color: white /*#242424*/;
+.dark-thumb .scroll-bar:horizontal .thumb, .dark-thumb .scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-color-dark /*#242424*/;
     -fx-background-radius: 5em;
     -fx-pref-width: 4px;
     -fx-background-insets: 5, 0, 0;
 }
+
+.scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-color-white /*#242424*/;
+    -fx-background-radius: 5em;
+    -fx-pref-width: 4px;
+    -fx-background-insets: 5, 0, 0;
+}
+
+
 

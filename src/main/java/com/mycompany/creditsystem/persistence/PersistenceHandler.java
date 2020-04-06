@@ -1,7 +1,6 @@
-package com.mycompany.tv2guitest.persistence;
+package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.tv2guitest.domain.Production;
-import com.mycompany.tv2guitest.domain.User;
+import com.mycompany.creditsystem.domain.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class PersistenceHandler {
             if (connection == null) System.exit(-1);
         }
     }
-    /*
+
 
     public static List<User> getUsers() {
         try {
@@ -46,8 +45,8 @@ public class PersistenceHandler {
             int rowcount = 0;
             List<User> returnValue = new ArrayList<>();
             while (sqlReturnValues.next()) {
-                // Title
-                returnValue.add(new User(sqlReturnValues.getString(1), sqlReturnValues.getString(2)));
+                // TODO: fix so the database and user contructor is equal
+                //returnValue.add(new User(sqlReturnValues.getString(1), sqlReturnValues.getString(2)));
             }
             return returnValue;
         } catch (SQLException ex) {
@@ -58,9 +57,14 @@ public class PersistenceHandler {
 
     public static boolean createUser(User user) {
         try {
+            // TODO: correct the parameters and ? values
             PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO users (name, accessRole) VALUES (?,?)");
+            // TODO: get correct things
+            /*
             insertStatement.setString(1, user.getName());
             insertStatement.setString(2, user.getAccessRole());
+
+             */
             insertStatement.execute();
             return true;
         } catch (SQLException e) {
@@ -68,6 +72,6 @@ public class PersistenceHandler {
             return false;
         }
     }
-    
-     */
+
+
 }

@@ -1,6 +1,6 @@
-package com.mycompany.tv2guitest.domain;
+package com.mycompany.creditsystem.domain;
 
-import com.mycompany.tv2guitest.presentation.App;
+import com.mycompany.creditsystem.App;
 
 public class Main {
     public static void main(String[] args) {

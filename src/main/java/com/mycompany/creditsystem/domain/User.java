@@ -1,4 +1,4 @@
-package com.mycompany.tv2guitest.domain;
+package com.mycompany.creditsystem.domain;
 
 import java.util.Date;
 

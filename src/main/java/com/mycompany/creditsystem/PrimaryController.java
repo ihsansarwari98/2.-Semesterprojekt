@@ -1,7 +1,9 @@
 package com.mycompany.creditsystem;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
@@ -15,6 +17,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,10 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -56,7 +58,9 @@ public class PrimaryController implements Initializable {
     @FXML
     private ScrollPane productionScrollPane;
     @FXML
-    private Label nameLabel;
+    private Label nameText;
+    @FXML
+    private Label roleText;
     @FXML
     private AnchorPane sideBar;
     @FXML
@@ -97,6 +101,8 @@ public class PrimaryController implements Initializable {
     private VBox descriptionVBoxRole;
     @FXML
     private Rectangle descriptionRectangleSplitter;
+    @FXML
+    private Polygon homeButton;
 
     // idk what im doing
     private PersistenceHandler persistanceHandler;
@@ -104,6 +110,12 @@ public class PrimaryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateProperties();
+
+        Info.productions.addListener((ListChangeListener<Production>) change -> {
+            updateProductionList();
+            System.out.println("Penis");
+        });
+
         Info.sidePanelOn = true;
         // idk
         persistanceHandler = PersistenceHandler.getInstance();
@@ -137,6 +149,33 @@ public class PrimaryController implements Initializable {
         Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
         Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
         Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","penis"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
         /////
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), (ActionEvent event) -> {
@@ -146,8 +185,11 @@ public class PrimaryController implements Initializable {
 
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+
+
     }
 
+    // Updates the graphical style and fill
     private void updateProperties() {
         Info.updateColors();
         // BUTTONS
@@ -157,6 +199,7 @@ public class PrimaryController implements Initializable {
         closeRectangle2.setFill(Info.accentGradient);
         maximizeRectangle.setFill(Info.accentGradient);
         minimizeRectangle.setFill(Info.accentGradient);
+        homeButton.setFill(Info.accentGradient);
 
         // SEARCH BAR
         // Set the color and round the corners of the search bar 
@@ -182,41 +225,49 @@ public class PrimaryController implements Initializable {
 
         // DESCRIPTION
         descriptionRectangleSplitter.setFill(Info.accentGradient);
+        descriptionScrollPane.getStyleClass().add("dark-thumb");
 
     }
 
+    // Is getting called many times a second
     private void updateEverySecond() {
         if (textFieldSearchBar.isFocused()) {
-            wordSearch();
-
-
+            updateSearchResultList();
         }
 
         handleSearchFocus();
-
-
-        // TODO: remove later
-        updateProductionList();
     }
 
+    // Displays the credits and sets their style
     private void showCreditList(Production program) {
         descriptionVBoxName.getChildren().clear();
         descriptionVBoxRole.getChildren().clear();
 
-        for (int i = 0; i < program.getCredits().size(); i++) {
-            Credit credit = (Credit)program.getCredits().get(i);
-            Label name = new Label(credit.getName());
-            Label role = new Label(credit.getRole());
+        if (program.getCredits().size() == 0) {
+            calculateSplitterRectangleHeight(null, program);
+        } else {
+            for (int i = 0; i < program.getCredits().size(); i++) {
+                Credit credit = (Credit) program.getCredits().get(i);
+                Label name = new Label(credit.getName());
+                Label role = new Label(credit.getRole());
 
-            descriptionVBoxName.getChildren().add(name);
-            descriptionVBoxRole.getChildren().add(role);
+                descriptionVBoxName.getChildren().add(name);
+                descriptionVBoxRole.getChildren().add(role);
 
+                name.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+                role.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+                name.setAlignment(Pos.CENTER_RIGHT);
+                role.setAlignment(Pos.CENTER_LEFT);
 
-            name.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-            role.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+                name.applyCss();
+                role.applyCss();
+
+                calculateSplitterRectangleHeight(name, program);
+            }
         }
     }
-    
+
+    // Makes the search text white when focused and clicking ENTER searches the focused text
     private void handleSearchFocus() {
         for (int i = 0; i < searchResults.getChildren().size(); i++) {
             AnchorPane ap = (AnchorPane)searchResults.getChildren().get(i);
@@ -235,9 +286,11 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    // Holds the last updated text in the search bar
     private String tempUserSearch = "";
 
-    private void wordSearch() {
+    // Updates and displays the search results
+    private void updateSearchResultList() {
         String userSearch = textFieldSearchBar.getText().toLowerCase();
         int searchResultSpacing = 10;
         int searchResultTextPadding = 50;
@@ -251,7 +304,7 @@ public class PrimaryController implements Initializable {
                 for (int i = 0; i < Info.productions.size(); i++) {
                     String title = Info.productions.get(i).getTitle().toLowerCase();
 
-                    // if the text written in the searchbar is equal to any result in the production list // DATABASE
+                    // if the text written in the search bar is equal to any result in the production list // DATABASE
                     if (title.contains(userSearch)) { // DATABASE
                         AnchorPane ap = new AnchorPane();
                         Label titleText = new Label(Info.productions.get(i).getTitle());
@@ -270,7 +323,7 @@ public class PrimaryController implements Initializable {
                     searchRectangleBG.setHeight(searchBarBackground.getHeight());
                 }
 
-                // Goes through each Label and AnchorPane and sets the style accordingly
+                // Goes through each Text and AnchorPane and sets the style accordingly
                 for (int i = 0; i < searchResults.getChildren().size(); i++) {
                     AnchorPane ap = (AnchorPane) searchResults.getChildren().get(i);
                     Label titleText = (Label) ap.getChildren().get(0);
@@ -298,6 +351,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    // Calculates and sets the height of the search result tab
     private void calculateSearchResultsHeight(Label titleText) {
         int visibleResults = 3;
         int searchResultSize = searchResults.getChildren().size();
@@ -305,43 +359,37 @@ public class PrimaryController implements Initializable {
         if (searchResultSize == 0) {
             searchRectangleBG.setHeight(searchBarBackground.getHeight()); // no results
         } else if (searchResultSize < visibleResults) { // Maximum amount of search results shown
-            searchRectangleBG.setHeight(searchBarBackground.getHeight() + (titleText.prefHeight(-1) + 10) * (searchResultSize));
+            searchRectangleBG.setHeight(searchBarBackground.getHeight() + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (searchResultSize));
         } else {
-            searchRectangleBG.setHeight(searchBarBackground.getHeight() + (titleText.prefHeight(-1) + 10) * (visibleResults));
+            searchRectangleBG.setHeight(searchBarBackground.getHeight() + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (visibleResults));
         }
     }
 
-    // Handles what happens when you enter a search on the search bar
+    // Calculates and sets the height of the splitter rectangle for the production description
+    private void calculateSplitterRectangleHeight (Label name, Production production) {
+        if (name == null) {
+            descriptionRectangleSplitter.setHeight(0);
+        } else {
+            descriptionRectangleSplitter.setHeight((name.prefHeight(-1) + descriptionVBoxName.getSpacing()) * production.getCredits().size());
+        }
+    }
+
+    private ArrayList<Production> searchHistory = new ArrayList<>();
+
+    // Handles what happens when you search
     @FXML
     private void handleSearch() { // TODO: REWORK EVERYTHING
 
-        String startColorCommand = "!startColor ";
-        String endColorCommand = "!endColor ";
-        String switchColorCommand = "!switchColor";
         String addProgramCommand = "!addProgram ";
         String addCreditCommand = "!addCredit ";
-        String showCreditsCommand = "!showCredits ";
 
-
-        if (textFieldSearchBar.getText().startsWith(startColorCommand)) {
-            Info.accentStartColor = (textFieldSearchBar.getText().substring(startColorCommand.length()));
-            System.out.println(Info.accentStartColor);
-
-        } else if (textFieldSearchBar.getText().startsWith(endColorCommand)) {
-            Info.accentEndColor = (textFieldSearchBar.getText().substring(endColorCommand.length()));
-            System.out.println(Info.accentEndColor);
-
-        } else if ((textFieldSearchBar.getText().startsWith(switchColorCommand))) {
-            String tempColor = Info.accentEndColor;
-            Info.accentEndColor = Info.accentStartColor;
-            Info.accentStartColor = tempColor;
-
-        } else if ((textFieldSearchBar.getText().startsWith(addProgramCommand))) {
+        // Add program logic
+        if ((textFieldSearchBar.getText().startsWith(addProgramCommand))) {
             String programTitle = textFieldSearchBar.getText().substring(addProgramCommand.length());
             Info.productions.add(new Production(programTitle, Production.Status.Red));
-
-            updateProductionList();
-        } else if (textFieldSearchBar.getText().startsWith(addCreditCommand)) {
+        }
+        // Add credit logic
+        else if (textFieldSearchBar.getText().startsWith(addCreditCommand)) {
             String line = (textFieldSearchBar.getText().substring(addCreditCommand.length()));
             String[] content = line.split(" ");
 
@@ -351,23 +399,14 @@ public class PrimaryController implements Initializable {
                     System.out.println("added " + content[1] + " with the role " + content[2] + " to " + Info.productions.get(i).getTitle());
                 }
             }
-
-        } else if (textFieldSearchBar.getText().startsWith(showCreditsCommand)) {
-            String programTitle = textFieldSearchBar.getText().substring(showCreditsCommand.length());
-            System.out.println("Showing credits for " + programTitle);
-
-            for (int i = 0; i < Info.productions.size(); i++) {
-                if (programTitle.equals(Info.productions.get(i).getTitle())) {
-                    System.out.println(Info.productions.get(i).getCredits());
-                }
-            }
-        } else {
+        }
+        // Actual search function
+        else {
             if (Info.getProduction(textFieldSearchBar.getText()) != null) {
                 Production program = Info.getProduction(textFieldSearchBar.getText());
-                System.out.println(program);
-                System.out.println(Info.productions);
                 descriptionTitleText.setText(program.getTitle());
                 showCreditList(program);
+                searchHistory.add(program);
             } else {
                 System.out.println("Production doesn't exist in the database");
             }
@@ -378,6 +417,7 @@ public class PrimaryController implements Initializable {
         updateProperties();
     }
 
+    // Handles when the user clicks on the background to deselect what was previously focused
     @FXML
     private void handleDeselect() {
         backgroundAP.requestFocus();
@@ -401,6 +441,13 @@ public class PrimaryController implements Initializable {
     @FXML
     private void optionButtonAction() {
         System.out.println("Open options");
+        // TODO: fix sorting (can't autosort when using ListChangeListener)
+        Collections.sort(Info.productions);
+    }
+
+    @FXML
+    private void homeButtonAction() {
+        System.out.println("go home");
     }
 
     @FXML
@@ -416,21 +463,23 @@ public class PrimaryController implements Initializable {
 
     private void updateProductionList() {
 
-        Collections.sort(Info.productions);
         programList.getChildren().clear();
 
         for (int i = 0; i < Info.productions.size(); i++) {
 
             HBox hb = new HBox();
             Circle circle = new Circle(4);
+            AnchorPane ap = new AnchorPane();
             Label title = new Label(Info.productions.get(i).getTitle());
 
             programList.getChildren().add(hb);
+            hb.getChildren().addAll(circle, ap);
+            ap.getChildren().add(title);
+            HBox.setHgrow(ap, Priority.ALWAYS);
 
-            hb.getChildren().addAll(circle, title);
             hb.setSpacing(25);
             hb.setAlignment(Pos.CENTER_LEFT);
-            title.setCursor(Cursor.HAND);
+            ap.setCursor(Cursor.HAND);
 
             if (Info.productions.get(i).getStatus() == Production.Status.Red) {
                 circle.setFill(Paint.valueOf(Info.statusRed)); // DATABASE
@@ -440,8 +489,12 @@ public class PrimaryController implements Initializable {
                 circle.setFill(Paint.valueOf(Info.statusGreen)); // DATABASE
             }
 
-            title.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+            ap.setOnMouseClicked(e -> {
+                textFieldSearchBar.setText(title.getText());
+                handleSearch();
+            });
 
+            title.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
         }
     }
 
@@ -462,15 +515,6 @@ public class PrimaryController implements Initializable {
         menuCurve.setOpacity(0);
         animateSidePanel(0);
     }
-
-    /////////////////////////////////////////////////////
-/*
-    if (enter is clicked && isSearching) {
-        Label firstElement = (Label)searchResults.getChildren().get(0);
-        Info.getProgram(firstElement.getText());
-    }
-*/
-    /////////////////////////////////////////////////////
 
     @FXML
     public void handleSearchMenuHoveringClicked(MouseEvent event) {

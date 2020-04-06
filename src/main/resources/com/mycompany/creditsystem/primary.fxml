@@ -41,14 +41,14 @@
                               </Polygon>
                               <VBox prefWidth="260.0" spacing="2.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="30.0">
                                  <children>
-                                    <Label fx:id="nameLabel" text="Michael Bille Jensen Frandsen" textFill="WHITE" wrapText="true" VBox.vgrow="NEVER">
+                                    <Label fx:id="nameText" text="Name" textFill="WHITE">
                                        <font>
-                                          <Font name="Roboto Bold" size="24.0" />
+                                          <Font name="System Bold" size="24.0" />
                                        </font>
                                     </Label>
-                                    <Label text="Producer" textFill="#242424" wrapText="true">
+                                    <Label fx:id="roleText" text="Role" textFill="#242424">
                                        <font>
-                                          <Font name="Roboto" size="16.0" />
+                                          <Font size="16.0" />
                                        </font>
                                     </Label>
                                  </children>
@@ -63,12 +63,12 @@
                               <Polygon fx:id="sideBarTopColor1" fill="#bdbdbd00" points="0.0, 12.0, 350.0, 12.0, 350.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
                               <VBox fx:id="programListVBox" prefHeight="89.0" prefWidth="290.0" spacing="20.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
                                  <children>
-                                    <Label text="Mine Produktioner" textFill="WHITE" wrapText="true" VBox.vgrow="NEVER">
+                                    <Label text="Mine produktioner" textFill="WHITE">
                                        <font>
-                                          <Font name="Roboto Bold" size="20.0" />
+                                          <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <ScrollPane fx:id="productionScrollPane" fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+                                    <ScrollPane fx:id="productionScrollPane" fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
                                        <content>
                                           <VBox fx:id="programList" spacing="20.0" />
                                        </content>
@@ -77,7 +77,7 @@
                               </VBox>
                            </children>
                         </AnchorPane>
-                        <HBox onMouseClicked="#switchToSecondary" prefHeight="0.0" prefWidth="280.0" spacing="3.0" VBox.vgrow="NEVER">
+                        <HBox onMouseClicked="#optionButtonAction" prefHeight="0.0" prefWidth="280.0" spacing="3.0" VBox.vgrow="NEVER">
                            <children>
                               <Circle fill="WHITE" radius="3.0" stroke="BLACK" strokeType="INSIDE" />
                               <Circle fill="WHITE" radius="3.0" stroke="BLACK" strokeType="INSIDE" HBox.hgrow="NEVER" />
@@ -113,22 +113,22 @@
                         </StackPane>
                      </children>
                   </AnchorPane>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
                      <center>
-                        <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+                        <VBox alignment="TOP_CENTER">
                            <children>
-                              <Label fx:id="descriptionTitleText" alignment="TOP_CENTER" text="Title" textAlignment="CENTER">
+                              <Label fx:id="descriptionTitleText" text="Title">
                                  <font>
-                                    <Font name="Roboto Bold" size="48.0" />
+                                    <Font name="System Bold" size="48.0" />
                                  </font>
                               </Label>
-                              <ScrollPane fx:id="descriptionScrollPane" fitToHeight="true" fitToWidth="true" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                              <ScrollPane fx:id="descriptionScrollPane" fitToHeight="true" fitToWidth="true" styleClass="dark-thumb" VBox.vgrow="ALWAYS">
                                  <content>
                                     <HBox alignment="TOP_CENTER" spacing="20.0">
                                        <children>
-                                          <VBox fx:id="descriptionVBoxName" alignment="TOP_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS" />
-                                          <Rectangle fx:id="descriptionRectangleSplitter" arcHeight="5.0" arcWidth="5.0" height="300.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1.0" HBox.hgrow="ALWAYS" />
-                                          <VBox fx:id="descriptionVBoxRole" spacing="20.0" HBox.hgrow="ALWAYS" />
+                                          <VBox fx:id="descriptionVBoxName" alignment="TOP_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS" />
+                                          <Rectangle fx:id="descriptionRectangleSplitter" arcHeight="5.0" arcWidth="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1.0" HBox.hgrow="ALWAYS" />
+                                          <VBox fx:id="descriptionVBoxRole" spacing="10.0" HBox.hgrow="ALWAYS" />
                                        </children>
                                     </HBox>
                                  </content>
@@ -140,7 +140,7 @@
                         </VBox>
                      </center>
                   </BorderPane>
-                  <BorderPane layoutX="280.0" layoutY="219.0" onMousePressed="#handleDeselect" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+                  <BorderPane layoutX="280.0" layoutY="219.0" onMousePressed="#handleDeselect" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
                      <top>
                         <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <BorderPane.margin>
@@ -186,7 +186,7 @@
                                                 </BorderPane>
                                                 <TextField fx:id="textFieldSearchBar" onAction="#handleSearch" prefHeight="40.0" prefWidth="213.0" promptText="Søg efter TV-serie eller film..." style="-fx-background-color: transparent; -fx-text-fill: white;" HBox.hgrow="ALWAYS">
                                                    <font>
-                                                      <Font name="Roboto" size="16.0" />
+                                                      <Font size="16.0" />
                                                    </font>
                                                    <HBox.margin>
                                                       <Insets left="-15.0" />
@@ -196,7 +196,7 @@
                                                    <center>
                                                       <Label graphicTextGap="0.0" text="Søg" textAlignment="CENTER" textFill="#f7f7f7">
                                                          <font>
-                                                            <Font name="Roboto" size="16.0" />
+                                                            <Font size="16.0" />
                                                          </font>
                                                       </Label>
                                                    </center>
@@ -211,7 +211,7 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <ScrollPane fx:id="searchResultScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-border-color: transparent;" visible="false" VBox.vgrow="ALWAYS">
+                                    <ScrollPane fx:id="searchResultScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" visible="false" VBox.vgrow="ALWAYS">
                                        <content>
                                           <VBox fx:id="searchResults" />
                                        </content>
@@ -291,9 +291,9 @@
                         </StackPane>
                      </children>
                   </HBox>
-                  <StackPane onMouseClicked="#sidePanelAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
+                  <HBox layoutX="30.0" layoutY="30.0" spacing="16.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
                      <children>
-                        <VBox>
+                        <StackPane onMouseClicked="#sidePanelAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
                            <children>
                               <Circle fx:id="loginCircle" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
                                  <fill>
@@ -306,12 +306,23 @@
                                  </fill>
                               </Circle>
                            </children>
-                        </VBox>
+                        </StackPane>
+                        <StackPane onMouseClicked="#homeButtonAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
+                           <children>
+                              <Polygon fx:id="homeButton" points="0.0, -40.0, 20.0, -40.0, 0.0, -60.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+                                 <fill>
+                                    <LinearGradient endX="1.0" startY="1.0">
+                                       <stops>
+                                          <Stop color="#2fffd2" />
+                                          <Stop color="#4fbfff" offset="1.0" />
+                                       </stops>
+                                    </LinearGradient>
+                                 </fill>
+                              </Polygon>
+                           </children>
+                        </StackPane>
                      </children>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </StackPane>
+                  </HBox>
                </children>
             </AnchorPane>
          </children>

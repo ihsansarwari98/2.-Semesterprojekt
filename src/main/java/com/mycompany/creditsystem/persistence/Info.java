@@ -1,6 +1,6 @@
-package com.mycompany.tv2guitest.persistence;
+package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.tv2guitest.domain.Production;
+import com.mycompany.creditsystem.domain.Production;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.*;
