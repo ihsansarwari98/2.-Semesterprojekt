@@ -52,5 +52,10 @@
     -fx-background-insets: 5, 0, 0;
 }
 
+.text-field {
+    -fx-background-color: transparent;
+    -fx-font-size: 16;
+}
+
 
 

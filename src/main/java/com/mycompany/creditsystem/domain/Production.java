@@ -1,7 +1,9 @@
 package com.mycompany.creditsystem.domain;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class Production implements Comparable<Production> {
 
@@ -11,10 +13,10 @@ public class Production implements Comparable<Production> {
     private ArrayList<Credit> credits = new ArrayList<>();
     private ArrayList<Producer> assosiatedProducers = new ArrayList<>();
 
-    public Production(String title, Status status) {
+    public Production(String title) {
         this.title = title;
         this.deadline = new Date();
-        this.status = status;
+        this.status = Status.Red;
     }
 
     public void addCredit(Credit credit) {
@@ -23,7 +25,7 @@ public class Production implements Comparable<Production> {
 
     @Override
     public String toString() {
-        return title;
+        return title ;
     }
 
     public String getTitle() {
@@ -42,20 +44,30 @@ public class Production implements Comparable<Production> {
     }
 
     public enum Status {
-        Green,
-        Yellow,
-        Red
+        Green, Yellow, Red
     }
 
     public Status getStatus() {
         return status;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public Date getDeadline() {
         return deadline;
+    }
+
+    public String getDeadlineString() {
+        String pattern1 = "dd-MM-yyyy | HH:mm:ss";
+        String pattern2 = "EEEEE dd MMMMM yyyy HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern1, new Locale("da", "DK"));
+        return simpleDateFormat.format(deadline);
     }
 
     public ArrayList getCredits() {
         return credits;
     }
+
 }

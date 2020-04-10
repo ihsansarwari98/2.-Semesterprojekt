@@ -1,7 +1,6 @@
 package com.mycompany.creditsystem;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +8,9 @@ import java.util.ResourceBundle;
 
 import com.mycompany.creditsystem.domain.Credit;
 import com.mycompany.creditsystem.domain.Production;
+import com.mycompany.creditsystem.domain.Production.Status;
+import com.mycompany.creditsystem.domain.ProductionDeadlineComparator;
+import com.mycompany.creditsystem.domain.ProductionNameComparator;
 import com.mycompany.creditsystem.persistence.Info;
 import com.mycompany.creditsystem.persistence.PersistenceHandler;
 
@@ -17,9 +19,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -38,6 +38,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.w3c.dom.Text;
 
 public class PrimaryController implements Initializable {
 
@@ -103,6 +104,8 @@ public class PrimaryController implements Initializable {
     private Rectangle descriptionRectangleSplitter;
     @FXML
     private Polygon homeButton;
+    @FXML
+    private Rectangle rectangleSortSplitter;
 
     // idk what im doing
     private PersistenceHandler persistanceHandler;
@@ -110,10 +113,10 @@ public class PrimaryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateProperties();
+        setNameAndRole();
 
         Info.productions.addListener((ListChangeListener<Production>) change -> {
             updateProductionList();
-            System.out.println("Penis");
         });
 
         Info.sidePanelOn = true;
@@ -121,31 +124,34 @@ public class PrimaryController implements Initializable {
         persistanceHandler = PersistenceHandler.getInstance();
 
         // TRASH FOR TESTING
-        Info.productions.add(new Production("1", Production.Status.Red));
-        Info.productions.add(new Production("2", Production.Status.Red));
-        Info.productions.add(new Production("2", Production.Status.Red));
-        Info.productions.add(new Production("3", Production.Status.Red));
-        Info.productions.add(new Production("3", Production.Status.Red));
-        Info.productions.add(new Production("3", Production.Status.Red));
-        Info.productions.add(new Production("4", Production.Status.Red));
-        Info.productions.add(new Production("4", Production.Status.Red));
-        Info.productions.add(new Production("4", Production.Status.Red));
-        Info.productions.add(new Production("4", Production.Status.Red));
-        Info.productions.add(new Production("5", Production.Status.Red));
-        Info.productions.add(new Production("5", Production.Status.Red));
-        Info.productions.add(new Production("5", Production.Status.Red));
-        Info.productions.add(new Production("5", Production.Status.Red));
-        Info.productions.add(new Production("5", Production.Status.Red));
-        Info.productions.add(new Production("6", Production.Status.Red));
-        Info.productions.add(new Production("6", Production.Status.Red));
-        Info.productions.add(new Production("6", Production.Status.Red));
-        Info.productions.add(new Production("6", Production.Status.Red));
-        Info.productions.add(new Production("6", Production.Status.Red));
-        Info.productions.add(new Production("6", Production.Status.Red));
-        Info.productions.add(new Production("Pulp Fiction", Production.Status.Red));
-        Info.productions.add(new Production("Taxidermlia", Production.Status.Red));
-        Info.productions.add(new Production("Naked Lunch", Production.Status.Red));
-        Info.productions.add(new Production("There Will Be Blood", Production.Status.Red));
+        Info.productions.add(new Production("1"));
+        Info.productions.add(new Production("2"));
+        Info.productions.add(new Production("2"));
+        Info.productions.add(new Production("3"));
+        Info.productions.add(new Production("3"));
+        Info.productions.add(new Production("3"));
+        Info.productions.add(new Production("4"));
+        Info.productions.add(new Production("4"));
+        Info.productions.add(new Production("4"));
+        Info.productions.add(new Production("4"));
+        Info.productions.add(new Production("5"));
+        Info.productions.add(new Production("5"));
+        Info.productions.add(new Production("5"));
+        Info.productions.add(new Production("5"));
+        Info.productions.add(new Production("5"));
+        Info.productions.add(new Production("6"));
+        Info.productions.add(new Production("6"));
+        Info.productions.add(new Production("6"));
+        Info.productions.add(new Production("6"));
+        Info.productions.add(new Production("6"));
+        Info.productions.add(new Production("6"));
+        Info.productions.add(new Production("Pulp Fiction"));
+        Info.productions.add(new Production("Taxidermlia"));
+        Info.productions.add(new Production("Naked Lunch"));
+        Info.productions.add(new Production("There Will Be Blood"));
+
+        Info.getProduction("There Will Be Blood").setStatus(Status.Green);
+
         Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
         Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
         Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
@@ -222,6 +228,7 @@ public class PrimaryController implements Initializable {
         topCurveOverlap.setFill(Paint.valueOf(Info.backgroundColor));
         // Set the color of side bar background
         sidePanelBackground.setStyle("-fx-background-color: " + Info.forgroundColor + ";");
+        rectangleSortSplitter.setFill(Info.accentGradient);
 
         // DESCRIPTION
         descriptionRectangleSplitter.setFill(Info.accentGradient);
@@ -248,21 +255,55 @@ public class PrimaryController implements Initializable {
         } else {
             for (int i = 0; i < program.getCredits().size(); i++) {
                 Credit credit = (Credit) program.getCredits().get(i);
-                Label name = new Label(credit.getName());
-                Label role = new Label(credit.getRole());
+                Label nameLB = new Label(credit.getName());
+                TextField nameTF = new TextField();
+                Label roleLB = new Label(credit.getRole());
+                TextField roleTF = new TextField();
 
-                descriptionVBoxName.getChildren().add(name);
-                descriptionVBoxRole.getChildren().add(role);
+                descriptionVBoxName.getChildren().add(nameLB);
+                descriptionVBoxRole.getChildren().add(roleLB);
 
-                name.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-                role.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-                name.setAlignment(Pos.CENTER_RIGHT);
-                role.setAlignment(Pos.CENTER_LEFT);
+                nameLB.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+                roleLB.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+                nameLB.setAlignment(Pos.CENTER_RIGHT);
+                roleLB.setAlignment(Pos.CENTER_LEFT);
+                nameTF.setAlignment(Pos.CENTER_RIGHT);
 
-                name.applyCss();
-                role.applyCss();
+                nameLB.setOnMouseClicked(e -> {
+                    for (int j = 0; j < descriptionVBoxName.getChildren().size(); j++) {
 
-                calculateSplitterRectangleHeight(name, program);
+                        if (descriptionVBoxName.getChildren().get(j) instanceof Label) {
+                            Label nameCheck = (Label)descriptionVBoxName.getChildren().get(j);
+                            if (nameCheck == nameLB) {
+
+                                nameTF.setText(nameLB.getText());
+                                descriptionVBoxName.getChildren().add(j, nameTF);
+                                descriptionVBoxName.getChildren().remove(nameLB);
+                            }
+                        }
+                    }
+                });
+
+                nameTF.setOnKeyPressed(ev -> {
+                    if (ev.getCode() == KeyCode.ENTER) {
+                        for (int k = 0; k < descriptionVBoxName.getChildren().size(); k++) {
+                            if (descriptionVBoxName.getChildren().get(k) instanceof TextField) {
+                                TextField textCheck = (TextField)descriptionVBoxName.getChildren().get(k);
+                                if (textCheck == nameTF) {
+
+                                    nameLB.setText(nameTF.getText());
+                                    descriptionVBoxName.getChildren().add(k, nameLB);
+                                    descriptionVBoxName.getChildren().remove(nameTF);
+                                }
+                            }
+                        }
+                    }
+                });
+
+                nameLB.applyCss();
+                roleLB.applyCss();
+
+                calculateSplitterRectangleHeight(nameLB, program);
             }
         }
     }
@@ -288,12 +329,11 @@ public class PrimaryController implements Initializable {
 
     // Holds the last updated text in the search bar
     private String tempUserSearch = "";
+    Boolean selectBlank = true;
 
     // Updates and displays the search results
     private void updateSearchResultList() {
         String userSearch = textFieldSearchBar.getText().toLowerCase();
-        int searchResultSpacing = 10;
-        int searchResultTextPadding = 50;
 
         // TODO: Fix select/deselect and writing visibility
         // Only updates when a change is made in the textField
@@ -311,46 +351,69 @@ public class PrimaryController implements Initializable {
 
                         searchResults.getChildren().add(ap);
                         ap.getChildren().addAll(titleText);
-
-                        searchRectangleBG.setVisible(true);
-                        searchResultScrollPane.setVisible(true);
                     }
+
                 }
 
                 if (searchResults.getChildren().size() == 0) {
-                    searchRectangleBG.setVisible(false);
-                    searchResultScrollPane.setVisible(false);
                     searchRectangleBG.setHeight(searchBarBackground.getHeight());
                 }
 
-                // Goes through each Text and AnchorPane and sets the style accordingly
-                for (int i = 0; i < searchResults.getChildren().size(); i++) {
-                    AnchorPane ap = (AnchorPane) searchResults.getChildren().get(i);
-                    Label titleText = (Label) ap.getChildren().get(0);
+                styleSearchResults();
 
-                    searchResults.setAlignment(Pos.TOP_LEFT);
-                    searchResults.setSpacing(searchResultSpacing);
-                    ap.setCursor(Cursor.HAND);
-
-                    titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
-                    titleText.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-                    titleText.setAlignment(Pos.CENTER_LEFT);
-                    titleText.setFocusTraversable(true);
-
-                    ap.setOnMouseEntered(this::handleSearchMenuHoveringEnter);
-                    ap.setOnMouseExited(this::handleSearchMenuHoveringExit);
-                    ap.setOnMouseClicked(this::handleSearchMenuHoveringClicked);
-
-                    titleText.applyCss();
-                    calculateSearchResultsHeight(titleText);
-                }
+            } else {
+                // triggers if the search bar becomes empty while the using is typing
+                displaySearchHistory();
+                styleSearchResults();
             }
         } else if (userSearch.isBlank()) {
-            searchRectangleBG.setVisible(false);
-            searchResultScrollPane.setVisible(false);
+            // triggers if the search bar is empty and just focused
+            if (selectBlank) {
+                selectBlank = false;
+                displaySearchHistory();
+                styleSearchResults();
+            }
         }
     }
 
+    // Search history
+    private void displaySearchHistory() {
+        searchResults.getChildren().clear();
+        for (int i = 0; i < searchHistory.size(); i++) {
+            String title = searchHistory.get(i).getTitle();
+            AnchorPane ap = new AnchorPane();
+            Label titleText = new Label(title);
+
+            searchResults.getChildren().add(ap);
+            ap.getChildren().addAll(titleText);
+        }
+    }
+
+    private void styleSearchResults() {
+        int searchResultSpacing = 10;
+        int searchResultTextPadding = 50;
+
+        for (int i = 0; i < searchResults.getChildren().size(); i++) {
+            AnchorPane ap = (AnchorPane) searchResults.getChildren().get(i);
+            Label titleText = (Label) ap.getChildren().get(0);
+
+            searchResults.setAlignment(Pos.TOP_LEFT);
+            searchResults.setSpacing(searchResultSpacing);
+            ap.setCursor(Cursor.HAND);
+
+            titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
+            titleText.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+            titleText.setAlignment(Pos.CENTER_LEFT);
+            titleText.setFocusTraversable(true);
+
+            ap.setOnMouseEntered(this::handleSearchMenuHoveringEnter);
+            ap.setOnMouseExited(this::handleSearchMenuHoveringExit);
+            ap.setOnMouseClicked(this::handleSearchMenuHoveringClicked);
+
+            titleText.applyCss();
+            calculateSearchResultsHeight(titleText);
+        }
+    }
     // Calculates and sets the height of the search result tab
     private void calculateSearchResultsHeight(Label titleText) {
         int visibleResults = 3;
@@ -374,8 +437,6 @@ public class PrimaryController implements Initializable {
         }
     }
 
-    private ArrayList<Production> searchHistory = new ArrayList<>();
-
     // Handles what happens when you search
     @FXML
     private void handleSearch() { // TODO: REWORK EVERYTHING
@@ -386,7 +447,7 @@ public class PrimaryController implements Initializable {
         // Add program logic
         if ((textFieldSearchBar.getText().startsWith(addProgramCommand))) {
             String programTitle = textFieldSearchBar.getText().substring(addProgramCommand.length());
-            Info.productions.add(new Production(programTitle, Production.Status.Red));
+            Info.productions.add(new Production(programTitle));
         }
         // Add credit logic
         else if (textFieldSearchBar.getText().startsWith(addCreditCommand)) {
@@ -406,7 +467,8 @@ public class PrimaryController implements Initializable {
                 Production program = Info.getProduction(textFieldSearchBar.getText());
                 descriptionTitleText.setText(program.getTitle());
                 showCreditList(program);
-                searchHistory.add(program);
+                addToProductionHistory(program);
+
             } else {
                 System.out.println("Production doesn't exist in the database");
             }
@@ -417,13 +479,24 @@ public class PrimaryController implements Initializable {
         updateProperties();
     }
 
+    private ArrayList<Production> searchHistory = new ArrayList<>();
+    // add program to search history
+    private void addToProductionHistory(Production production) {
+        for (int i = 0; i < searchHistory.size(); i++) {
+            if (searchHistory.get(i) == production) {
+                searchHistory.remove(i);
+            }
+        }
+        searchHistory.add(0, production);
+    }
+
     // Handles when the user clicks on the background to deselect what was previously focused
     @FXML
     private void handleDeselect() {
         backgroundAP.requestFocus();
-        searchRectangleBG.setVisible(false);
-        searchResultScrollPane.setVisible(false);
         searchRectangleBG.setHeight(searchBarBackground.getHeight());
+        searchResults.getChildren().clear();
+        selectBlank = true;
     }
 
     @FXML
@@ -438,16 +511,45 @@ public class PrimaryController implements Initializable {
         //System.out.println(PersistenceHandler.getUsers());
     }
 
+    private void setNameAndRole() {
+        String name = Info.currentUser.getName();
+        String role = Info.currentUser.getAccessRole().toString();
+        nameText.setText(name);
+        roleText.setText(role.substring(0, 1).toUpperCase() + role.substring(1));
+    }
+
+    private Boolean nameComparatorShift = true;
+
     @FXML
-    private void optionButtonAction() {
-        System.out.println("Open options");
-        // TODO: fix sorting (can't autosort when using ListChangeListener)
-        Collections.sort(Info.productions);
+    private void sortByName() {
+        ProductionNameComparator nameComparator = new ProductionNameComparator();
+        if (nameComparatorShift) {
+            Info.productions.sort(nameComparator);
+            nameComparatorShift = false;
+        } else {
+            Info.productions.sort(nameComparator.reversed());
+            nameComparatorShift = true;
+        }
+
+    }
+
+    private Boolean deadlineComparatorShift = true;
+
+    @FXML
+    private void sortByDeadline() {
+        ProductionDeadlineComparator deadlineComparator = new ProductionDeadlineComparator();
+        if (deadlineComparatorShift) {
+            Info.productions.sort(deadlineComparator);
+            deadlineComparatorShift = false;
+        } else {
+            Info.productions.sort(deadlineComparator.reversed());
+            deadlineComparatorShift = true;
+        }
     }
 
     @FXML
     private void homeButtonAction() {
-        System.out.println("go home");
+        System.out.println("do home thing");
     }
 
     @FXML
@@ -470,11 +572,14 @@ public class PrimaryController implements Initializable {
             HBox hb = new HBox();
             Circle circle = new Circle(4);
             AnchorPane ap = new AnchorPane();
+            VBox vb = new VBox();
             Label title = new Label(Info.productions.get(i).getTitle());
+            Label deadline = new Label(Info.productions.get(i).getDeadlineString());
 
             programList.getChildren().add(hb);
             hb.getChildren().addAll(circle, ap);
-            ap.getChildren().add(title);
+            ap.getChildren().add(vb);
+            vb.getChildren().addAll(title, deadline);
             HBox.setHgrow(ap, Priority.ALWAYS);
 
             hb.setSpacing(25);
@@ -495,6 +600,8 @@ public class PrimaryController implements Initializable {
             });
 
             title.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+            deadline.setStyle("-fx-text-fill: " + Info.fontColor3 + "; -fx-font-size: " + Info.fontSizeSmall + ";");
+
         }
     }
 
@@ -583,10 +690,8 @@ public class PrimaryController implements Initializable {
     @FXML
     public void maximizeButtonAction() {
         if (!App.stage.isMaximized()) {
-            System.out.println("fullscreen");
             App.stage.setMaximized(true);
         } else {
-            System.out.println("not fullscreen");
             App.stage.setMaximized(false);
         }
     }

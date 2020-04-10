@@ -8,6 +8,7 @@ public class Producer extends User {
 
     public Producer(String name, String username, String password) {
         super(name, username, password);
+        super.setAccessRole(AccessRole.producer);
     }
 
     public ArrayList<Production> getOwnedProductions() {

@@ -8,6 +8,7 @@ public abstract class User {
     private String username;
     private String password;
     private Date creationDate;
+    private AccessRole accessRole;
 
     public User (String name, String username, String password) {
         this.name = name;
@@ -51,5 +52,13 @@ public abstract class User {
 
     public Date getCreationDate() {
         return creationDate;
+    }
+
+    public void setAccessRole(AccessRole accessRole) {
+        this.accessRole = accessRole;
+    }
+
+    public AccessRole getAccessRole() {
+        return accessRole;
     }
 }

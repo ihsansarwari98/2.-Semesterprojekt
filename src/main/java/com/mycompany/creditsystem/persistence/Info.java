@@ -1,11 +1,15 @@
 package com.mycompany.creditsystem.persistence;
 
+import com.mycompany.creditsystem.domain.Producer;
 import com.mycompany.creditsystem.domain.Production;
+import com.mycompany.creditsystem.domain.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.*;
 
 public class Info {
+
+    public static User currentUser = new Producer("Alan Jensen","123","123");
 
     public static String username = "Admin";
     public static String password = "123";
@@ -16,6 +20,7 @@ public class Info {
 
     public static String fontColor1 = "#FFFFFF";
     public static String fontColor2 = "#242424";
+    public static String fontColor3 = "#666666";
 
     public static String accentStartColor = "#F25C54"; //  #F25C54 mint green ish      #57ffcd
     public static String accentEndColor = "#F7B267"; //  #F7B267   light blue ish      #74c5ff
@@ -32,6 +37,7 @@ public class Info {
     public static double scaleAmount = 0.15;
 
     public static int fontSizeDefault = 16;
+    public static int fontSizeSmall = 10;
 
     public static boolean sidePanelOn;
 

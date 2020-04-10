@@ -72,29 +72,84 @@
                                        <content>
                                           <VBox fx:id="programList" spacing="20.0" />
                                        </content>
+                                       <VBox.margin>
+                                          <Insets right="20.0" />
+                                       </VBox.margin>
                                     </ScrollPane>
                                  </children>
                               </VBox>
                            </children>
                         </AnchorPane>
-                        <HBox onMouseClicked="#optionButtonAction" prefHeight="0.0" prefWidth="280.0" spacing="3.0" VBox.vgrow="NEVER">
-                           <children>
-                              <Circle fill="WHITE" radius="3.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Circle fill="WHITE" radius="3.0" stroke="BLACK" strokeType="INSIDE" HBox.hgrow="NEVER" />
-                              <Circle fill="WHITE" radius="3.0" stroke="BLACK" strokeType="INSIDE" />
-                           </children>
+                        <BorderPane>
+                           <center>
+                              <HBox alignment="CENTER" spacing="16.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <StackPane onMouseClicked="#sortByDeadline">
+                                       <children>
+                                          <Circle fill="TRANSPARENT" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" />
+                                          <Rectangle fill="WHITE" height="2.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" translateX="-6.0" width="5.0" StackPane.alignment="CENTER_RIGHT" />
+                                          <Rectangle fill="WHITE" height="5.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" translateY="10.0" width="2.0" StackPane.alignment="TOP_CENTER" />
+                                       </children>
+                                    </StackPane>
+                                    <StackPane HBox.hgrow="NEVER">
+                                       <children>
+                                          <Rectangle fx:id="rectangleSortSplitter" arcHeight="5.0" arcWidth="5.0" height="16.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1.0">
+                                             <fill>
+                                                <LinearGradient endX="1.0" startY="1.0">
+                                                   <stops>
+                                                      <Stop color="#00ffb4" />
+                                                      <Stop color="#0aa9ff" offset="0.9961685823754789" />
+                                                      <Stop color="#0aa9ff" offset="1.0" />
+                                                   </stops>
+                                                </LinearGradient>
+                                             </fill>
+                                          </Rectangle>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane onMouseClicked="#sortByName" HBox.hgrow="NEVER">
+                                       <children>
+                                          <HBox spacing="5.0" StackPane.alignment="CENTER">
+                                             <children>
+                                                <StackPane>
+                                                   <children>
+                                                      <Rectangle fill="WHITE" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0" />
+                                                      <Rectangle fill="WHITE" height="5.0" rotate="45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="1.0" translateY="-4.0" width="2.0" StackPane.alignment="BOTTOM_CENTER" />
+                                                      <Rectangle fill="WHITE" height="5.0" rotate="-45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="-1.0" translateY="-4.0" width="2.0" StackPane.alignment="BOTTOM_CENTER" />
+                                                   </children>
+                                                </StackPane>
+                                                <VBox alignment="CENTER">
+                                                   <children>
+                                                      <Label text="A" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="10.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="Z" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="10.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </HBox>
+                           </center>
                            <VBox.margin>
-                              <Insets bottom="30.0" left="30.0" right="1000.0" />
+                              <Insets bottom="30.0" left="30.0" right="30.0" />
                            </VBox.margin>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </HBox>
+                        </BorderPane>
                      </children>
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="backgroundAP" style="-fx-background-color: ffffff;" HBox.hgrow="ALWAYS">
+            <AnchorPane fx:id="backgroundAP" onMouseClicked="#handleDeselect" style="-fx-background-color: ffffff;" HBox.hgrow="ALWAYS">
                <children>
                   <Polygon fx:id="backgroundShade" fill="#f7f7f7" points="1013.0, 621.0, 1013.0, 0.0, 132.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <AnchorPane fx:id="menuCurve" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -211,7 +266,7 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <ScrollPane fx:id="searchResultScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" visible="false" VBox.vgrow="ALWAYS">
+                                    <ScrollPane fx:id="searchResultScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                                        <content>
                                           <VBox fx:id="searchResults" />
                                        </content>
