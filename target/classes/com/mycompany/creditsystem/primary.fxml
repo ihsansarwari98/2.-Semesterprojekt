@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -25,9 +26,9 @@
          <children>
           <AnchorPane fx:id="sideBar" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="720.0" prefWidth="320.0" HBox.hgrow="SOMETIMES">
                <children>
-                  <VBox fx:id="sidePanelBackground" nodeOrientation="LEFT_TO_RIGHT" prefWidth="0.0" style="-fx-background-color: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox fx:id="sidePanelBackground" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#handleDeselect" prefWidth="0.0" style="-fx-background-color: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane maxHeight="325.0" prefHeight="0.0" prefWidth="350.0" VBox.vgrow="NEVER">
+                        <AnchorPane fx:id="nameAndRoleAP" maxHeight="325.0" prefHeight="0.0" prefWidth="350.0" VBox.vgrow="NEVER">
                            <children>
                               <Polygon fx:id="sideBarTopColor" points="0.0, 163.0, 350.0, 91.0, 350.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <fill>
@@ -39,7 +40,7 @@
                                     </LinearGradient>
                                  </fill>
                               </Polygon>
-                              <VBox prefWidth="260.0" spacing="2.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="30.0">
+                              <VBox fx:id="nameAndRole" prefWidth="260.0" spacing="2.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="30.0">
                                  <children>
                                     <Label fx:id="nameText" text="Name" textFill="WHITE">
                                        <font>
@@ -55,12 +56,12 @@
                               </VBox>
                            </children>
                         </AnchorPane>
-                        <AnchorPane VBox.vgrow="ALWAYS">
+                        <AnchorPane fx:id="mineProduktioner" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                            <children>
-                              <Polygon fx:id="sideBarTopColor1" fill="#bdbdbd00" points="0.0, 12.0, 350.0, 12.0, 350.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
+                              <Polygon fx:id="sideBarTopColor1" fill="#bdbdbd00" points="0.0, 12.0, 320.0, 12.0, 320.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
                               <VBox fx:id="programListVBox" prefHeight="89.0" prefWidth="290.0" spacing="20.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
                                  <children>
                                     <Label text="Mine produktioner" textFill="WHITE">
@@ -73,78 +74,164 @@
                                           <VBox fx:id="programList" spacing="20.0" />
                                        </content>
                                        <VBox.margin>
-                                          <Insets right="20.0" />
+                                          <Insets />
                                        </VBox.margin>
                                     </ScrollPane>
                                  </children>
                               </VBox>
                            </children>
                         </AnchorPane>
-                        <BorderPane>
-                           <center>
-                              <HBox alignment="CENTER" spacing="16.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <StackPane onMouseClicked="#sortByDeadline">
+                        <AnchorPane fx:id="loginAP" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Polygon fx:id="sideBarTopColor11" fill="#bdbdbd00" points="0.0, 12.0, 320.0, 12.0, 320.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
+                              <BorderPane layoutX="30.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
+                                 <center>
+                                    <VBox fx:id="programListVBox1" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
                                        <children>
-                                          <Circle fill="TRANSPARENT" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" />
-                                          <Rectangle fill="WHITE" height="2.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" translateX="-6.0" width="5.0" StackPane.alignment="CENTER_RIGHT" />
-                                          <Rectangle fill="WHITE" height="5.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" translateY="10.0" width="2.0" StackPane.alignment="TOP_CENTER" />
-                                       </children>
-                                    </StackPane>
-                                    <StackPane HBox.hgrow="NEVER">
-                                       <children>
-                                          <Rectangle fx:id="rectangleSortSplitter" arcHeight="5.0" arcWidth="5.0" height="16.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1.0">
-                                             <fill>
-                                                <LinearGradient endX="1.0" startY="1.0">
-                                                   <stops>
-                                                      <Stop color="#00ffb4" />
-                                                      <Stop color="#0aa9ff" offset="0.9961685823754789" />
-                                                      <Stop color="#0aa9ff" offset="1.0" />
-                                                   </stops>
-                                                </LinearGradient>
-                                             </fill>
-                                          </Rectangle>
-                                       </children>
-                                    </StackPane>
-                                    <StackPane onMouseClicked="#sortByName" HBox.hgrow="NEVER">
-                                       <children>
-                                          <HBox spacing="5.0" StackPane.alignment="CENTER">
+                                          <Label alignment="CENTER" text="Login" textAlignment="CENTER" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <VBox fx:id="programList1" alignment="CENTER" spacing="10.0" VBox.vgrow="NEVER">
                                              <children>
-                                                <StackPane>
+                                                <AnchorPane style="-fx-background-color: FFFFFF; -fx-background-radius: 25; -fx-border-radius: 25;">
                                                    <children>
-                                                      <Rectangle fill="WHITE" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0" />
-                                                      <Rectangle fill="WHITE" height="5.0" rotate="45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="1.0" translateY="-4.0" width="2.0" StackPane.alignment="BOTTOM_CENTER" />
-                                                      <Rectangle fill="WHITE" height="5.0" rotate="-45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="-1.0" translateY="-4.0" width="2.0" StackPane.alignment="BOTTOM_CENTER" />
+                                                      <TextField fx:id="usernameTextField" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#handleLogin" prefHeight="40.0" promptText="username" style="-fx-background-color: transparent; -fx-text-fill: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </TextField>
                                                    </children>
-                                                </StackPane>
-                                                <VBox alignment="CENTER">
+                                                </AnchorPane>
+                                                <AnchorPane style="-fx-background-color: FFFFFF; -fx-background-radius: 25; -fx-border-radius: 25;">
                                                    <children>
-                                                      <Label text="A" textFill="WHITE">
+                                                      <PasswordField fx:id="passwordTextField" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#handleLogin" prefHeight="40.0" promptText="password" style="-fx-text-fill: #242424; -fx-background-color: transparant;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <font>
-                                                            <Font name="System Bold" size="10.0" />
+                                                            <Font size="16.0" />
                                                          </font>
-                                                      </Label>
-                                                      <Label text="Z" textFill="WHITE">
-                                                         <font>
-                                                            <Font name="System Bold" size="10.0" />
-                                                         </font>
-                                                      </Label>
+                                                      </PasswordField>
                                                    </children>
-                                                </VBox>
+                                                </AnchorPane>
+                                                <Rectangle fx:id="loginRectangleSplitter" height="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="20.0" VBox.vgrow="NEVER">
+                                                   <fill>
+                                                      <LinearGradient endX="1.0" startY="1.0">
+                                                         <stops>
+                                                            <Stop color="#1fffb4" />
+                                                            <Stop color="#3b99ff" offset="1.0" />
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </fill>
+                                                </Rectangle>
                                              </children>
-                                          </HBox>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </VBox>
+                                          <StackPane onMouseClicked="#handleLogin" VBox.vgrow="NEVER">
+                                             <children>
+                                                <Rectangle fx:id="loginRectangleBG" arcHeight="40.0" arcWidth="40.0" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0">
+                                                   <fill>
+                                                      <LinearGradient endX="1.0" startY="1.0">
+                                                         <stops>
+                                                            <Stop color="#1fffb4" />
+                                                            <Stop color="#3b99ff" offset="1.0" />
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </fill>
+                                                </Rectangle>
+                                                <Label text="Log in" textFill="WHITE" StackPane.alignment="CENTER">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets left="80.0" right="80.0" />
+                                             </VBox.margin>
+                                          </StackPane>
                                        </children>
-                                    </StackPane>
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                           </center>
+                                    </VBox>
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="sortingAP">
                            <VBox.margin>
-                              <Insets bottom="30.0" left="30.0" right="30.0" />
+                              <Insets />
                            </VBox.margin>
-                        </BorderPane>
+                           <children>
+                              <Polygon fx:id="sideBarTopColor111" fill="#bdbdbd00" layoutX="10.0" layoutY="10.0" points="-10.0, 12.0, 310.0, 12.0, 310.0, 0.0, -10.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
+                              <BorderPane AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <center>
+                                    <HBox alignment="CENTER" spacing="16.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <StackPane onMouseClicked="#sortByDeadline">
+                                             <children>
+                                                <Circle fill="TRANSPARENT" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" />
+                                                <Rectangle fill="WHITE" height="2.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" translateX="-6.0" width="5.0" StackPane.alignment="CENTER_RIGHT" />
+                                                <Rectangle fill="WHITE" height="5.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" translateY="10.0" width="2.0" StackPane.alignment="TOP_CENTER" />
+                                             </children>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </StackPane>
+                                          <StackPane HBox.hgrow="NEVER">
+                                             <children>
+                                                <Rectangle fx:id="rectangleSortSplitter" arcHeight="5.0" arcWidth="5.0" height="16.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1.0">
+                                                   <fill>
+                                                      <LinearGradient endX="1.0" startY="1.0">
+                                                         <stops>
+                                                            <Stop color="#00ffb4" />
+                                                            <Stop color="#0aa9ff" offset="0.9961685823754789" />
+                                                            <Stop color="#0aa9ff" offset="1.0" />
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </fill>
+                                                </Rectangle>
+                                             </children>
+                                          </StackPane>
+                                          <StackPane onMouseClicked="#sortByName" HBox.hgrow="NEVER">
+                                             <children>
+                                                <HBox spacing="5.0" StackPane.alignment="CENTER">
+                                                   <children>
+                                                      <StackPane>
+                                                         <children>
+                                                            <Rectangle fill="WHITE" height="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0" />
+                                                            <Rectangle fill="WHITE" height="5.0" rotate="45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="1.0" translateY="-4.0" width="2.0" StackPane.alignment="BOTTOM_CENTER" />
+                                                            <Rectangle fill="WHITE" height="5.0" rotate="-45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="-1.0" translateY="-4.0" width="2.0" StackPane.alignment="BOTTOM_CENTER" />
+                                                         </children>
+                                                      </StackPane>
+                                                      <VBox alignment="CENTER">
+                                                         <children>
+                                                            <Label fx:id="topSortingLabel" alignment="CENTER" text="A" textAlignment="CENTER" textFill="WHITE">
+                                                               <font>
+                                                                  <Font name="System Bold" size="10.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label fx:id="bottomSortingLabel" alignment="CENTER" text="Z" textAlignment="CENTER" textFill="WHITE">
+                                                               <font>
+                                                                  <Font name="System Bold" size="10.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </StackPane>
+                                       </children>
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
+                                    </HBox>
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </AnchorPane>
                      </children>
                   </VBox>
                </children>

@@ -6,11 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
-import com.mycompany.creditsystem.domain.Credit;
-import com.mycompany.creditsystem.domain.Production;
+import com.mycompany.creditsystem.domain.*;
 import com.mycompany.creditsystem.domain.Production.Status;
-import com.mycompany.creditsystem.domain.ProductionDeadlineComparator;
-import com.mycompany.creditsystem.domain.ProductionNameComparator;
 import com.mycompany.creditsystem.persistence.Info;
 import com.mycompany.creditsystem.persistence.PersistenceHandler;
 
@@ -38,7 +35,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.w3c.dom.Text;
 
 public class PrimaryController implements Initializable {
 
@@ -106,6 +102,29 @@ public class PrimaryController implements Initializable {
     private Polygon homeButton;
     @FXML
     private Rectangle rectangleSortSplitter;
+    @FXML
+    private Label topSortingLabel;
+    @FXML
+    private Label bottomSortingLabel;
+    @FXML
+    private AnchorPane mineProduktioner;
+    @FXML
+    private AnchorPane nameAndRoleAP;
+    @FXML
+    private VBox nameAndRole;
+    @FXML
+    private AnchorPane sortingAP;
+    @FXML
+    private Rectangle loginRectangleSplitter;
+    @FXML
+    private Rectangle loginRectangleBG;
+    @FXML
+    private TextField usernameTextField;
+    @FXML
+    private TextField passwordTextField;
+    @FXML
+    private AnchorPane loginAP;
+
 
     // idk what im doing
     private PersistenceHandler persistanceHandler;
@@ -114,6 +133,9 @@ public class PrimaryController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         updateProperties();
         setNameAndRole();
+
+        loadLoginElements();
+
 
         Info.productions.addListener((ListChangeListener<Production>) change -> {
             updateProductionList();
@@ -229,6 +251,8 @@ public class PrimaryController implements Initializable {
         // Set the color of side bar background
         sidePanelBackground.setStyle("-fx-background-color: " + Info.forgroundColor + ";");
         rectangleSortSplitter.setFill(Info.accentGradient);
+        loginRectangleSplitter.setFill(Info.accentGradient);
+        loginRectangleBG.setFill(Info.accentGradient);
 
         // DESCRIPTION
         descriptionRectangleSplitter.setFill(Info.accentGradient);
@@ -243,6 +267,45 @@ public class PrimaryController implements Initializable {
         }
 
         handleSearchFocus();
+    }
+
+    @FXML
+    private void handleLogin() {
+        System.out.println("login stuff");
+        if (usernameTextField.getText().equals(Info.currentUser.getUsername()) &&
+                passwordTextField.getText().equals(Info.currentUser.getPassword())) {
+            enableElements(Info.currentUser.getAccessRole());
+            sidePanelBackground.getChildren().remove(loginAP);
+        } else {
+            System.out.println("wrong password");
+        }
+    }
+
+    private void enableElements(AccessRole accessRole) {
+        switch(accessRole) {
+            case publicUser:
+                break;
+            case producer:
+                nameAndRoleAP.getChildren().add(nameAndRole);
+                sidePanelBackground.getChildren().add(mineProduktioner);
+                sidePanelBackground.getChildren().add(sortingAP);
+                break;
+            case productionCompany:
+                break;
+            case admin:
+                break;
+            default:
+                System.out.println("ERROR while loading user access type.");
+        }
+    }
+
+    private void loadLoginElements() {
+        sidePanelBackground.getChildren().clear();
+        sidePanelBackground.getChildren().add(nameAndRoleAP);
+        nameAndRoleAP.getChildren().remove(nameAndRole);
+        sidePanelBackground.getChildren().add(loginAP);
+        usernameTextField.clear();
+        passwordTextField.clear();
     }
 
     // Displays the credits and sets their style
@@ -499,18 +562,6 @@ public class PrimaryController implements Initializable {
         selectBlank = true;
     }
 
-    @FXML
-    private void switchToSecondary() throws IOException {
-        /*
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("secondary.fxml"));
-        AnchorPane view = fxmlLoader.load();
-        sidePanelBackground.getChildren().add(view);
-
-        //App.setRoot("secondary");
-         */
-        //System.out.println(PersistenceHandler.getUsers());
-    }
-
     private void setNameAndRole() {
         String name = Info.currentUser.getName();
         String role = Info.currentUser.getAccessRole().toString();
@@ -526,11 +577,14 @@ public class PrimaryController implements Initializable {
         if (nameComparatorShift) {
             Info.productions.sort(nameComparator);
             nameComparatorShift = false;
+            topSortingLabel.setText("A");
+            bottomSortingLabel.setText("Z");
         } else {
             Info.productions.sort(nameComparator.reversed());
             nameComparatorShift = true;
+            topSortingLabel.setText("Z");
+            bottomSortingLabel.setText("A");
         }
-
     }
 
     private Boolean deadlineComparatorShift = true;
@@ -550,6 +604,7 @@ public class PrimaryController implements Initializable {
     @FXML
     private void homeButtonAction() {
         System.out.println("do home thing");
+        loadLoginElements();
     }
 
     @FXML

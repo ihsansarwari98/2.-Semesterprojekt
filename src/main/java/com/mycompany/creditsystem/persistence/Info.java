@@ -9,7 +9,7 @@ import javafx.scene.paint.*;
 
 public class Info {
 
-    public static User currentUser = new Producer("Alan Jensen","123","123");
+    public static User currentUser = new Producer("Alan Jensen", "123", "123");
 
     public static String username = "Admin";
     public static String password = "123";
