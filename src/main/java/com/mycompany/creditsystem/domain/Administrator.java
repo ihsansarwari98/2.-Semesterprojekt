@@ -5,8 +5,9 @@ public class Administrator extends User {
         super(name, username, password);
     }
 
-    public void createProductionCompany(ProductionCompany prod) {
-
+    public void createProductionCompany(String ProductionCompanyName, String ProductionCompanyUsername,String password) {
+    ProductionCompany productionCompany = new ProductionCompany(ProductionCompanyName, ProductionCompanyUsername,
+            password);
     }
 
     public void removeProductionCompany(ProductionCompany productionCompany) {
