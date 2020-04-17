@@ -113,8 +113,6 @@ public class PrimaryController implements Initializable {
     @FXML
     private VBox nameAndRole;
     @FXML
-    private AnchorPane sortingAP;
-    @FXML
     private Rectangle loginRectangleSplitter;
     @FXML
     private Rectangle loginRectangleBG;
@@ -123,7 +121,13 @@ public class PrimaryController implements Initializable {
     @FXML
     private TextField passwordTextField;
     @FXML
+    private BorderPane sortingBorderPane;
+    @FXML
+    private Rectangle rectangleLogoutSplitter;
+    @FXML
     private AnchorPane loginAP;
+    @FXML
+    private AnchorPane logoutAP;
 
 
     // idk what im doing
@@ -253,6 +257,7 @@ public class PrimaryController implements Initializable {
         rectangleSortSplitter.setFill(Info.accentGradient);
         loginRectangleSplitter.setFill(Info.accentGradient);
         loginRectangleBG.setFill(Info.accentGradient);
+        rectangleLogoutSplitter.setFill(Info.accentGradient);
 
         // DESCRIPTION
         descriptionRectangleSplitter.setFill(Info.accentGradient);
@@ -276,6 +281,7 @@ public class PrimaryController implements Initializable {
                 passwordTextField.getText().equals(Info.currentUser.getPassword())) {
             enableElements(Info.currentUser.getAccessRole());
             sidePanelBackground.getChildren().remove(loginAP);
+            sidePanelBackground.getChildren().add(logoutAP);
         } else {
             System.out.println("wrong password");
         }
@@ -288,7 +294,7 @@ public class PrimaryController implements Initializable {
             case producer:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 sidePanelBackground.getChildren().add(mineProduktioner);
-                sidePanelBackground.getChildren().add(sortingAP);
+                nameAndRoleAP.getChildren().add(sortingBorderPane);
                 break;
             case productionCompany:
                 break;
@@ -303,9 +309,16 @@ public class PrimaryController implements Initializable {
         sidePanelBackground.getChildren().clear();
         sidePanelBackground.getChildren().add(nameAndRoleAP);
         nameAndRoleAP.getChildren().remove(nameAndRole);
+        nameAndRoleAP.getChildren().remove(sortingBorderPane);
         sidePanelBackground.getChildren().add(loginAP);
         usernameTextField.clear();
         passwordTextField.clear();
+    }
+
+    @FXML
+    private void handleLogout() {
+        loadLoginElements();
+
     }
 
     // Displays the credits and sets their style
@@ -604,7 +617,6 @@ public class PrimaryController implements Initializable {
     @FXML
     private void homeButtonAction() {
         System.out.println("do home thing");
-        loadLoginElements();
     }
 
     @FXML
