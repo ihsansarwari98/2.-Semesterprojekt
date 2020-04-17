@@ -20,11 +20,11 @@ public class ProductionCompany extends User {
     }
 
     public void addProduction(Production production) {
-
+        companyProductions.add(production);
     }
 
     public void removeCompanyProduction(Production production) {
-
+        companyProductions.remove(production);
     }
 
     public ArrayList<Producer> getCompanyProducers() {
@@ -32,11 +32,11 @@ public class ProductionCompany extends User {
     }
 
     public void addProducerToProduction(Producer producer) {
-
+        companyProducers.add(producer);
     }
 
     public void removeCompanyProducer(Producer producer) {
-
+        companyProducers.remove(producer);
     }
 
     public void createCompanyProducer(Producer producer) {

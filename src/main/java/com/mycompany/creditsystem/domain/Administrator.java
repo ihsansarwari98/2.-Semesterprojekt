@@ -9,7 +9,9 @@ public class Administrator extends User {
 
     }
 
-    public void remove (ProductionCompany productionCompany) {
+    public void removeProductionCompany(ProductionCompany productionCompany) {
 
     }
+
+
 }
