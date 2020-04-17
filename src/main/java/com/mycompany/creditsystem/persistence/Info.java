@@ -1,8 +1,8 @@
 package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.creditsystem.domain.Producer;
-import com.mycompany.creditsystem.domain.Production;
-import com.mycompany.creditsystem.domain.User;
+import com.mycompany.creditsystem.domain.logic.Producer;
+import com.mycompany.creditsystem.domain.logic.Production;
+import com.mycompany.creditsystem.domain.logic.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.*;

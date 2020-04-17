@@ -1,13 +1,11 @@
 package com.mycompany.creditsystem;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.ResourceBundle;
 
-import com.mycompany.creditsystem.domain.*;
-import com.mycompany.creditsystem.domain.Production.Status;
+import com.mycompany.creditsystem.domain.logic.*;
+import com.mycompany.creditsystem.domain.logic.Production.Status;
 import com.mycompany.creditsystem.persistence.Info;
 import com.mycompany.creditsystem.persistence.PersistenceHandler;
 

@@ -1,4 +1,4 @@
-package com.mycompany.creditsystem.domain;
+package com.mycompany.creditsystem.domain.logic;
 
 import java.util.ArrayList;
 
@@ -6,13 +6,14 @@ public class ProductionCompany extends User {
 
 
 
-    ArrayList<Production> companyProductions;
-    ArrayList<Producer> companyProducers;
+    private ArrayList<Production> companyProductions;
+    private ArrayList<Producer> companyProducers;
 
     public ProductionCompany(String name, String username, String password) {
         super(name, username, password);
         companyProductions = new ArrayList<>();
         companyProducers = new ArrayList<>();
+        super.setAccessRole(AccessRole.productionCompany);
     }
 
     public ArrayList<Production> getCompanyProductions() {

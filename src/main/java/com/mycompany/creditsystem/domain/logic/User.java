@@ -1,4 +1,6 @@
-package com.mycompany.creditsystem.domain;
+package com.mycompany.creditsystem.domain.logic;
+
+import com.mycompany.creditsystem.domain.logic.AccessRole;
 
 import java.util.Date;
 
