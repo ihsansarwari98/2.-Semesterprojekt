@@ -2,9 +2,13 @@ package com.mycompany.creditsystem.domain;
 
 public interface IAdministratorHandler {
 
-    public Producer getProducer(int producerId);
+    public Producer getProducer(int id);
     public void createProducer(String name, String username);
-    public void deleteProducer(int producerId);
-    public Producer updateProducer(int producerId);
-    public ProductionCompany getProductionCompany(int productionCompanyId);
+    public void deleteProducer(int id);
+    public Producer updateProducer(int id);
+    public ProductionCompany getProductionCompany(int id);
+    public void createProductionCompany(String name, String username);
+    public void deleteProductionCompany(int id);
+    public ProductionCompany updateProductionCompany(int id);
+
 }
