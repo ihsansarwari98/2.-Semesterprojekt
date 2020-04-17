@@ -428,7 +428,6 @@ public class PrimaryController implements Initializable {
                         searchResults.getChildren().add(ap);
                         ap.getChildren().addAll(titleText);
                     }
-
                 }
 
                 if (searchResults.getChildren().size() == 0) {
@@ -439,8 +438,13 @@ public class PrimaryController implements Initializable {
 
             } else {
                 // triggers if the search bar becomes empty while the using is typing
-                displaySearchHistory();
-                styleSearchResults();
+                if (searchHistory.size() > 0) {
+                    displaySearchHistory();
+                    styleSearchResults();
+                } else {
+                    searchResults.getChildren().clear();
+                    searchRectangleBG.setHeight(searchBarBackground.getHeight());
+                }
             }
         } else if (userSearch.isBlank()) {
             // triggers if the search bar is empty and just focused

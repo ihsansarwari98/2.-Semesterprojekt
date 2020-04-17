@@ -96,12 +96,12 @@
                                                       </StackPane>
                                                       <VBox alignment="CENTER">
                                                          <children>
-                                                            <Label fx:id="topSortingLabel" alignment="CENTER" text="A" textAlignment="CENTER" textFill="WHITE">
+                                                            <Label fx:id="topSortingLabel" alignment="CENTER" text="A" textAlignment="CENTER" textFill="WHITE" translateY="2.0">
                                                                <font>
                                                                   <Font name="System Bold" size="10.0" />
                                                                </font>
                                                             </Label>
-                                                            <Label fx:id="bottomSortingLabel" alignment="CENTER" text="Z" textAlignment="CENTER" textFill="WHITE">
+                                                            <Label fx:id="bottomSortingLabel" alignment="CENTER" text="Z" textAlignment="CENTER" textFill="WHITE" translateY="-1.0">
                                                                <font>
                                                                   <Font name="System Bold" size="10.0" />
                                                                </font>
