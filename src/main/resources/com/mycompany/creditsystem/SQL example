@@ -1,0 +1,72 @@
+CREATE TABLE users (
+	user_id SERIAL UNIQUE PRIMARY KEY NOT NULL,
+	name VARCHAR(100) NOT NULL,
+	username VARCHAR(100) UNIQUE NOT NULL,
+	password VARCHAR(100),
+	date_created DATE NOT NULL
+);
+
+CREATE TABLE producers (
+	producer_id SERIAL UNIQUE NOT NULL,
+	CONSTRAINT producer_id PRIMARY KEY (user_id)
+) INHERITS (users);
+
+CREATE TABLE production_companies (
+	production_company_id SERIAL UNIQUE NOT NULL,
+	CONSTRAINT production_company_id PRIMARY KEY (user_id)
+) INHERITS (users);
+
+CREATE TABLE administrators (
+	administrator_id SERIAL UNIQUE NOT NULL,
+	CONSTRAINT administrator_id PRIMARY KEY (user_id)
+) INHERITS (users);
+
+CREATE TABLE productions (
+    production_id SERIAL UNIQUE PRIMARY KEY NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    deadline DATE NOT NULL,
+    status SMALLINT NOT NULL
+);
+
+CREATE TABLE credits (
+    credit_id SERIAL UNIQUE PRIMARY KEY NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    role VARCHAR(100) NOT NULL,
+    created_by INTEGER REFERENCES users(user_id)
+);
+
+CREATE TABLE company_producer_subscriptions (
+    producer_id INTEGER REFERENCES producers(user_id),
+    production_company_id INTEGER REFERENCES production_companies(user_id)
+);
+
+INSERT INTO producers (name, username, password, date_created)
+VALUES ('Steffen','123','1234', NOW());
+
+INSERT INTO producers (name, username, password, date_created)
+VALUES ('Jørgen','123','1234', NOW());
+
+INSERT INTO producers (name, username, password, date_created)
+VALUES ('morgens','123','1234', NOW());
+
+INSERT INTO production_companies (name, username, password, date_created)
+VALUES ('lars','123','1234', NOW());
+
+INSERT INTO production_companies (name, username, password, date_created)
+VALUES ('pik','123','1234', NOW());
+
+INSERT INTO administrators (name, username, password, date_created)
+VALUES ('Maren','123','1234', NOW());
+
+SELECT * FROM producers;
+
+SELECT * FROM users;
+
+SELECT * FROM production_companies;
+
+SELECT * FROM administrators;
+
+DROP TABLE producers;
+DROP TABLE production_companies;
+DROP TABLE administrators;
+DROP TABLE users;

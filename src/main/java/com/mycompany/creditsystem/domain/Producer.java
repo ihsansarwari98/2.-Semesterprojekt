@@ -1,37 +1,34 @@
 package com.mycompany.creditsystem.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Producer extends User {
-    private ArrayList<Production> ownedProductions;
-    private boolean canEdit;
+    private HashMap<Production, Boolean> ownedProductons = new HashMap<>();
 
     public Producer(String name, String username, String password) {
         super(name, username, password);
         super.setAccessRole(AccessRole.producer);
     }
 
-    public ArrayList<Production> getOwnedProductions() {
-        return ownedProductions;
+    public HashMap<Production, Boolean> getOwnedProductions() {
+        return ownedProductons;
     }
 
     public void addOwnedProduction(Production production) {
-        ownedProductions.add(production);
+        ownedProductons.put(production, true);
     }
 
     public void removeOwnedProduction(Production production) {
-        ownedProductions.remove(production);
+        ownedProductons.remove(production);
     }
 
-    public void setOwnedProductions(ArrayList<Production> ownedProductions) {
-        this.ownedProductions = ownedProductions;
+    public void setCanEdit (Production production, Boolean canEdit) {
+        ownedProductons.replace(production, canEdit);
     }
 
-    public boolean isCanEdit() {
-        return canEdit;
+    public boolean isCanEdit(Production production) {
+        return ownedProductons.get(production);
     }
 
-    public void setCanEdit(boolean canEdit) {
-        this.canEdit = canEdit;
-    }
 }

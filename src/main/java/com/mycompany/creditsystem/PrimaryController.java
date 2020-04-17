@@ -556,7 +556,7 @@ public class PrimaryController implements Initializable {
     }
 
     private ArrayList<Production> searchHistory = new ArrayList<>();
-    // add program to search history
+    // add program to search history and if it already exists in the history, it get's moved to the top
     private void addToProductionHistory(Production production) {
         for (int i = 0; i < searchHistory.size(); i++) {
             if (searchHistory.get(i) == production) {
