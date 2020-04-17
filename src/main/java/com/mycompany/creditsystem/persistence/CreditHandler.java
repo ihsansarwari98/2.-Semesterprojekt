@@ -1,7 +1,7 @@
 package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.creditsystem.domain.Credit;
-import com.mycompany.creditsystem.domain.ICreditHandler;
+import com.mycompany.creditsystem.domain.logic.Credit;
+import com.mycompany.creditsystem.domain.interfaces.ICreditHandler;
 
 public class CreditHandler implements ICreditHandler {
     @Override

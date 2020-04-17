@@ -1,4 +1,6 @@
-package com.mycompany.creditsystem.domain;
+package com.mycompany.creditsystem.domain.interfaces;
+
+import com.mycompany.creditsystem.domain.logic.ProductionCompany;
 
 public interface IProductionCompanyHandler {
 

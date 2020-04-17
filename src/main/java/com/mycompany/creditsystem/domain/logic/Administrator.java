@@ -1,4 +1,4 @@
-package com.mycompany.creditsystem.domain;
+package com.mycompany.creditsystem.domain.logic;
 
 public class Administrator extends User {
     public Administrator(String name, String username, String password) {

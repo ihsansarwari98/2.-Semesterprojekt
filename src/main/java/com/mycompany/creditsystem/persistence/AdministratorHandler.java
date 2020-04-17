@@ -1,8 +1,8 @@
 package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.creditsystem.domain.IAdministratorHandler;
-import com.mycompany.creditsystem.domain.Producer;
-import com.mycompany.creditsystem.domain.ProductionCompany;
+import com.mycompany.creditsystem.domain.interfaces.IAdministratorHandler;
+import com.mycompany.creditsystem.domain.logic.Producer;
+import com.mycompany.creditsystem.domain.logic.ProductionCompany;
 
 public class AdministratorHandler implements IAdministratorHandler {
 

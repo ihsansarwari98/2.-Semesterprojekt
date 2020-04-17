@@ -1,6 +1,6 @@
 package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.creditsystem.domain.User;
+import com.mycompany.creditsystem.domain.logic.User;
 
 import java.sql.*;
 import java.util.ArrayList;
