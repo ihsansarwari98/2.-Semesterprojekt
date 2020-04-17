@@ -2,9 +2,18 @@ package com.mycompany.creditsystem.domain;
 
 import java.util.ArrayList;
 
-public class ProductionCompany {
-    ArrayList<Production> companyProductions = new ArrayList<>();
-    ArrayList<Producer> companyProducers = new ArrayList<>();
+public class ProductionCompany extends User {
+
+
+
+    ArrayList<Production> companyProductions;
+    ArrayList<Producer> companyProducers;
+
+    public ProductionCompany(String name, String username, String password) {
+        super(name, username, password);
+        companyProductions = new ArrayList<>();
+        companyProducers = new ArrayList<>();
+    }
 
     public ArrayList<Production> getCompanyProductions() {
         return companyProductions;
