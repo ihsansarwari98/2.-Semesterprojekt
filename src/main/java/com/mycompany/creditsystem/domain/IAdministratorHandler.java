@@ -9,6 +9,6 @@ public interface IAdministratorHandler {
     public ProductionCompany getProductionCompany(int id);
     public void createProductionCompany(String name, String username);
     public void deleteProductionCompany(int id);
-    public ProductionCompany updateProductionCompany(int id);
+    public void updateProductionCompany(int id);
 
 }

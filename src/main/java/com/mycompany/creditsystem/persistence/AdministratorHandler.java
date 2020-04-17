@@ -42,7 +42,7 @@ public class AdministratorHandler implements IAdministratorHandler {
     }
 
     @Override
-    public ProductionCompany updateProductionCompany(int id) {
-        return null;
+    public void updateProductionCompany(int id) {
+
     }
 }
