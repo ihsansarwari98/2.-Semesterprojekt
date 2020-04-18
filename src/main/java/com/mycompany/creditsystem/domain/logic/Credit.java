@@ -1,12 +1,14 @@
 package com.mycompany.creditsystem.domain.logic;
 
 public class Credit {
-    String name;
-    String role;
+    private String name;
+    private String role;
+
 
     public Credit (String name, String role) {
         this.name = name;
         this.role = role;
+
     }
 
     @Override

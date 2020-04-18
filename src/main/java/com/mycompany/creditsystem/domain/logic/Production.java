@@ -10,13 +10,17 @@ public class Production implements Comparable<Production> {
     private String title;
     private Date deadline;
     private Status status;
-    private ArrayList<Credit> credits = new ArrayList<>();
-    private ArrayList<Producer> assosiatedProducers = new ArrayList<>();
+    private ArrayList<Credit> credits;
+    private ArrayList<Producer> assosiatedProducers;
+    private int id;
 
     public Production(String title) {
         this.title = title;
         this.deadline = new Date();
         this.status = Status.Red;
+        credits = new ArrayList<>();
+        assosiatedProducers = new ArrayList<>();
+
     }
 
     public void addCredit(Credit credit) {
@@ -66,8 +70,20 @@ public class Production implements Comparable<Production> {
         return simpleDateFormat.format(deadline);
     }
 
-    public ArrayList getCredits() {
+    public ArrayList<Credit> getCredits() {
         return credits;
     }
+
+    public ArrayList<Producer> getAssosiatedProducers(){
+        return assosiatedProducers;
+    }
+   // public void addAssosiatedProducers(Producer producer){
+   //     assosiatedProducers.add(producer);
+  //  }
+
+    // public void addCredits(Credit credit) {
+    //    credits.add(credit);
+   // }
+
 
 }

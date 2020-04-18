@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class ProductionCompany extends User {
 
 
-
     private ArrayList<Production> companyProductions;
     private ArrayList<Producer> companyProducers;
 
@@ -32,19 +31,28 @@ public class ProductionCompany extends User {
         return companyProducers;
     }
 
-    public void addProducerToProduction(Producer producer) {
-        companyProducers.add(producer);
+    public void addProducerToProduction(Producer producer, Production production) {
+
+
     }
 
     public void removeCompanyProducer(Producer producer) {
         companyProducers.remove(producer);
     }
 
-    public void createCompanyProducer(Producer producer) {
+    public void createCompanyProducer(String name, String username, String password) {
+        companyProducers.add(new Producer(name, username, password));
+    }
+
+    // public void producerCanEdit(Producer producer, boolean canEdit, Production production) {
+    //    if (canEdit == false) {
+    //        producer.setCanEdit(production, false);
+     //   } else {
+     //       producer.setCanEdit(production, true);
+    //    }
 
     }
 
-    public boolean producerCanEdit(Producer producer, boolean canEdit) {
-        return false;
-    }
-}
+
+
+// }

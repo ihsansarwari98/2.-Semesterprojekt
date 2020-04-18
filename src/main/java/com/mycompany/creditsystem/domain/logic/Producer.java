@@ -28,6 +28,8 @@ public class Producer extends User {
 
     public boolean isCanEdit(Production production) {
         return ownedProductons.get(production);
+
     }
+
 
 }
