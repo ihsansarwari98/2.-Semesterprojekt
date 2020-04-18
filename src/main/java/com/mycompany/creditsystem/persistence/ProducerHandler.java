@@ -1,5 +1,6 @@
 package com.mycompany.creditsystem.persistence;
 
+import com.mycompany.creditsystem.domain.interfaces.IProducerHandler;
 import com.mycompany.creditsystem.domain.logic.Producer;
 import com.mycompany.creditsystem.domain.logic.User;
 
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProducerHandler {
+public class ProducerHandler implements IProducerHandler {
 
     public static List<User> getProducers() {
         try {
@@ -28,7 +29,8 @@ public class ProducerHandler {
         }
     }
 
-    public static boolean createProducer(Producer producer) {
+    @Override
+    public boolean createProducer(Producer producer) {
         try {
             // TODO: correct the parameters and ? values
             PreparedStatement insertStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO producers (name, username, password) VALUES (?,?,?)");
@@ -45,5 +47,20 @@ public class ProducerHandler {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Producer getProducer(int id) {
+        return null;
+    }
+
+    @Override
+    public void deleteProducer(int id) {
+
+    }
+
+    @Override
+    public void updateProducer(int id) {
+
     }
 }

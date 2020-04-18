@@ -55,13 +55,13 @@ INSERT INTO producers (name, username, password, date_created)
 VALUES ('Jørgen', '123', '1234', NOW());
 
 INSERT INTO producers (name, username, password, date_created)
-VALUES ('morgens', '123', '1234', NOW());
+VALUES ('Morgens', '123', '1234', NOW());
 
 INSERT INTO production_companies (name, username, password, date_created)
 VALUES ('lars', '123', '1234', NOW());
 
 INSERT INTO production_companies (name, username, password, date_created)
-VALUES ('pik', '123', '1234', NOW());
+VALUES ('Karen', '123', '1234', NOW());
 
 INSERT INTO administrators (name, username, password, date_created)
 VALUES ('Maren', '123', '1234', NOW());
@@ -82,7 +82,7 @@ SELECT *
 FROM administrators;
 
 SELECT *
-FROM company_producer_subscriptions;
+FROM company_producer_subscriptio;ns
 
 DROP TABLE company_producer_subscriptions;
 DROP TABLE credits;
