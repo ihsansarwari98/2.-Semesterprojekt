@@ -29,6 +29,7 @@ public class ProducerHandler implements IProducerHandler {
         }
     }
 
+    //Har fjernet static tilstand!
     @Override
     public boolean createProducer(Producer producer) {
         try {
@@ -51,7 +52,23 @@ public class ProducerHandler implements IProducerHandler {
 
     @Override
     public Producer getProducer(int id) {
-        return null;
+        try {
+
+            PreparedStatement stmt = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM producers WHERE producer_id = ?");
+            stmt.setInt(1, id);
+
+            ResultSet sqlReturnValue = stmt.executeQuery();
+            //TODO: Tjek hvorvidt dette er måden at gøre det på
+            if (!sqlReturnValue.next()) {
+                return null;
+            }
+            return new Producer(sqlReturnValue.getString(1),sqlReturnValue.getString(2),sqlReturnValue.getString(3));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
