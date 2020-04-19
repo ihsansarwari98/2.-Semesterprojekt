@@ -32,6 +32,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class PrimaryController implements Initializable {
@@ -97,7 +98,7 @@ public class PrimaryController implements Initializable {
     @FXML
     private Rectangle descriptionRectangleSplitter;
     @FXML
-    private Polygon homeButton;
+    private Text homeText;
     @FXML
     private Rectangle rectangleSortSplitter;
     @FXML
@@ -126,10 +127,21 @@ public class PrimaryController implements Initializable {
     private AnchorPane loginAP;
     @FXML
     private AnchorPane logoutAP;
+    @FXML
+    private BorderPane titleAndDescriptionBP;
+    @FXML
+    private BorderPane searchBarBP;
+    @FXML
+    private Text logoText;
+    @FXML
+    private Rectangle rectangleLogoSplitter;
+    @FXML
+    private VBox logoVBox;
 
 
     // idk what im doing
     private PersistenceHandler persistanceHandler;
+    private boolean loggedin;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -143,7 +155,6 @@ public class PrimaryController implements Initializable {
             updateProductionList();
         });
 
-        Info.sidePanelOn = true;
         // idk
         persistanceHandler = PersistenceHandler.getInstance();
 
@@ -176,37 +187,41 @@ public class PrimaryController implements Initializable {
 
         Info.getProduction("There Will Be Blood").setStatus(Status.Green);
 
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","penis"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen","VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen","Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo","Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "penis"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
+        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
         /////
+        sortByDeadline();
+        homeButtonAction();
+        Info.sidePanelOn = true;
+        sidePanelAction();
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), (ActionEvent event) -> {
             // this code will be called every second
@@ -229,7 +244,7 @@ public class PrimaryController implements Initializable {
         closeRectangle2.setFill(Info.accentGradient);
         maximizeRectangle.setFill(Info.accentGradient);
         minimizeRectangle.setFill(Info.accentGradient);
-        homeButton.setFill(Info.accentGradient);
+        homeText.setFill(Info.accentGradient);
 
         // SEARCH BAR
         // Set the color and round the corners of the search bar 
@@ -261,6 +276,8 @@ public class PrimaryController implements Initializable {
         descriptionRectangleSplitter.setFill(Info.accentGradient);
         descriptionScrollPane.getStyleClass().add("dark-thumb");
 
+        logoText.setFill(Paint.valueOf(Info.forgroundColor));
+        rectangleLogoSplitter.setFill(Info.accentGradient);
     }
 
     // Is getting called many times a second
@@ -286,7 +303,7 @@ public class PrimaryController implements Initializable {
     }
 
     private void enableElements(AccessRole accessRole) {
-        switch(accessRole) {
+        switch (accessRole) {
             case publicUser:
                 break;
             case producer:
@@ -330,9 +347,9 @@ public class PrimaryController implements Initializable {
             for (int i = 0; i < program.getCredits().size(); i++) {
                 Credit credit = (Credit) program.getCredits().get(i);
                 Label nameLB = new Label(credit.getName());
-                TextField nameTF = new TextField();
+                TextField nameTF = new TextField(nameLB.getText());
                 Label roleLB = new Label(credit.getRole());
-                TextField roleTF = new TextField();
+                TextField roleTF = new TextField(nameLB.getText());
 
                 descriptionVBoxName.getChildren().add(nameLB);
                 descriptionVBoxRole.getChildren().add(roleLB);
@@ -342,12 +359,18 @@ public class PrimaryController implements Initializable {
                 nameLB.setAlignment(Pos.CENTER_RIGHT);
                 roleLB.setAlignment(Pos.CENTER_LEFT);
                 nameTF.setAlignment(Pos.CENTER_RIGHT);
+                roleTF.setAlignment(Pos.CENTER_LEFT);
+
+                nameLB.applyCss();
+                roleLB.applyCss();
+
+                calculateSplitterRectangleHeight(nameLB, program);
 
                 nameLB.setOnMouseClicked(e -> {
                     for (int j = 0; j < descriptionVBoxName.getChildren().size(); j++) {
 
                         if (descriptionVBoxName.getChildren().get(j) instanceof Label) {
-                            Label nameCheck = (Label)descriptionVBoxName.getChildren().get(j);
+                            Label nameCheck = (Label) descriptionVBoxName.getChildren().get(j);
                             if (nameCheck == nameLB) {
 
                                 nameTF.setText(nameLB.getText());
@@ -362,7 +385,7 @@ public class PrimaryController implements Initializable {
                     if (ev.getCode() == KeyCode.ENTER) {
                         for (int k = 0; k < descriptionVBoxName.getChildren().size(); k++) {
                             if (descriptionVBoxName.getChildren().get(k) instanceof TextField) {
-                                TextField textCheck = (TextField)descriptionVBoxName.getChildren().get(k);
+                                TextField textCheck = (TextField) descriptionVBoxName.getChildren().get(k);
                                 if (textCheck == nameTF) {
 
                                     nameLB.setText(nameTF.getText());
@@ -373,20 +396,27 @@ public class PrimaryController implements Initializable {
                         }
                     }
                 });
-
-                nameLB.applyCss();
-                roleLB.applyCss();
-
-                calculateSplitterRectangleHeight(nameLB, program);
             }
         }
     }
 
+    // Calculates and sets the height of the splitter rectangle for the production description
+    private void calculateSplitterRectangleHeight(Label name, Production production) {
+        if (name == null) {
+            descriptionRectangleSplitter.setHeight(0);
+        } else {
+            descriptionRectangleSplitter.setHeight((25 /*name.prefHeight(-1)*/ + descriptionVBoxName.getSpacing()) * production.getCredits().size());
+            //System.out.println(name.prefHeight(-1) + " | " + name.getHeight());
+        }
+    }
+
+
+
     // Makes the search text white when focused and clicking ENTER searches the focused text
     private void handleSearchFocus() {
         for (int i = 0; i < searchResults.getChildren().size(); i++) {
-            AnchorPane ap = (AnchorPane)searchResults.getChildren().get(i);
-            Label titleText = (Label)ap.getChildren().get(0);
+            AnchorPane ap = (AnchorPane) searchResults.getChildren().get(i);
+            Label titleText = (Label) ap.getChildren().get(0);
             if (titleText.isFocused()) {
                 titleText.setOnKeyPressed(e -> {
                     if (e.getCode() == KeyCode.ENTER) {
@@ -403,7 +433,7 @@ public class PrimaryController implements Initializable {
 
     // Holds the last updated text in the search bar
     private String tempUserSearch = "";
-    Boolean selectBlank = true;
+    private boolean selectBlank = true;
 
     // Updates and displays the search results
     private void updateSearchResultList() {
@@ -492,26 +522,18 @@ public class PrimaryController implements Initializable {
             calculateSearchResultsHeight(titleText);
         }
     }
+
     // Calculates and sets the height of the search result tab
     private void calculateSearchResultsHeight(Label titleText) {
         int visibleResults = 3;
         int searchResultSize = searchResults.getChildren().size();
 
         if (searchResultSize == 0) {
-            searchRectangleBG.setHeight(searchBarBackground.getHeight()); // no results
+            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1)); // no results
         } else if (searchResultSize < visibleResults) { // Maximum amount of search results shown
-            searchRectangleBG.setHeight(searchBarBackground.getHeight() + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (searchResultSize));
+            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1) + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (searchResultSize));
         } else {
-            searchRectangleBG.setHeight(searchBarBackground.getHeight() + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (visibleResults));
-        }
-    }
-
-    // Calculates and sets the height of the splitter rectangle for the production description
-    private void calculateSplitterRectangleHeight (Label name, Production production) {
-        if (name == null) {
-            descriptionRectangleSplitter.setHeight(0);
-        } else {
-            descriptionRectangleSplitter.setHeight((name.prefHeight(-1) + descriptionVBoxName.getSpacing()) * production.getCredits().size());
+            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1) + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (visibleResults));
         }
     }
 
@@ -543,6 +565,10 @@ public class PrimaryController implements Initializable {
         else {
             if (Info.getProduction(textFieldSearchBar.getText()) != null) {
                 Production program = Info.getProduction(textFieldSearchBar.getText());
+                if (homeScreen) {
+                    homeScreen = false;
+                    loadTitleAndDescriptionElements();
+                }
                 descriptionTitleText.setText(program.getTitle());
                 showCreditList(program);
                 addToProductionHistory(program);
@@ -558,6 +584,7 @@ public class PrimaryController implements Initializable {
     }
 
     private ArrayList<Production> searchHistory = new ArrayList<>();
+
     // add program to search history and if it already exists in the history, it get's moved to the top
     private void addToProductionHistory(Production production) {
         for (int i = 0; i < searchHistory.size(); i++) {
@@ -616,20 +643,68 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    public void calculateSearchBarAnchors() {
+        if (homeScreen) {
+            // triggers when the problem opens
+            if (backgroundAP.getHeight() == 0) {
+                int windowStartHeight = 720; // Can't seem to get backgroundAP.prefHeight(-1) to give 720, so i'm hardcoding it for now
+                AnchorPane.setTopAnchor(searchBarBP, (windowStartHeight / 2) - logoVBox.prefHeight(-1));
+                //AnchorPane.setTopAnchor(searchBarBP, (backgroundAP.prefHeight(-1) / 2) - logoVBox.prefHeight(-1));
+            } else {
+                AnchorPane.setTopAnchor(searchBarBP, (backgroundAP.getHeight() / 2) - logoVBox.prefHeight(-1));
+            }
+        } else {
+            AnchorPane.setTopAnchor(searchBarBP, (double) 30);
+        }
+    }
+
+    private void loadTitleAndDescriptionElements() {
+        backgroundAP.getChildren().remove(searchBarBP);
+        backgroundAP.getChildren().add(2, titleAndDescriptionBP);
+        backgroundAP.getChildren().add(3, searchBarBP);
+        searchBarBP.getChildren().remove(logoVBox);
+        calculateSearchBarAnchors();
+
+    }
+
+    private boolean homeScreen = false;
+
     @FXML
     private void homeButtonAction() {
-        System.out.println("do home thing");
+        homeScreen = true;
+        backgroundAP.getChildren().remove(titleAndDescriptionBP);
+        searchBarBP.getChildren().remove(logoVBox);
+        searchBarBP.setTop(logoVBox);
+        BorderPane.setAlignment(logoVBox, Pos.TOP_CENTER);
+        calculateSearchBarAnchors();
     }
 
     @FXML
     private void sidePanelAction() {
+        // closes the side panel
         if (Info.sidePanelOn) {
-            sidePanelOff();
             Info.sidePanelOn = false;
+            // check if the application just opened
+            if (backgroundAP.getHeight() == 0) {
+                sideBar.setPrefWidth(0); // closes the side panel without animation
+            } else {
+                animateSidePanel(0);
+            }
+            menuCurve.setOpacity(0);
+        // opens the side panel
         } else {
-            sidePanelOn();
             Info.sidePanelOn = true;
+            menuCurve.setOpacity(100);
+            animateSidePanel(Info.sideBarWidth);
         }
+    }
+
+    private void animateSidePanel(int size) {
+        Timeline timeline = new Timeline();
+        KeyValue kv = new KeyValue(sideBar.prefWidthProperty(), size, Interpolator.EASE_OUT);
+        KeyFrame kf = new KeyFrame(Duration.seconds(0.5), kv);
+        timeline.getKeyFrames().add(kf);
+        timeline.play();
     }
 
     private void updateProductionList() {
@@ -672,24 +747,6 @@ public class PrimaryController implements Initializable {
             deadline.setStyle("-fx-text-fill: " + Info.fontColor3 + "; -fx-font-size: " + Info.fontSizeSmall + ";");
 
         }
-    }
-
-    private void animateSidePanel(int size) {
-        Timeline timeline = new Timeline();
-        KeyValue kv = new KeyValue(sideBar.prefWidthProperty(), size, Interpolator.EASE_OUT);
-        KeyFrame kf = new KeyFrame(Duration.seconds(0.5), kv);
-        timeline.getKeyFrames().add(kf);
-        timeline.play();
-    }
-
-    private void sidePanelOn() {
-        menuCurve.setOpacity(100);
-        animateSidePanel(Info.sideBarWidth);
-    }
-
-    private void sidePanelOff() {
-        menuCurve.setOpacity(0);
-        animateSidePanel(0);
     }
 
     @FXML
@@ -763,6 +820,7 @@ public class PrimaryController implements Initializable {
         } else {
             App.stage.setMaximized(false);
         }
+        calculateSearchBarAnchors();
     }
 
     @FXML
