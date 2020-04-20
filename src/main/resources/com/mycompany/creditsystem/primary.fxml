@@ -512,7 +512,7 @@
                      <children>
                         <StackPane onMouseClicked="#sidePanelAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
                            <children>
-                              <Circle fx:id="loginCircle" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+                              <Circle fx:id="loginCircle1" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateY="-2.0" StackPane.alignment="BOTTOM_CENTER">
                                  <fill>
                                     <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
                                        <stops>
@@ -522,6 +522,17 @@
                                     </LinearGradient>
                                  </fill>
                               </Circle>
+                              <Circle fx:id="loginCircle2" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateY="-3.0">
+                                 <fill>
+                                    <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
+                                       <stops>
+                                          <Stop color="#57ffcd" />
+                                          <Stop color="#74c5ff" offset="1.0" />
+                                       </stops>
+                                    </LinearGradient>
+                                 </fill>
+                              </Circle>
+                              <Circle fx:id="loginCircle" fill="TRANSPARENT" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
                            </children>
                         </StackPane>
                         <StackPane onMouseClicked="#homeButtonAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">

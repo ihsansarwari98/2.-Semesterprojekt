@@ -11,8 +11,6 @@ import java.util.List;
 
 public class CreditHandler implements ICreditHandler {
 
-
-
     @Override
     public List<Credit> getCredits() {
 

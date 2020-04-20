@@ -85,6 +85,10 @@ public class PrimaryController implements Initializable {
     @FXML
     private Circle loginCircle;
     @FXML
+    private Circle loginCircle1;
+    @FXML
+    private Circle loginCircle2;
+    @FXML
     private Rectangle searchRectangleBG;
     @FXML
     private ScrollPane searchResultScrollPane;
@@ -253,7 +257,10 @@ public class PrimaryController implements Initializable {
         Info.updateColors();
         // BUTTONS
         // Set the color of the buttons
-        loginCircle.setFill(Info.accentGradient);
+        loginCircle.setStroke(Info.accentGradient);
+        loginCircle1.setFill(Info.accentGradient);
+        loginCircle2.setFill(Info.accentGradient);
+
         closeRectangle1.setFill(Info.accentGradient);
         closeRectangle2.setFill(Info.accentGradient);
         maximizeRectangle.setFill(Info.accentGradient);
