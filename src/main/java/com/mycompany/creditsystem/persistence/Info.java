@@ -7,9 +7,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.*;
 
+import java.util.ArrayList;
+
 public class Info {
 
-    public static User currentUser = new Producer("Alan Jensen", "123", "123");
+    public static User currentUser;
+    public static ArrayList<User> users = new ArrayList<>();
 
     public static String username = "Admin";
     public static String password = "123";
@@ -36,6 +39,7 @@ public class Info {
     public static int roundAmount = 25;
     public static double scaleAmount = 0.15;
 
+    public static int fontSizeBig = 20;
     public static int fontSizeDefault = 16;
     public static int fontSizeSmall = 10;
 

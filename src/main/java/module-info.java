@@ -1,10 +1,11 @@
 module com.mycompany.creditsystem {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.base;
+    requires javafx.graphics;
     requires java.sql;
     requires postgresql;
 
-    opens com.mycompany.creditsystem to javafx.fxml, javafx.graphics;
+
+    opens com.mycompany.creditsystem to javafx.fxml, javafx.graphics, javafx.controls;
     exports com.mycompany.creditsystem;
 }
