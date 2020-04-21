@@ -3,6 +3,7 @@ package com.mycompany.creditsystem.domain.logic;
 import java.util.HashMap;
 
 public class Producer extends User {
+
     private HashMap<Production, Boolean> ownedProductons = new HashMap<>();
 
     public Producer(String name, String username, String password) {
@@ -30,6 +31,5 @@ public class Producer extends User {
         return ownedProductons.get(production);
 
     }
-
 
 }
