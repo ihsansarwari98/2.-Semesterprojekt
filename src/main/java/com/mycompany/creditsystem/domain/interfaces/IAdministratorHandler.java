@@ -1,17 +1,11 @@
 package com.mycompany.creditsystem.domain.interfaces;
 
-import com.mycompany.creditsystem.domain.logic.Producer;
-import com.mycompany.creditsystem.domain.logic.ProductionCompany;
+import com.mycompany.creditsystem.domain.logic.Administrator;
 
 public interface IAdministratorHandler {
-
-    public Producer getProducer(int id);
-    public void createProducer(String name, String username);
-    public void deleteProducer(int id);
-    public Producer updateProducer(int id);
-    public ProductionCompany getProductionCompany(int id);
-    public void createProductionCompany(String name, String username);
-    public void deleteProductionCompany(int id);
-    public void updateProductionCompany(int id);
+    public Administrator getAdministrator(int id);
+    public boolean createAdministrator(Administrator administrator);
+    public boolean deleteAdministrator(int id);
+    public void updateAdministrator(int id);
 
 }

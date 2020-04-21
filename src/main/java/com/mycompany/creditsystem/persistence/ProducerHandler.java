@@ -62,7 +62,7 @@ public class ProducerHandler implements IProducerHandler {
             if (!sqlReturnValue.next()) {
                 return null;
             }
-            return new Producer(sqlReturnValue.getString(1),sqlReturnValue.getString(2),sqlReturnValue.getString(3));
+            return new Producer(sqlReturnValue.getString(1), sqlReturnValue.getString(2), sqlReturnValue.getString(3));
 
         } catch (SQLException e) {
             e.printStackTrace();
