@@ -25,6 +25,4 @@ public class Credit {
     public int getId() {
         return id;
     }
-
-
 }

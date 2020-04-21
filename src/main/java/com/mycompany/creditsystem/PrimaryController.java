@@ -7,15 +7,14 @@ import java.util.Stack;
 
 import com.mycompany.creditsystem.domain.logic.*;
 import com.mycompany.creditsystem.domain.logic.Production.Status;
-import com.mycompany.creditsystem.persistence.ConnectionHandler;
-import com.mycompany.creditsystem.persistence.Info;
-import com.mycompany.creditsystem.persistence.PersistenceHandler;
+import com.mycompany.creditsystem.persistence.*;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.application.Preloader;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -147,7 +146,9 @@ public class PrimaryController implements Initializable {
     private HBox descriptionTitleHBox;
 
     // idk what im doing
-    private ConnectionHandler connectionHandler;
+    private CreditHandler creditHandler;
+    private ProductionHandler productionHandler;
+
     private boolean loggedin;
     HBox switchButtonHBox = new HBox();
     SwitchButton switchButton = new SwitchButton();
@@ -165,7 +166,23 @@ public class PrimaryController implements Initializable {
         });
 
         // idk
-        connectionHandler = ConnectionHandler.getInstance();
+        creditHandler = CreditHandler.getInstance();
+        productionHandler = ProductionHandler.getInstance();
+
+        //creditHandler.createCredit(new Credit("Peter"));
+        /*
+        System.out.println(creditHandler.getCredits());
+        System.out.println(creditHandler.getCredit(2));
+        //creditHandler.deleteCreditFromSystem(2);
+        System.out.println(creditHandler.getCredits());
+        //creditHandler.deleteCreditRelation(1,1);
+        System.out.println(creditHandler.getCredits());
+
+         */
+
+        productionHandler.createProduction(new Production("Yoo"));
+
+        System.out.println(productionHandler.getProductions());
 
         // TRASH FOR TESTING
         Info.productions.add(new Production("1"));
@@ -196,6 +213,14 @@ public class PrimaryController implements Initializable {
 
         Info.getProduction("There Will Be Blood").setStatus(Status.Green);
 
+        Info.credits.add(new Credit("Maren Jytte Jensen"));
+        Info.credits.add(new Credit("Jeppe Jytte Jensen"));
+        Info.credits.add(new Credit("Holger Jytte Jensen"));
+        Info.credits.add(new Credit("Frede Jytte Jensen"));
+        Info.credits.add(new Credit("Mustafa Jytte Jensen"));
+        Info.credits.add(new Credit("Maren2 Jytte Jensen"));
+        Info.credits.add(new Credit("123PENIS Jytte Jensen"));
+
         Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(1));
         Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(2));
         Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(3));
@@ -206,13 +231,6 @@ public class PrimaryController implements Initializable {
         Info.users.add(new Administrator("Lars", "2", "2"));
         Info.users.add(new ProductionCompany("Penis Joe","4","4"));
 
-        Info.credits.add(new Credit("Maren Jytte Jensen"));
-        Info.credits.add(new Credit("Jeppe Jytte Jensen"));
-        Info.credits.add(new Credit("Holger Jytte Jensen"));
-        Info.credits.add(new Credit("Frede Jytte Jensen"));
-        Info.credits.add(new Credit("Mustafa Jytte Jensen"));
-        Info.credits.add(new Credit("Maren2 Jytte Jensen"));
-        Info.credits.add(new Credit("123PENIS Jytte Jensen"));
 
 
         /////
