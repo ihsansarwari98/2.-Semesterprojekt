@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import com.mycompany.creditsystem.domain.logic.*;
 import com.mycompany.creditsystem.domain.logic.Production.Status;
+import com.mycompany.creditsystem.persistence.ConnectionHandler;
 import com.mycompany.creditsystem.persistence.Info;
 import com.mycompany.creditsystem.persistence.PersistenceHandler;
 
@@ -146,7 +147,7 @@ public class PrimaryController implements Initializable {
     private HBox descriptionTitleHBox;
 
     // idk what im doing
-    private PersistenceHandler persistanceHandler;
+    private ConnectionHandler connectionHandler;
     private boolean loggedin;
     HBox switchButtonHBox = new HBox();
     SwitchButton switchButton = new SwitchButton();
@@ -164,7 +165,7 @@ public class PrimaryController implements Initializable {
         });
 
         // idk
-        persistanceHandler = PersistenceHandler.getInstance();
+        connectionHandler = ConnectionHandler.getInstance();
 
         // TRASH FOR TESTING
         Info.productions.add(new Production("1"));
@@ -195,41 +196,24 @@ public class PrimaryController implements Initializable {
 
         Info.getProduction("There Will Be Blood").setStatus(Status.Green);
 
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogensen", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larsen", "Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo", "Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mogens1en", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Lar1sen", "Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilb1o", "Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John M2ogensen", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis La2rsen", "Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vil2bo", "Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Moge3nsen", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Larse3n", "Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilbo3", "Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mo4gensen", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Lar4sen", "Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilb4o", "Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mo5gensen", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Lar5sen", "Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilb5o", "Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mo6gensen", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Lar6sen", "penis"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilb6o", "Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John M7ogensen", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis La7rsen", "Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vil7bo", "Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mo8gensen", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Lar8sen", "Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilb8o", "Dressing"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("John Mo9gensen", "VFX"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Teis Lar9sen", "Actor"));
-        Info.getProduction("There Will Be Blood").addCredit(new Credit("Lars Vilb9o", "Dressing"));
+        Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(1));
+        Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(2));
+        Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(3));
+        Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(4));
 
         Info.users.add(new Producer("John","1","1"));
         Info.users.add(new Producer("Kim","3","3"));
         Info.users.add(new Administrator("Lars", "2", "2"));
         Info.users.add(new ProductionCompany("Penis Joe","4","4"));
+
+        Info.credits.add(new Credit("Maren Jytte Jensen"));
+        Info.credits.add(new Credit("Jeppe Jytte Jensen"));
+        Info.credits.add(new Credit("Holger Jytte Jensen"));
+        Info.credits.add(new Credit("Frede Jytte Jensen"));
+        Info.credits.add(new Credit("Mustafa Jytte Jensen"));
+        Info.credits.add(new Credit("Maren2 Jytte Jensen"));
+        Info.credits.add(new Credit("123PENIS Jytte Jensen"));
+
 
         /////
 
@@ -399,11 +383,12 @@ public class PrimaryController implements Initializable {
         descriptionVBox.getChildren().clear();
         for (int i = 0; i < production.getCredits().size(); i++) {
             Credit credit = (Credit) production.getCredits().get(i);
-            Text roleText = new Text(credit.getRole());
+            // TODO get credit role on production (production_credit_role_subscription)
+            //Text roleText = new Text(credit.getRole());
             Label name = new Label(credit.getName());
             VBox vb = new VBox();
 
-            roleText.setFill(Info.accentGradient);
+            //roleText.setFill(Info.accentGradient);
             roleText.setStyle("-fx-font-weight: bold; -fx-font-size:" + Info.fontSizeBig + ";");
             name.setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.forgroundColor + ";");
             vb.setAlignment(Pos.TOP_CENTER);
@@ -419,10 +404,14 @@ public class PrimaryController implements Initializable {
                     VBox vbox = (VBox) descriptionVBox.getChildren().get(j);
                     Text role = (Text) vbox.getChildren().get(0);
 
+                    // TODO get credit role on production (production_credit_role_subscription)
+                    /*
                     if (credit.getRole().equals(role.getText())) {
                         vbox.getChildren().add(name);
                         foundRole = true;
                     }
+
+                    */
                 }
                 if (!foundRole) {
                     descriptionVBox.getChildren().add(vb);
@@ -576,12 +565,16 @@ public class PrimaryController implements Initializable {
             String line = (textFieldSearchBar.getText().substring(addCreditCommand.length()));
             String[] content = line.split(" ");
 
+
+            /*
             for (int i = 0; i < Info.productions.size(); i++) {
                 if (content[0].equals(Info.productions.get(i).getTitle())) {
                     Info.productions.get(i).addCredit(new Credit(content[1], content[2]));
                     System.out.println("added " + content[1] + " with the role " + content[2] + " to " + Info.productions.get(i).getTitle());
                 }
             }
+
+             */
         }
         // Actual search function
         else {
