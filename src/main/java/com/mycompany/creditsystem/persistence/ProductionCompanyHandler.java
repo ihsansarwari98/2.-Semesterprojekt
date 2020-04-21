@@ -53,8 +53,17 @@ public class ProductionCompanyHandler implements IProductionCompanyHandler {
 
 
     @Override
-    public void deleteProductionCompany(int id) {
+    public boolean deleteProductionCompany(int id) {
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_companies WHERE production_company_id = ?");
+            stmt.setInt(1,id);
+            stmt.execute();
 
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

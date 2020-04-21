@@ -6,7 +6,7 @@ public interface IProductionCompanyHandler {
 
     public ProductionCompany getProductionCompany(int id);
     public boolean createProductionCompany (ProductionCompany productionCompany);
-    public void deleteProductionCompany(int id);
+    public boolean deleteProductionCompany(int id);
     public void updateProductionCompany(int id);
 
 }
