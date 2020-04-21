@@ -61,8 +61,6 @@ public class Info {
 
     public static void updateColors() {
         // Create the stops
-
-
         Stop[] stop = {new Stop(0, Color.valueOf(accentStartColor)), new Stop(1, Color.valueOf(accentEndColor))};
         // create a Linear gradient object 
         accentGradient = new LinearGradient(0, 1, 1, 0, true, CycleMethod.NO_CYCLE, stop);

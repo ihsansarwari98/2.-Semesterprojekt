@@ -3,19 +3,15 @@ package com.mycompany.creditsystem.persistence;
 import com.mycompany.creditsystem.domain.interfaces.IProductionHandler;
 import com.mycompany.creditsystem.domain.logic.Production;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ProductionHandler implements IProductionHandler {
 
     public static ProductionHandler instance;
-
-    public ProductionHandler() {
-        ConnectionHandler.getInstance();
-    }
 
     public static ProductionHandler getInstance() {
         if (instance == null) {
@@ -24,10 +20,31 @@ public class ProductionHandler implements IProductionHandler {
         return instance;
     }
 
+    public Timestamp convertDateToTimestamp(Date date) {
+        return new Timestamp(date.getTime());
+    }
+
     @Override
     public List<Production> getProductions() {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions");
+            ResultSet sqlReturnvalues = statement.executeQuery();
+            List<Production> returnValue = new ArrayList<>();
+            while (sqlReturnvalues.next()) {
+                returnValue.add(new Production(sqlReturnvalues.getString(2)));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Production> getProductions(String titlePart) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions WHERE title ~* ?");
+            statement.setString(1, titlePart);
             ResultSet sqlReturnvalues = statement.executeQuery();
             List<Production> returnValue = new ArrayList<>();
             while (sqlReturnvalues.next()) {
@@ -61,8 +78,8 @@ public class ProductionHandler implements IProductionHandler {
         try {
             PreparedStatement insertStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO productions (title, deadline, status) VALUES (?,?,?)");
             insertStatement.setString(1, production.getTitle());
-            insertStatement.setDate(1, production.getDeadline());
-            insertStatement.setInt(1, production.getStatusInt());
+            insertStatement.setTimestamp(2, convertDateToTimestamp(production.getDeadline()));
+            insertStatement.setInt(3, production.getStatusInt());
 
             return insertStatement.execute();
 
@@ -90,12 +107,12 @@ public class ProductionHandler implements IProductionHandler {
     }
 
     @Override
-    public boolean updateProduction(Production production) {
-        /*
+    public boolean updateProduction(String title, int production_id) {
+
         try {
-            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("UPDATE credits SET name = ? WHERE credit_id = ?");
-            updateStatement.setString(1, production.getTitle());
-            updateStatement.setInt(2, production.getStatusInt());
+            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("UPDATE productions SET title = ? WHERE production_id = ?");
+            updateStatement.setString(1, title);
+            updateStatement.setInt(2, production_id);
 
             return updateStatement.execute();
 
@@ -103,8 +120,5 @@ public class ProductionHandler implements IProductionHandler {
             ex.printStackTrace();
             return false;
             }
-
-         */
-        return false;
     }
 }

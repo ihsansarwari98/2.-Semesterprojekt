@@ -12,10 +12,6 @@ public class CreditHandler implements ICreditHandler {
 
     public static CreditHandler instance;
 
-    public CreditHandler () {
-        ConnectionHandler.getInstance();
-    }
-
     public static CreditHandler getInstance() {
         if (instance == null) {
             instance = new CreditHandler();

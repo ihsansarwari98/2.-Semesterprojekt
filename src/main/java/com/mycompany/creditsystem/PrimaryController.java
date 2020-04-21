@@ -169,20 +169,8 @@ public class PrimaryController implements Initializable {
         creditHandler = CreditHandler.getInstance();
         productionHandler = ProductionHandler.getInstance();
 
-        //creditHandler.createCredit(new Credit("Peter"));
-        /*
-        System.out.println(creditHandler.getCredits());
-        System.out.println(creditHandler.getCredit(2));
-        //creditHandler.deleteCreditFromSystem(2);
-        System.out.println(creditHandler.getCredits());
-        //creditHandler.deleteCreditRelation(1,1);
-        System.out.println(creditHandler.getCredits());
-
-         */
-
-        productionHandler.createProduction(new Production("Yoo"));
-
         System.out.println(productionHandler.getProductions());
+        System.out.println(productionHandler.getProductions("yoo"));
 
         // TRASH FOR TESTING
         Info.productions.add(new Production("1"));
@@ -231,8 +219,6 @@ public class PrimaryController implements Initializable {
         Info.users.add(new Administrator("Lars", "2", "2"));
         Info.users.add(new ProductionCompany("Penis Joe","4","4"));
 
-
-
         /////
 
         sortByDeadline();
@@ -241,8 +227,6 @@ public class PrimaryController implements Initializable {
         sidePanelAction();
 
         switchButtonHBox.getChildren().addAll(switchButton, editLabel);
-
-
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), (ActionEvent event) -> {
             // this code will be called every second
