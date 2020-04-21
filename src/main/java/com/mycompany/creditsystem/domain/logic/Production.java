@@ -77,13 +77,14 @@ public class Production implements Comparable<Production> {
     public ArrayList<Producer> getAssosiatedProducers(){
         return assosiatedProducers;
     }
-   // public void addAssosiatedProducers(Producer producer){
-   //     assosiatedProducers.add(producer);
-  //  }
 
-    // public void addCredits(Credit credit) {
-    //    credits.add(credit);
-   // }
+    public void addAssosiatedProducers(Producer producer){
+        assosiatedProducers.add(producer);
+    }
+
+     public void addCredits(Credit credit) {
+        credits.add(credit);
+    }
 
 
 }

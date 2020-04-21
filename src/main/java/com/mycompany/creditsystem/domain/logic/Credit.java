@@ -1,42 +1,30 @@
 package com.mycompany.creditsystem.domain.logic;
 
 public class Credit {
-    private String name;
-    private String role;
-    private User createdBy;
 
-    public Credit (String name, String role, User createdBy) {
+    private String name;
+    private int id;
+
+    public Credit (String name) {
         this.name = name;
-        this.role = role;
-        this.createdBy = createdBy;
     }
 
     @Override
     public String toString() {
-        return name + " is " + role;
+        return name;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public int getId() {
+        return id;
     }
 
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
+
 }

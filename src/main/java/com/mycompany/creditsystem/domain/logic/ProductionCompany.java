@@ -31,10 +31,6 @@ public class ProductionCompany extends User {
         return companyProducers;
     }
 
-    public void addProducerToProduction(Producer producer, Production production) {
-
-
-    }
 
     public void removeCompanyProducer(Producer producer) {
         companyProducers.remove(producer);
@@ -44,15 +40,6 @@ public class ProductionCompany extends User {
         companyProducers.add(new Producer(name, username, password));
     }
 
-    // public void producerCanEdit(Producer producer, boolean canEdit, Production production) {
-    //    if (canEdit == false) {
-    //        producer.setCanEdit(production, false);
-     //   } else {
-     //       producer.setCanEdit(production, true);
-    //    }
+
 
     }
-
-
-
-// }

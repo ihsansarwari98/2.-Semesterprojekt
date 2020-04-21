@@ -7,8 +7,8 @@ import java.util.List;
 public interface ICreditHandler {
     public List<Credit> getCredits();
     public Credit getCredit(int id);
-    public void createCredit (Credit Credit);
-    public void deleteCredit (int id);
-    public void updateCredit (int id);
+    public boolean createCredit (Credit credit);
+    public boolean deleteCredit (int id);
+    public boolean updateCredit (Credit credit);
 
 }

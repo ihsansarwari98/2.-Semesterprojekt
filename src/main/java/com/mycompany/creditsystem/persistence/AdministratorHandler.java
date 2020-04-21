@@ -19,7 +19,7 @@ public class AdministratorHandler implements IAdministratorHandler {
             if (!sqlReturnValues.next()) {
                 return null;
             }
-            return new Administrator(sqlReturnValues.getString("name"), "username", "password" );
+            return new Administrator(sqlReturnValues.getString("name"), "username", "password");
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;
@@ -41,14 +41,16 @@ public class AdministratorHandler implements IAdministratorHandler {
             e.printStackTrace();
             return false;
         }
+
     }
 
     @Override
     public boolean deleteAdministrator(int id) {
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM administrators WHERE administrator_id = ?");
-            stmt.setInt(1,id);
-            return stmt.execute();
+            stmt.setInt(1, id);
+            stmt.execute();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
