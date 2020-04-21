@@ -328,6 +328,7 @@ public class PrimaryController implements Initializable {
             setNameAndRole();
             sidePanelBackground.getChildren().remove(loginAP);
             sidePanelBackground.getChildren().add(logoutAP);
+            handleDeselect();
         } // if username and password doesn't match
         else {
             enableElements(AccessRole.publicUser);

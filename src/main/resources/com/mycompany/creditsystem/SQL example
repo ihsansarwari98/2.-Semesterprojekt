@@ -33,11 +33,17 @@ CREATE TABLE productions
     status        SMALLINT                  NOT NULL
 );
 
+CREATE TABLE roles
+(
+    role_id    SERIAL UNIQUE PRIMARY KEY NOT NULL,
+    role_title VARCHAR(100) UNIQUE       NOT NULL
+);
+
 CREATE TABLE credits
 (
-    credit_id  SERIAL UNIQUE PRIMARY KEY NOT NULL,
-    name       VARCHAR(100)              NOT NULL,
-    role       VARCHAR(100)              NOT NULL,
+    credit_id  SERIAL UNIQUE PRIMARY KEY               NOT NULL,
+    name       VARCHAR(100)                            NOT NULL,
+    role_title INTEGER REFERENCES roles (role_id) NOT NULL,
     created_by INTEGER REFERENCES users (user_id)
 );
 
@@ -46,6 +52,13 @@ CREATE TABLE company_producer_subscriptions
     producer_id           INTEGER REFERENCES producers (producer_id)                      NOT NULL,
     production_company_id INTEGER REFERENCES production_companies (production_company_id) NOT NULL,
     PRIMARY KEY (producer_id, production_company_id)
+);
+
+CREATE TABLE company_production_subscriptions
+(
+    production_id         INTEGER REFERENCES productions (production_id)                  NOT NULL,
+    production_company_id INTEGER REFERENCES production_companies (production_company_id) NOT NULL,
+    PRIMARY KEY (production_id, production_company_id)
 );
 
 INSERT INTO producers (name, username, password, date_created)
@@ -82,7 +95,8 @@ SELECT *
 FROM administrators;
 
 SELECT *
-FROM company_producer_subscriptio;ns
+FROM company_producer_subscriptions;
+
 
 DROP TABLE company_producer_subscriptions;
 DROP TABLE credits;
