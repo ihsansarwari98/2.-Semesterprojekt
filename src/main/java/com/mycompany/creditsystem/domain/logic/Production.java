@@ -1,6 +1,8 @@
 package com.mycompany.creditsystem.domain.logic;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -17,6 +19,7 @@ public class Production implements Comparable<Production> {
     public Production(String title) {
         this.title = title;
         this.status = Status.Red;
+        deadline = new Date();
         credits = new ArrayList<>();
         assosiatedProducers = new ArrayList<>();
     }
