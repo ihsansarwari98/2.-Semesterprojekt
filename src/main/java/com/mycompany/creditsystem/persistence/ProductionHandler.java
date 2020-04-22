@@ -2,6 +2,7 @@ package com.mycompany.creditsystem.persistence;
 
 import com.mycompany.creditsystem.domain.interfaces.IProductionHandler;
 import com.mycompany.creditsystem.domain.logic.Production;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.ZoneId;
@@ -28,10 +29,10 @@ public class ProductionHandler implements IProductionHandler {
     public List<Production> getProductions() {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions");
-            ResultSet sqlReturnvalues = statement.executeQuery();
+            ResultSet sqlReturnValues = statement.executeQuery();
             List<Production> returnValue = new ArrayList<>();
-            while (sqlReturnvalues.next()) {
-                returnValue.add(new Production(sqlReturnvalues.getString(2)));
+            while (sqlReturnValues.next()) {
+                returnValue.add(new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4)));
             }
             return returnValue;
         } catch (SQLException e) {
@@ -45,10 +46,10 @@ public class ProductionHandler implements IProductionHandler {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions WHERE title ~* ?");
             statement.setString(1, titlePart);
-            ResultSet sqlReturnvalues = statement.executeQuery();
+            ResultSet sqlReturnValues = statement.executeQuery();
             List<Production> returnValue = new ArrayList<>();
-            while (sqlReturnvalues.next()) {
-                returnValue.add(new Production(sqlReturnvalues.getString(2)));
+            while (sqlReturnValues.next()) {
+                returnValue.add(new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4)));
             }
             return returnValue;
         } catch (SQLException e) {
@@ -66,7 +67,7 @@ public class ProductionHandler implements IProductionHandler {
             if (!sqlReturnValues.next()) {
                 return null;
             }
-            return new Production(sqlReturnValues.getString(2));
+            return new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4));
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;
@@ -107,7 +108,7 @@ public class ProductionHandler implements IProductionHandler {
     }
 
     @Override
-    public boolean updateProduction(String title, int production_id) {
+    public boolean updateProductionTitle(String title, int production_id) {
         try {
             PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("UPDATE productions SET title = ? WHERE production_id = ?");
             updateStatement.setString(1, title);
@@ -120,6 +121,38 @@ public class ProductionHandler implements IProductionHandler {
             return false;
         }
     }
+
+
+    @Override
+    public boolean updateProductionDeadline(Date deadline, int production_id) {
+        try {
+            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("UPDATE productions SET deadline = ? WHERE production_id = ?");
+            updateStatement.setTimestamp(1, convertDateToTimestamp(deadline));
+            updateStatement.setInt(2, production_id);
+
+            return updateStatement.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateProductionStatus(int status, int production_id) {
+        try {
+            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("UPDATE productions SET status = ? WHERE production_id = ?");
+            updateStatement.setInt(1, status);
+            updateStatement.setInt(2, production_id);
+
+            return updateStatement.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
 
     public boolean addCreditAndRoleToProduction(int production_id, int credit_id, int role_id) {
         try {

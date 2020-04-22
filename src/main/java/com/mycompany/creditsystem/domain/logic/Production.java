@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class Production implements Comparable<Production> {
+public class Production implements Comparable<Production>  {
 
     private String title;
     private Date deadline;
@@ -16,12 +16,31 @@ public class Production implements Comparable<Production> {
     private ArrayList<Producer> assosiatedProducers;
     private int id;
 
+
     public Production(String title) {
         this.title = title;
         this.status = Status.Red;
         deadline = new Date();
         credits = new ArrayList<>();
         assosiatedProducers = new ArrayList<>();
+    }
+
+    public Production(int id, String title, Date deadline, int status) {
+        this.id = id;
+        this.title = title;
+        this.status = calcStatus(status);
+        this.deadline = deadline;
+        credits = new ArrayList<>();
+        assosiatedProducers = new ArrayList<>();
+    }
+
+    public Status calcStatus (int statusNumber) {
+        if (statusNumber == 1) {
+            return Status.Yellow;
+        } else if (statusNumber == 2) {
+            return Status.Green;
+        }
+        return Status.Red;
     }
 
     public void addCredit(Credit credit) {
@@ -95,5 +114,7 @@ public class Production implements Comparable<Production> {
         credits.add(credit);
     }
 
-
+    public int getId() {
+        return id;
+    }
 }

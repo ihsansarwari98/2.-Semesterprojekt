@@ -145,8 +145,8 @@ public class PrimaryController implements Initializable {
     private HBox descriptionTitleHBox;
 
     // idk what im doing
-    private CreditHandler creditHandler;
-    private ProductionHandler productionHandler;
+    //private ProductionLogic productionLogic = new ProductionLogic();
+    SystemFacede systemFacede = new SystemFacede();
 
     private boolean loggedin;
     HBox switchButtonHBox = new HBox();
@@ -164,12 +164,7 @@ public class PrimaryController implements Initializable {
             updateProductionList();
         });
 
-        // idk
-        creditHandler = CreditHandler.getInstance();
-        productionHandler = ProductionHandler.getInstance();
-
-        System.out.println(productionHandler.getProductions());
-        System.out.println(productionHandler.getProductions("yoo"));
+        System.out.println(systemFacede.productionLogic.getProductions());
 
         // TRASH FOR TESTING
         Info.productions.add(new Production("1"));
@@ -213,10 +208,10 @@ public class PrimaryController implements Initializable {
         Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(3));
         Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(4));
 
-        Info.users.add(new Producer("John","1","1"));
-        Info.users.add(new Producer("Kim","3","3"));
+        Info.users.add(new Producer("John", "1", "1"));
+        Info.users.add(new Producer("Kim", "3", "3"));
         Info.users.add(new Administrator("Lars", "2", "2"));
-        Info.users.add(new ProductionCompany("Penis Joe","4","4"));
+        Info.users.add(new ProductionCompany("Penis Joe", "4", "4"));
 
         /////
 
@@ -456,17 +451,13 @@ public class PrimaryController implements Initializable {
             tempUserSearch = userSearch;
             if (!userSearch.isBlank()) {
                 searchResults.getChildren().clear();
-                for (int i = 0; i < Info.productions.size(); i++) {
-                    String title = Info.productions.get(i).getTitle().toLowerCase();
-
+                for (int i = 0; i < systemFacede.productionLogic.getProductions(userSearch).size(); i++) {
                     // if the text written in the search bar is equal to any result in the production list // DATABASE
-                    if (title.contains(userSearch)) { // DATABASE
-                        AnchorPane ap = new AnchorPane();
-                        Label titleText = new Label(Info.productions.get(i).getTitle());
+                    AnchorPane ap = new AnchorPane();
+                    Label titleText = new Label(systemFacede.productionLogic.getProductions(userSearch).get(i).getTitle());
 
-                        searchResults.getChildren().add(ap);
-                        ap.getChildren().addAll(titleText);
-                    }
+                    searchResults.getChildren().add(ap);
+                    ap.getChildren().addAll(titleText);
                 }
 
                 if (searchResults.getChildren().size() == 0) {
@@ -580,6 +571,7 @@ public class PrimaryController implements Initializable {
         // Actual search function
         else {
             if (Info.getProduction(textFieldSearchBar.getText()) != null) {
+
                 Production program = Info.getProduction(textFieldSearchBar.getText());
                 if (activeProduction == null) {
                     loadTitleAndDescriptionElements();
@@ -639,7 +631,6 @@ public class PrimaryController implements Initializable {
             deadline.setStyle("-fx-text-fill: " + Info.fontColor3 + "; -fx-font-size: " + Info.fontSizeSmall + ";");
         }
     }
-
 
     private ArrayList<Production> searchHistory = new ArrayList<>();
 
