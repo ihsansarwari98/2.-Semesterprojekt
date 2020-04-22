@@ -1,16 +1,14 @@
 package com.mycompany.creditsystem.presentation;
 
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.mycompany.creditsystem.domain.logic.*;
 import com.mycompany.creditsystem.domain.logic.Production.Status;
-import com.mycompany.creditsystem.persistence.*;
 
-import com.mycompany.creditsystem.presentation.App;
-import com.mycompany.creditsystem.presentation.Info;
-import com.mycompany.creditsystem.presentation.SwitchButton;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -146,7 +144,7 @@ public class PrimaryController implements Initializable {
 
     // idk what im doing
     //private ProductionLogic productionLogic = new ProductionLogic();
-    SystemFacede systemFacede = new SystemFacede();
+    private SystemFacade systemFacade = new SystemFacade();
 
     private boolean loggedin;
     HBox switchButtonHBox = new HBox();
@@ -158,13 +156,19 @@ public class PrimaryController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         updateProperties();
 
-        enableElements(AccessRole.publicUser);
+        enableElements(User.AccessRole.publicUser);
 
         Info.productions.addListener((ListChangeListener<Production>) change -> {
             updateProductionList();
         });
 
-        System.out.println(systemFacede.productionLogic.getProductions());
+//        System.out.println(systemFacade.productionLogic.getProductions());
+//        System.out.println(systemFacade.userLogic.getUsers());
+        System.out.println(systemFacade.userLogic.getUsers().get(0).getPassword());
+        System.out.println(systemFacade.userLogic.getUsers().get(0).getUsername());
+
+
+        //System.out.println(systemFacade.currentUser.getUser());
 
         // TRASH FOR TESTING
         Info.productions.add(new Production("1"));
@@ -215,7 +219,6 @@ public class PrimaryController implements Initializable {
 
         /////
 
-        sortByDeadline();
         homeButtonAction();
         Info.sidePanelOn = true;
         sidePanelAction();
@@ -292,38 +295,33 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void handleLogin() {
-        boolean foundUser = false;
+        if (systemFacade.userLogic.userLogin(usernameTextField.getText(), passwordTextField.getText())) {
+            enableElements(systemFacade.currentUser.getUser().getAccessRole());
 
-        // check the list of users
-        for (int i = 0; i < Info.users.size(); i++) {
-            User user = Info.users.get(i);
-            if (usernameTextField.getText().equals(user.getUsername()) && passwordTextField.getText().equals(user.getPassword())) {
-                foundUser = true;
-                Info.currentUser = user;
-            }
-        }
-        // If username and password matches
-        if (foundUser) {
-            enableElements(Info.currentUser.getAccessRole());
+            // Sets myProductions
+            systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToProducer(systemFacade.currentUser.getUser().getId()));
+
             setNameAndRole();
             sidePanelBackground.getChildren().remove(loginAP);
             sidePanelBackground.getChildren().add(logoutAP);
             handleDeselect();
-        } // if username and password doesn't match
-        else {
-            enableElements(AccessRole.publicUser);
+            updateSearchResultList();
+
+        } else {
+            enableElements(User.AccessRole.publicUser);
+            System.out.println("password and username doesn't match");
         }
     }
 
     private void setNameAndRole() {
-        String role = Info.currentUser.getAccessRole().toString();
+        String role = systemFacade.currentUser.getUser().getAccessRole().toString();
         String[] roleName = role.split("(?=\\p{Upper})");
         StringBuilder capitalizedRoleName = new StringBuilder();
-        for (int i = 0; i < roleName.length; i++) {
-            capitalizedRoleName.append(roleName[i].substring(0, 1).toUpperCase()).append(roleName[i].substring(1)).append(" ");
+        for (String s : roleName) {
+            capitalizedRoleName.append(s.substring(0, 1).toUpperCase()).append(s.substring(1)).append(" ");
         }
 
-        nameText.setText(Info.currentUser.getName());
+        nameText.setText(systemFacade.currentUser.getUser().getName());
         roleText.setText(capitalizedRoleName.toString());
     }
 
@@ -335,7 +333,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleHBox.getChildren().add(switchButtonHBox);
     }
 
-    private void enableElements(AccessRole accessRole) {
+    private void enableElements(User.AccessRole accessRole) {
         switch (accessRole) {
             case publicUser:
                 sidePanelBackground.getChildren().clear();
@@ -371,10 +369,11 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void handleLogout() {
-        Info.currentUser = null;
-        enableElements(AccessRole.publicUser);
+        systemFacade.currentUser.setUser(null);
+        enableElements(User.AccessRole.publicUser);
     }
 
+    // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private void showCreditList(Production production) {
         descriptionVBox.getChildren().clear();
         for (int i = 0; i < production.getCredits().size(); i++) {
@@ -419,6 +418,7 @@ public class PrimaryController implements Initializable {
     }
 
     // Makes the search text white when focused and clicking ENTER searches the focused text
+
     private void handleSearchFocus() {
         for (int i = 0; i < searchResults.getChildren().size(); i++) {
             AnchorPane ap = (AnchorPane) searchResults.getChildren().get(i);
@@ -451,10 +451,10 @@ public class PrimaryController implements Initializable {
             tempUserSearch = userSearch;
             if (!userSearch.isBlank()) {
                 searchResults.getChildren().clear();
-                for (int i = 0; i < systemFacede.productionLogic.getProductions(userSearch).size(); i++) {
+                for (int i = 0; i < systemFacade.productionLogic.getProductions(userSearch).size(); i++) {
                     // if the text written in the search bar is equal to any result in the production list // DATABASE
                     AnchorPane ap = new AnchorPane();
-                    Label titleText = new Label(systemFacede.productionLogic.getProductions(userSearch).get(i).getTitle());
+                    Label titleText = new Label(systemFacade.productionLogic.getProductions(userSearch).get(i).getTitle());
 
                     searchResults.getChildren().add(ap);
                     ap.getChildren().addAll(titleText);
@@ -468,7 +468,7 @@ public class PrimaryController implements Initializable {
 
             } else {
                 // triggers if the search bar becomes empty while the using is typing
-                if (searchHistory.size() > 0) {
+                if (systemFacade.currentUser.getSearchHistory().size() > 0) {
                     displaySearchHistory();
                     styleSearchResults();
                 } else {
@@ -489,13 +489,15 @@ public class PrimaryController implements Initializable {
     // Search history
     private void displaySearchHistory() {
         searchResults.getChildren().clear();
-        for (int i = 0; i < searchHistory.size(); i++) {
-            String title = searchHistory.get(i).getTitle();
-            AnchorPane ap = new AnchorPane();
-            Label titleText = new Label(title);
+        if (systemFacade.currentUser.getSearchHistory() != null) {
+            for (int i = 0; i < systemFacade.currentUser.getSearchHistory().size(); i++) {
+                String title = systemFacade.currentUser.getSearchHistory().get(i).getTitle();
+                AnchorPane ap = new AnchorPane();
+                Label titleText = new Label(title);
 
-            searchResults.getChildren().add(ap);
-            ap.getChildren().addAll(titleText);
+                searchResults.getChildren().add(ap);
+                ap.getChildren().addAll(titleText);
+            }
         }
     }
 
@@ -527,20 +529,20 @@ public class PrimaryController implements Initializable {
 
     // Calculates and sets the height of the search result tab
     private void calculateSearchResultsHeight(Label titleText) {
-        int visibleResults = 3;
         int searchResultSize = searchResults.getChildren().size();
 
         if (searchResultSize == 0) {
             searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1)); // no results
-        } else if (searchResultSize < visibleResults) { // Maximum amount of search results shown
+        } else if (searchResultSize < Info.visibleResults) { // Maximum amount of search results shown
             searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1) + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (searchResultSize));
         } else {
-            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1) + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (visibleResults));
+            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1) + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (Info.visibleResults));
         }
     }
 
 
     // Handles what happens when you search
+    // TODO
     @FXML
     private void handleSearch() { // TODO: REWORK EVERYTHING
 
@@ -550,7 +552,7 @@ public class PrimaryController implements Initializable {
         // Add program logic
         if ((textFieldSearchBar.getText().startsWith(addProgramCommand))) {
             String programTitle = textFieldSearchBar.getText().substring(addProgramCommand.length());
-            Info.productions.add(new Production(programTitle));
+            systemFacade.productionLogic.createProduction(new Production(programTitle));
         }
         // Add credit logic
         else if (textFieldSearchBar.getText().startsWith(addCreditCommand)) {
@@ -579,7 +581,7 @@ public class PrimaryController implements Initializable {
                 activeProduction = program;
                 descriptionTitleText.setText(program.getTitle());
                 showCreditList(program);
-                addToProductionHistory(program);
+                systemFacade.currentUser.addToSearchHistory(program);
                 calculateSearchBarAnchors();
 
             } else {
@@ -593,55 +595,45 @@ public class PrimaryController implements Initializable {
     }
 
     private void updateProductionList() {
-        programList.getChildren().clear();
+        if (systemFacade.currentUser.getUser() != null) {
+            if (systemFacade.currentUser.getUser().getAccessRole().equals(User.AccessRole.producer)) {
+                programList.getChildren().clear();
+                for (Production production : systemFacade.currentUser.getMyProductions()) {
+                    HBox hb = new HBox();
+                    Circle circle = new Circle(4);
+                    AnchorPane ap = new AnchorPane();
+                    VBox vb = new VBox();
+                    Label title = new Label(production.getTitle());
+                    Label deadline = new Label(production.getDeadlineString());
 
-        for (int i = 0; i < Info.productions.size(); i++) {
+                    programList.getChildren().add(hb);
+                    hb.getChildren().addAll(circle, ap);
+                    ap.getChildren().add(vb);
+                    vb.getChildren().addAll(title, deadline);
+                    HBox.setHgrow(ap, Priority.ALWAYS);
 
-            HBox hb = new HBox();
-            Circle circle = new Circle(4);
-            AnchorPane ap = new AnchorPane();
-            VBox vb = new VBox();
-            Label title = new Label(Info.productions.get(i).getTitle());
-            Label deadline = new Label(Info.productions.get(i).getDeadlineString());
+                    hb.setSpacing(25);
+                    hb.setAlignment(Pos.CENTER_LEFT);
+                    ap.setCursor(Cursor.HAND);
 
-            programList.getChildren().add(hb);
-            hb.getChildren().addAll(circle, ap);
-            ap.getChildren().add(vb);
-            vb.getChildren().addAll(title, deadline);
-            HBox.setHgrow(ap, Priority.ALWAYS);
+                    if (production.getStatus() == Status.Red) {
+                        circle.setFill(Paint.valueOf(Info.statusRed)); // DATABASE
+                    } else if (production.getStatus() == Status.Yellow) {
+                        circle.setFill(Paint.valueOf(Info.statusYellow)); // DATABASE
+                    } else {
+                        circle.setFill(Paint.valueOf(Info.statusGreen)); // DATABASE
+                    }
 
-            hb.setSpacing(25);
-            hb.setAlignment(Pos.CENTER_LEFT);
-            ap.setCursor(Cursor.HAND);
+                    ap.setOnMouseClicked(e -> {
+                        textFieldSearchBar.setText(title.getText());
+                        handleSearch();
+                    });
 
-            if (Info.productions.get(i).getStatus() == Production.Status.Red) {
-                circle.setFill(Paint.valueOf(Info.statusRed)); // DATABASE
-            } else if (Info.productions.get(i).getStatus() == Production.Status.Yellow) {
-                circle.setFill(Paint.valueOf(Info.statusYellow)); // DATABASE
-            } else {
-                circle.setFill(Paint.valueOf(Info.statusGreen)); // DATABASE
-            }
-
-            ap.setOnMouseClicked(e -> {
-                textFieldSearchBar.setText(title.getText());
-                handleSearch();
-            });
-
-            title.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-            deadline.setStyle("-fx-text-fill: " + Info.fontColor3 + "; -fx-font-size: " + Info.fontSizeSmall + ";");
-        }
-    }
-
-    private ArrayList<Production> searchHistory = new ArrayList<>();
-
-    // add program to search history and if it already exists in the history, it get's moved to the top
-    private void addToProductionHistory(Production production) {
-        for (int i = 0; i < searchHistory.size(); i++) {
-            if (searchHistory.get(i) == production) {
-                searchHistory.remove(i);
+                    title.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+                    deadline.setStyle("-fx-text-fill: " + Info.fontColor3 + "; -fx-font-size: " + Info.fontSizeSmall + ";");
+                }
             }
         }
-        searchHistory.add(0, production);
     }
 
     // Handles when the user clicks on the background to deselect what was previously focused
@@ -659,16 +651,17 @@ public class PrimaryController implements Initializable {
     private void sortByName() {
         ProductionNameComparator nameComparator = new ProductionNameComparator();
         if (nameComparatorShift) {
-            Info.productions.sort(nameComparator);
+            systemFacade.currentUser.getMyProductions().sort(nameComparator);
             nameComparatorShift = false;
             topSortingLabel.setText("A");
             bottomSortingLabel.setText("Z");
         } else {
-            Info.productions.sort(nameComparator.reversed());
+            systemFacade.currentUser.getMyProductions().sort(nameComparator.reversed());
             nameComparatorShift = true;
             topSortingLabel.setText("Z");
             bottomSortingLabel.setText("A");
         }
+        updateProductionList();
     }
 
     private Boolean deadlineComparatorShift = true;
@@ -677,12 +670,13 @@ public class PrimaryController implements Initializable {
     private void sortByDeadline() {
         ProductionDeadlineComparator deadlineComparator = new ProductionDeadlineComparator();
         if (deadlineComparatorShift) {
-            Info.productions.sort(deadlineComparator);
+            systemFacade.currentUser.getMyProductions().sort(deadlineComparator);
             deadlineComparatorShift = false;
         } else {
-            Info.productions.sort(deadlineComparator.reversed());
+            systemFacade.currentUser.getMyProductions().sort(deadlineComparator.reversed());
             deadlineComparatorShift = true;
         }
+        updateProductionList();
     }
 
     public void calculateSearchBarAnchors() {
@@ -716,6 +710,7 @@ public class PrimaryController implements Initializable {
         searchBarBP.setTop(logoVBox);
         BorderPane.setAlignment(logoVBox, Pos.TOP_CENTER);
         calculateSearchBarAnchors();
+        updateProductionList();
     }
 
     @FXML

@@ -38,7 +38,6 @@ public class ProductionCompanyHandler implements IProductionCompanyHandler {
 
     @Override
     public boolean createProductionCompany(ProductionCompany productionCompany) {
-
         try {
             PreparedStatement insertStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO production_companies (name, username, password) VALUES (?,?,?)");
 

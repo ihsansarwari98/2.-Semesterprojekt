@@ -4,16 +4,33 @@ CREATE TABLE users
     name         VARCHAR(100)              NOT NULL,
     username     VARCHAR(100) UNIQUE       NOT NULL,
     password     VARCHAR(100)              NOT NULL,
-    date_created timestamp DEFAULT now()   NOT NULL,
-    access_role  SMALLINT  DEFAULT 0       NOT NULL
+    date_created timestamp                 NOT NULL
 );
+
+CREATE TABLE producers
+(
+    producer_id SERIAL UNIQUE NOT NULL,
+    CONSTRAINT producer_id PRIMARY KEY (user_id)
+) INHERITS (users);
+
+CREATE TABLE production_companies
+(
+    production_company_id SERIAL UNIQUE NOT NULL,
+    CONSTRAINT production_company_id PRIMARY KEY (user_id)
+) INHERITS (users);
+
+CREATE TABLE administrators
+(
+    administrator_id SERIAL UNIQUE NOT NULL,
+    CONSTRAINT administrator_id PRIMARY KEY (user_id)
+) INHERITS (users);
 
 CREATE TABLE productions
 (
     production_id SERIAL UNIQUE PRIMARY KEY NOT NULL,
     title         VARCHAR(100)              NOT NULL,
-    deadline      DATE     DEFAULT now()    NOT NULL,
-    status        SMALLINT DEFAULT 0        NOT NULL
+    deadline      DATE                      NOT NULL,
+    status        SMALLINT                  NOT NULL
 );
 
 CREATE TABLE roles
@@ -30,21 +47,21 @@ CREATE TABLE credits
 
 CREATE TABLE company_producer_subscriptions
 (
-    producer_id           INTEGER REFERENCES users (user_id) NOT NULL,
-    production_company_id INTEGER REFERENCES users (user_id) NOT NULL,
+    producer_id           INTEGER REFERENCES producers (producer_id)                      NOT NULL,
+    production_company_id INTEGER REFERENCES production_companies (production_company_id) NOT NULL,
     PRIMARY KEY (producer_id, production_company_id)
 );
 
 CREATE TABLE company_production_subscriptions
 (
-    production_id         INTEGER REFERENCES users (user_id) NOT NULL,
-    production_company_id INTEGER REFERENCES users (user_id) NOT NULL,
+    production_id         INTEGER REFERENCES productions (production_id)                  NOT NULL,
+    production_company_id INTEGER REFERENCES production_companies (production_company_id) NOT NULL,
     PRIMARY KEY (production_id, production_company_id)
 );
 
 CREATE TABLE producer_production_subscriptions
 (
-    producer_id   INTEGER REFERENCES users (user_id)             NOT NULL,
+    producer_id   INTEGER REFERENCES producers (producer_id)     NOT NULL,
     production_id INTEGER REFERENCES productions (production_id) NOT NULL,
     PRIMARY KEY (producer_id, production_id)
 );
@@ -57,25 +74,22 @@ CREATE TABLE production_credit_role_subscriptions
     PRIMARY KEY (production_id, credit_id, role_id)
 );
 
-INSERT INTO users (name, username, password)
+INSERT INTO producers (name, username, password)
 VALUES ('Steffen', '1', '1');
 
-INSERT INTO users (name, username, password, access_role)
-VALUES ('STEVEN LANGSTRØMPE', 'a', 'a','1');
-
-INSERT INTO users (name, username, password)
+INSERT INTO producers (name, username, password)
 VALUES ('Jørgen', '2', '2');
 
-INSERT INTO users (name, username, password)
+INSERT INTO producers (name, username, password)
 VALUES ('Morgens', '3', '3');
 
-INSERT INTO users (name, username, password)
+INSERT INTO production_companies (name, username, password)
 VALUES ('lars', '4', '4');
 
-INSERT INTO users (name, username, password)
+INSERT INTO production_companies (name, username, password)
 VALUES ('Karen', '5', '5');
 
-INSERT INTO users (name, username, password)
+INSERT INTO administrators (name, username, password)
 VALUES ('Maren', '6', '6');
 
 INSERT INTO productions (title, deadline, status)
@@ -130,7 +144,16 @@ WHERE production_credit_role_subscriptions.production_id = productions.productio
   AND production_credit_role_subscriptions.role_id = roles.role_id;
 
 SELECT *
+FROM producers;
+
+SELECT *
 FROM users;
+
+SELECT *
+FROM production_companies;
+
+SELECT *
+FROM administrators;
 
 SELECT *
 FROM company_producer_subscriptions;
@@ -142,4 +165,7 @@ DROP TABLE company_producer_subscriptions;
 DROP TABLE roles;
 DROP TABLE credits;
 DROP TABLE productions;
+DROP TABLE producers;
+DROP TABLE production_companies;
+DROP TABLE administrators;
 DROP TABLE users;

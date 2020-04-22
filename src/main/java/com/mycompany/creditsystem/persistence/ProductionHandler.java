@@ -2,13 +2,10 @@ package com.mycompany.creditsystem.persistence;
 
 import com.mycompany.creditsystem.domain.interfaces.IProductionHandler;
 import com.mycompany.creditsystem.domain.logic.Production;
-import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 
 public class ProductionHandler implements IProductionHandler {
 
@@ -26,11 +23,11 @@ public class ProductionHandler implements IProductionHandler {
     }
 
     @Override
-    public List<Production> getProductions() {
+    public ArrayList<Production> getProductions() {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions");
             ResultSet sqlReturnValues = statement.executeQuery();
-            List<Production> returnValue = new ArrayList<>();
+            ArrayList<Production> returnValue = new ArrayList<>();
             while (sqlReturnValues.next()) {
                 returnValue.add(new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4)));
             }
@@ -42,12 +39,12 @@ public class ProductionHandler implements IProductionHandler {
     }
 
     @Override
-    public List<Production> getProductions(String titlePart) {
+    public ArrayList<Production> getProductions(String titlePart) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions WHERE title ~* ?");
             statement.setString(1, titlePart);
             ResultSet sqlReturnValues = statement.executeQuery();
-            List<Production> returnValue = new ArrayList<>();
+            ArrayList<Production> returnValue = new ArrayList<>();
             while (sqlReturnValues.next()) {
                 returnValue.add(new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4)));
             }
@@ -197,5 +194,20 @@ public class ProductionHandler implements IProductionHandler {
         }
     }
 
-
+    @Override
+    public ArrayList<Production> getProductionsLinkedToProducer(int producer_id) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT productions.production_id, productions.title, productions.deadline, productions.status  FROM producer_production_subscriptions,users, productions WHERE producer_production_subscriptions.producer_id = users.user_id AND producer_id = ? AND producer_production_subscriptions.production_id = productions.production_id");
+            statement.setInt(1, producer_id);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<Production> returnValue = new ArrayList<>();
+            while (sqlReturnValues.next()) {
+                returnValue.add(new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4)));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -39,6 +39,8 @@ public class Info {
     public static int roundAmount = 25;
     public static double scaleAmount = 0.15;
 
+    public static int visibleResults = 3;
+
     public static int fontSizeBig = 20;
     public static int fontSizeDefault = 16;
     public static int fontSizeSmall = 10;

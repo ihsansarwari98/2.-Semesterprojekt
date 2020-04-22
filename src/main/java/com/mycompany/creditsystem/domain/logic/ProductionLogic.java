@@ -3,18 +3,18 @@ package com.mycompany.creditsystem.domain.logic;
 import com.mycompany.creditsystem.domain.interfaces.IProductionLogic;
 import com.mycompany.creditsystem.persistence.ProductionHandler;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class ProductionLogic implements IProductionLogic {
 
     @Override
-    public List<Production> getProductions(String titlePart) {
+    public ArrayList<Production> getProductions(String titlePart) {
         return ProductionHandler.getInstance().getProductions(titlePart);
     }
 
     @Override
-    public List<Production> getProductions() {
+    public ArrayList<Production> getProductions() {
         return ProductionHandler.getInstance().getProductions();
     }
 
@@ -47,5 +47,11 @@ public class ProductionLogic implements IProductionLogic {
     public boolean updateProductionStatus(int status, int production_id) {
         return ProductionHandler.getInstance().updateProductionStatus(status, production_id);
     }
+
+    @Override
+    public ArrayList<Production> getProductionsLinkedToProducer(int producer_id) {
+        return ProductionHandler.getInstance().getProductionsLinkedToProducer(producer_id);
+    }
+
 
 }
