@@ -1,4 +1,4 @@
-package com.mycompany.creditsystem.domain.interfaces;
+package com.mycompany.creditsystem.domain.logicinterface;
 
 import com.mycompany.creditsystem.domain.logic.Production;
 
