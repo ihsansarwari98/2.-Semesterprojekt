@@ -1,6 +1,8 @@
 package com.mycompany.creditsystem.domain.logic;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -16,11 +18,10 @@ public class Production implements Comparable<Production> {
 
     public Production(String title) {
         this.title = title;
-        this.deadline = new Date();
         this.status = Status.Red;
+        deadline = new Date();
         credits = new ArrayList<>();
         assosiatedProducers = new ArrayList<>();
-
     }
 
     public void addCredit(Credit credit) {
@@ -48,7 +49,11 @@ public class Production implements Comparable<Production> {
     }
 
     public enum Status {
-        Green, Yellow, Red
+        Red, Yellow, Green
+    }
+
+    public int getStatusInt() {
+        return status.ordinal();
     }
 
     public Status getStatus() {
@@ -70,6 +75,10 @@ public class Production implements Comparable<Production> {
         return simpleDateFormat.format(deadline);
     }
 
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
+
     public ArrayList<Credit> getCredits() {
         return credits;
     }
@@ -82,7 +91,7 @@ public class Production implements Comparable<Production> {
         assosiatedProducers.add(producer);
     }
 
-     public void addCredits(Credit credit) {
+    public void addCredits(Credit credit) {
         credits.add(credit);
     }
 

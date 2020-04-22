@@ -68,7 +68,6 @@ public class ProducerHandler implements IProducerHandler {
             e.printStackTrace();
             return null;
         }
-
     }
 
     @Override

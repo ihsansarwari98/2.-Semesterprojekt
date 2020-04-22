@@ -1,6 +1,6 @@
-package com.mycompany.creditsystem;
+package com.mycompany.creditsystem.presentation;
 
-import com.mycompany.creditsystem.persistence.Info;
+import com.mycompany.creditsystem.presentation.Info;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

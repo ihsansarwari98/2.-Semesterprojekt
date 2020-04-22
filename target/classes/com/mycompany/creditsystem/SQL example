@@ -4,7 +4,7 @@ CREATE TABLE users
     name         VARCHAR(100)              NOT NULL,
     username     VARCHAR(100) UNIQUE       NOT NULL,
     password     VARCHAR(100)              NOT NULL,
-    date_created DATE                      NOT NULL
+    date_created timestamp                 NOT NULL
 );
 
 CREATE TABLE producers
@@ -33,12 +33,16 @@ CREATE TABLE productions
     status        SMALLINT                  NOT NULL
 );
 
+CREATE TABLE roles
+(
+    role_id    SERIAL UNIQUE PRIMARY KEY NOT NULL,
+    role_title VARCHAR(100) UNIQUE       NOT NULL
+);
+
 CREATE TABLE credits
 (
-    credit_id  SERIAL UNIQUE PRIMARY KEY NOT NULL,
-    name       VARCHAR(100)              NOT NULL,
-    role       VARCHAR(100)              NOT NULL,
-    created_by INTEGER REFERENCES users (user_id)
+    credit_id SERIAL UNIQUE PRIMARY KEY NOT NULL,
+    name      VARCHAR(100)              NOT NULL
 );
 
 CREATE TABLE company_producer_subscriptions
@@ -48,26 +52,96 @@ CREATE TABLE company_producer_subscriptions
     PRIMARY KEY (producer_id, production_company_id)
 );
 
-INSERT INTO producers (name, username, password, date_created)
-VALUES ('Steffen', '123', '1234', NOW());
+CREATE TABLE company_production_subscriptions
+(
+    production_id         INTEGER REFERENCES productions (production_id)                  NOT NULL,
+    production_company_id INTEGER REFERENCES production_companies (production_company_id) NOT NULL,
+    PRIMARY KEY (production_id, production_company_id)
+);
 
-INSERT INTO producers (name, username, password, date_created)
-VALUES ('Jørgen', '123', '1234', NOW());
+CREATE TABLE producer_production_subscriptions
+(
+    producer_id   INTEGER REFERENCES producers (producer_id)     NOT NULL,
+    production_id INTEGER REFERENCES productions (production_id) NOT NULL,
+    PRIMARY KEY (producer_id, production_id)
+);
 
-INSERT INTO producers (name, username, password, date_created)
-VALUES ('morgens', '123', '1234', NOW());
+CREATE TABLE production_credit_role_subscriptions
+(
+    production_id INTEGER REFERENCES productions (production_id) NOT NULL,
+    credit_id     INTEGER REFERENCES credits (credit_id)         NOT NULL,
+    role_id       INTEGER REFERENCES roles (role_id)             NOT NULL,
+    PRIMARY KEY (production_id, credit_id, role_id)
+);
 
-INSERT INTO production_companies (name, username, password, date_created)
-VALUES ('lars', '123', '1234', NOW());
+INSERT INTO producers (name, username, password)
+VALUES ('Steffen', '1', '1');
 
-INSERT INTO production_companies (name, username, password, date_created)
-VALUES ('pik', '123', '1234', NOW());
+INSERT INTO producers (name, username, password)
+VALUES ('Jørgen', '2', '2');
 
-INSERT INTO administrators (name, username, password, date_created)
-VALUES ('Maren', '123', '1234', NOW());
+INSERT INTO producers (name, username, password)
+VALUES ('Morgens', '3', '3');
+
+INSERT INTO production_companies (name, username, password)
+VALUES ('lars', '4', '4');
+
+INSERT INTO production_companies (name, username, password)
+VALUES ('Karen', '5', '5');
+
+INSERT INTO administrators (name, username, password)
+VALUES ('Maren', '6', '6');
+
+INSERT INTO productions (title, deadline, status)
+VALUES ('There Will Be Blood', '2020-10-10', '2');
+
+INSERT INTO productions (title, deadline, status)
+VALUES ('Abe', '2020-10-11', '0');
+
+INSERT INTO productions (title, deadline, status)
+VALUES ('Banana Split', '2020-10-12', '0');
+
+INSERT INTO productions (title, deadline, status)
+VALUES ('Vivarium', '2020-10-13', '0');
 
 INSERT INTO company_producer_subscriptions (producer_id, production_company_id)
 VALUES ('1', '1');
+
+INSERT INTO producer_production_subscriptions (producer_id, production_id)
+VALUES ('1', '1');
+
+INSERT INTO roles (role_title)
+VALUES ('VFX'),
+       ('Actor');
+
+INSERT INTO credits (name)
+VALUES ('Marta Jensen');
+
+INSERT INTO credits (name)
+VALUES ('Johnny Madsen');
+
+INSERT INTO production_credit_role_subscriptions (production_id, credit_id, role_id)
+VALUES ('1', '1', '1');
+
+INSERT INTO production_credit_role_subscriptions (production_id, credit_id, role_id)
+VALUES ('2', '2', '2');
+
+INSERT INTO production_credit_role_subscriptions (production_id, credit_id, role_id)
+VALUES ('3', '2', '1');
+
+SELECT *
+FROM users
+WHERE user_id = 2;
+
+-- Get production title, credit name and their role on the given production
+SELECT title, name, role_title
+FROM production_credit_role_subscriptions,
+     productions,
+     credits,
+     roles
+WHERE production_credit_role_subscriptions.production_id = productions.production_id
+  AND production_credit_role_subscriptions.credit_id = credits.credit_id
+  AND production_credit_role_subscriptions.role_id = roles.role_id;
 
 SELECT *
 FROM producers;
@@ -84,7 +158,11 @@ FROM administrators;
 SELECT *
 FROM company_producer_subscriptions;
 
+DROP TABLE production_credit_role_subscriptions;
+DROP TABLE producer_production_subscriptions;
+DROP TABLE company_production_subscriptions;
 DROP TABLE company_producer_subscriptions;
+DROP TABLE roles;
 DROP TABLE credits;
 DROP TABLE productions;
 DROP TABLE producers;

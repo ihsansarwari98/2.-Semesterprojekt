@@ -1,4 +1,4 @@
-package com.mycompany.creditsystem;
+package com.mycompany.creditsystem.presentation;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
 import javafx.stage.StageStyle;
 
 public class App extends Application {
@@ -24,10 +25,10 @@ public class App extends Application {
 
         // Makes the background transparent
         scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
-        scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/com/mycompany/creditsystem/css/stylesheet.css").toExternalForm());
 
         // Sets the logo for the application
-        stage.getIcons().add(new Image(App.class.getResourceAsStream("images/icon.png")));
+        stage.getIcons().add(new Image(App.class.getResourceAsStream("/com/mycompany/creditsystem/images/icon.png")));
 
         // Makes the navigation bar transparent
         stage.initStyle(StageStyle.TRANSPARENT);
@@ -37,7 +38,6 @@ public class App extends Application {
 
         stage.setScene(scene);
         stage.show();
-
     }
 
     public static void setRoot(String fxml) throws IOException {
@@ -45,7 +45,8 @@ public class App extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/mycompany/creditsystem/fxml/" + fxml + ".fxml"));
+        //FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(App.class.getCanonicalName().substring(18).replaceAll(fxml, "") + ".fxml"));
         return fxmlLoader.load();
     }
 

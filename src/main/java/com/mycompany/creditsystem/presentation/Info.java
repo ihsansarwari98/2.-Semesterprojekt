@@ -1,5 +1,6 @@
-package com.mycompany.creditsystem.persistence;
+package com.mycompany.creditsystem.presentation;
 
+import com.mycompany.creditsystem.domain.logic.Credit;
 import com.mycompany.creditsystem.domain.logic.Producer;
 import com.mycompany.creditsystem.domain.logic.Production;
 import com.mycompany.creditsystem.domain.logic.User;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 public class Info {
 
     public static User currentUser;
-    public static ArrayList<User> users = new ArrayList<>();
 
     public static String username = "Admin";
     public static String password = "123";
@@ -46,6 +46,8 @@ public class Info {
     public static boolean sidePanelOn;
 
     public static ObservableList<Production> productions = FXCollections.observableArrayList(); // DATABASE
+    public static ArrayList<User> users = new ArrayList<>();
+    public static ArrayList<Credit> credits = new ArrayList<>();
 
     public static Production getProduction(String title) {
         Production temp = null;
@@ -59,8 +61,6 @@ public class Info {
 
     public static void updateColors() {
         // Create the stops
-
-
         Stop[] stop = {new Stop(0, Color.valueOf(accentStartColor)), new Stop(1, Color.valueOf(accentEndColor))};
         // create a Linear gradient object 
         accentGradient = new LinearGradient(0, 1, 1, 0, true, CycleMethod.NO_CYCLE, stop);
