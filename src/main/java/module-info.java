@@ -6,6 +6,6 @@ module com.mycompany.creditsystem {
     requires postgresql;
 
 
-    opens com.mycompany.creditsystem to javafx.fxml, javafx.graphics, javafx.controls;
-    exports com.mycompany.creditsystem;
+    opens com.mycompany.creditsystem.presentation to javafx.fxml, javafx.graphics, javafx.controls;
+    exports com.mycompany.creditsystem.presentation;
 }

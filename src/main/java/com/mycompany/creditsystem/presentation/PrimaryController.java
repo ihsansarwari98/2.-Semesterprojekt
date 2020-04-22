@@ -1,20 +1,21 @@
-package com.mycompany.creditsystem;
+package com.mycompany.creditsystem.presentation;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.Stack;
 
 import com.mycompany.creditsystem.domain.logic.*;
 import com.mycompany.creditsystem.domain.logic.Production.Status;
 import com.mycompany.creditsystem.persistence.*;
 
+import com.mycompany.creditsystem.presentation.App;
+import com.mycompany.creditsystem.presentation.Info;
+import com.mycompany.creditsystem.presentation.SwitchButton;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.application.Preloader;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,8 +26,6 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;

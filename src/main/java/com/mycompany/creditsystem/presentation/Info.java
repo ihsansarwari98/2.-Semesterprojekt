@@ -1,4 +1,4 @@
-package com.mycompany.creditsystem.persistence;
+package com.mycompany.creditsystem.presentation;
 
 import com.mycompany.creditsystem.domain.logic.Credit;
 import com.mycompany.creditsystem.domain.logic.Producer;

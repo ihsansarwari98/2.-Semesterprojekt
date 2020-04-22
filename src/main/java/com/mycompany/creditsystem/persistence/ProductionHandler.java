@@ -20,7 +20,7 @@ public class ProductionHandler implements IProductionHandler {
         return instance;
     }
 
-    public Timestamp convertDateToTimestamp(Date date) {
+    private Timestamp convertDateToTimestamp(Date date) {
         return new Timestamp(date.getTime());
     }
 
@@ -108,7 +108,6 @@ public class ProductionHandler implements IProductionHandler {
 
     @Override
     public boolean updateProduction(String title, int production_id) {
-
         try {
             PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("UPDATE productions SET title = ? WHERE production_id = ?");
             updateStatement.setString(1, title);
@@ -119,6 +118,51 @@ public class ProductionHandler implements IProductionHandler {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
-            }
+        }
     }
+
+    public boolean addCreditAndRoleToProduction(int production_id, int credit_id, int role_id) {
+        try {
+            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO production_credit_role_subscriptions (production_id, credit_id, role_id) VALUES (?,?,?)");
+            updateStatement.setInt(1, production_id);
+            updateStatement.setInt(2, credit_id);
+            updateStatement.setInt(3, role_id);
+
+            return updateStatement.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean linkProductionToProductionCompany(int production_id, int production_company_id) {
+        try {
+            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO company_production_subscriptions (production_id, production_company_id) VALUES (?,?)");
+            updateStatement.setInt(1, production_id);
+            updateStatement.setInt(2, production_company_id);
+
+            return updateStatement.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean linkProductionToProducer(int production_id, int producer_id) {
+        try {
+            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO producer_production_subscriptions (production_id, producer_id) VALUES (?,?)");
+            updateStatement.setInt(1, production_id);
+            updateStatement.setInt(2, producer_id);
+
+            return updateStatement.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
