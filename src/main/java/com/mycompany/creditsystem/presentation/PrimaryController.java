@@ -161,14 +161,7 @@ public class PrimaryController implements Initializable {
         Info.productions.addListener((ListChangeListener<Production>) change -> {
             updateProductionList();
         });
-
-//        System.out.println(systemFacade.productionLogic.getProductions());
-//        System.out.println(systemFacade.userLogic.getUsers());
-        System.out.println(systemFacade.userLogic.getUsers().get(0).getPassword());
-        System.out.println(systemFacade.userLogic.getUsers().get(0).getUsername());
-
-
-        //System.out.println(systemFacade.currentUser.getUser());
+        
 
         // TRASH FOR TESTING
         Info.productions.add(new Production("1"));
@@ -305,7 +298,7 @@ public class PrimaryController implements Initializable {
             sidePanelBackground.getChildren().remove(loginAP);
             sidePanelBackground.getChildren().add(logoutAP);
             handleDeselect();
-            updateSearchResultList();
+            updateProductionList();
 
         } else {
             enableElements(User.AccessRole.publicUser);
@@ -468,7 +461,7 @@ public class PrimaryController implements Initializable {
 
             } else {
                 // triggers if the search bar becomes empty while the using is typing
-                if (systemFacade.currentUser.getSearchHistory().size() > 0) {
+                if (systemFacade.currentUser.getSearchHistory() != null) {
                     displaySearchHistory();
                     styleSearchResults();
                 } else {
@@ -572,16 +565,19 @@ public class PrimaryController implements Initializable {
         }
         // Actual search function
         else {
-            if (Info.getProduction(textFieldSearchBar.getText()) != null) {
+            if (!textFieldSearchBar.getText().isBlank()) {
 
-                Production program = Info.getProduction(textFieldSearchBar.getText());
+                // if active production is null (home screen) -> load elements
                 if (activeProduction == null) {
                     loadTitleAndDescriptionElements();
                 }
-                activeProduction = program;
-                descriptionTitleText.setText(program.getTitle());
-                showCreditList(program);
-                systemFacade.currentUser.addToSearchHistory(program);
+                // set the active production to be the current production
+                activeProduction = systemFacade.productionLogic.getProduction(textFieldSearchBar.getText());
+                // add title to title text element
+                descriptionTitleText.setText(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()).getTitle());
+                // add production to search history
+                systemFacade.currentUser.addToSearchHistory(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()));
+                // TODO showCreditList(production);
                 calculateSearchBarAnchors();
 
             } else {

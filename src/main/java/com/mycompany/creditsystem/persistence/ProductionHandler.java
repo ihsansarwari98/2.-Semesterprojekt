@@ -55,12 +55,27 @@ public class ProductionHandler implements IProductionHandler {
         }
     }
 
+    public Production getProduction(String title) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions WHERE title = ?");
+            statement.setString(1, title);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            if (!sqlReturnValues.next()) {
+                return null;
+            }
+            return new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public Production getProduction(int id) {
         try {
-            PreparedStatement stmt = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions WHERE production_id = ?");
-            stmt.setInt(1, id);
-            ResultSet sqlReturnValues = stmt.executeQuery();
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions WHERE production_id = ?");
+            statement.setInt(1, id);
+            ResultSet sqlReturnValues = statement.executeQuery();
             if (!sqlReturnValues.next()) {
                 return null;
             }

@@ -16,5 +16,6 @@ public interface IProductionLogic {
     public boolean updateProductionDeadline(Date deadline, int production_id);
     public boolean updateProductionStatus(int status, int production_id);
     public ArrayList<Production> getProductionsLinkedToProducer(int producer_id);
+    public Production getProduction(String title);
 
 }

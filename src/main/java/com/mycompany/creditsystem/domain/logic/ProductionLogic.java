@@ -53,5 +53,10 @@ public class ProductionLogic implements IProductionLogic {
         return ProductionHandler.getInstance().getProductionsLinkedToProducer(producer_id);
     }
 
+    @Override
+    public Production getProduction(String title) {
+        return ProductionHandler.getInstance().getProduction(title);
+    }
+
 
 }

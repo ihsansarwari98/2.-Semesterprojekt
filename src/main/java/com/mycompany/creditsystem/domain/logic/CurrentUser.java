@@ -14,8 +14,8 @@ public class CurrentUser {
     }
 
     public static User user;
-    public static ArrayList<Production> searchHistory;
-    public static ArrayList<Production> myProductions;
+    public static ArrayList<Production> searchHistory = new ArrayList<>();
+    public static ArrayList<Production> myProductions = new ArrayList<>();
 
     public User getUser() {
         return CurrentUser.user;
@@ -31,7 +31,7 @@ public class CurrentUser {
 
     public void addToSearchHistory(Production production) {
         for (int i = 0; i < CurrentUser.searchHistory.size(); i++) {
-            if (CurrentUser.searchHistory.get(i) == production) {
+            if (CurrentUser.searchHistory.get(i).getId() == production.getId()) {
                 CurrentUser.searchHistory.remove(i);
             }
         }

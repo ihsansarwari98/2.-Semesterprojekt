@@ -6,5 +6,5 @@ import java.util.ArrayList;
 
 public interface IUserHandler {
     public ArrayList<User> getUsers ();
-    public Boolean userLogin(String username, String password);
+    public boolean userLogin(String username, String password);
 }

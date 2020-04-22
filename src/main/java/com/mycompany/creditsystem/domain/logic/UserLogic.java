@@ -13,18 +13,16 @@ public class UserLogic implements IUserHandler {
     }
 
     @Override
-    public Boolean userLogin(String username, String password) {
+    public boolean userLogin(String username, String password) {
         boolean foundUser = false;
-        for (int i = 0; i < UserHandler.getInstance().getUsers().size(); i++) {
-            User user = UserHandler.getInstance().getUsers().get(i);
-            // check if username and password matches
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                foundUser = true;
-                CurrentUser.getInstance().setUser(user);
-                break;
-            }
+        CurrentUser.getInstance().setUser(UserHandler.getInstance().getUserLogin(username, password));
+        if (UserHandler.getInstance().getUserLogin(username, password) != null) {
+            foundUser = true;
         }
         return foundUser;
     }
 
+    public boolean createUser(User user) {
+        return UserHandler.getInstance().createUser(user);
+    }
 }
