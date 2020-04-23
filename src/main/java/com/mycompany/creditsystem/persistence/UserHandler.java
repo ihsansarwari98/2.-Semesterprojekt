@@ -41,13 +41,32 @@ public class UserHandler {
         MD5Encryption encryption = new MD5Encryption();
         String tempPassword = encryption.encrypt(user.getPassword());
         try {
-            PreparedStatement insertStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO users (name, username, password) VALUES (?,?,?)");
-            insertStatement.setString(1, user.getName());
-            insertStatement.setString(2, user.getUsername());
-            insertStatement.setString(3, tempPassword);
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO users (name, username, password, access_role) VALUES (?,?,?,?)");
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getUsername());
+            statement.setString(3, tempPassword);
+            statement.setInt(4, user.getAccessRoleInt(user.getAccessRole()));
 
-            return insertStatement.execute();
+            return statement.execute();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 
+    public boolean deleteUser(int user_id) {
+        try {
+            PreparedStatement statement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM company_producer_subscriptions WHERE producer_id = ?");
+            PreparedStatement statement2 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM producer_production_subscriptions WHERE producer_id = ?");
+            PreparedStatement statement3 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM users WHERE user_id = ?");
+            statement1.setInt(1, user_id);
+            statement2.setInt(1, user_id);
+            statement3.setInt(1, user_id);
+
+            statement1.execute();
+            statement2.execute();
+            statement3.execute();
+            return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
@@ -62,26 +81,14 @@ public class UserHandler {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
             statement.setString(1, username);
             statement.setString(2, tempPassword);
+
             ResultSet sqlReturnValues = statement.executeQuery();
 
             if (!sqlReturnValues.next()) {
                 return null;
             }
-            return new User(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getString(3), sqlReturnValues.getString(4), sqlReturnValues.getDate(5), sqlReturnValues.getInt(6));
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
+                return new User(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getString(3), sqlReturnValues.getString(4), sqlReturnValues.getDate(5), sqlReturnValues.getInt(6));
 
-
-    public Production getProduction(int id) {
-        try {
-            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions WHERE production_id = ?");
-            statement.setInt(1, id);
-            ResultSet sqlReturnValues = statement.executeQuery();
-
-            return new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4));
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;

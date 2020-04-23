@@ -45,7 +45,9 @@ public class ProductionHandler implements IProductionHandler {
             statement.setString(1, titlePart);
             ResultSet sqlReturnValues = statement.executeQuery();
             ArrayList<Production> returnValue = new ArrayList<>();
-            while (sqlReturnValues.next()) {
+            int iterator = 0;
+            while (sqlReturnValues.next() && iterator < 5) {
+                iterator++;
                 returnValue.add(new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4)));
             }
             return returnValue;

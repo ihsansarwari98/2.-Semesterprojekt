@@ -27,6 +27,14 @@ public class User {
         this.accessRole = calcAccessRole(accessRole);
     }
 
+    public User (String name, String username, String password, int accessRole) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.creationDate = new Date();
+        this.accessRole = calcAccessRole(accessRole);
+    }
+
     private AccessRole calcAccessRole(int accessRoleNumber) {
         if (accessRoleNumber == 1) {
             return AccessRole.producer;
@@ -36,6 +44,20 @@ public class User {
             return AccessRole.admin;
         }
         return AccessRole.publicUser;
+    }
+
+    public int getAccessRoleInt(AccessRole accessRole) {
+        if (accessRole == AccessRole.publicUser) {
+            return 0;
+        } else if (accessRole == AccessRole.producer) {
+            return 1;
+        } else if (accessRole == AccessRole.productionCompany) {
+            return 2;
+        } else if (accessRole == AccessRole.admin) {
+            return 3;
+        } else {
+            return -1;
+        }
     }
 
     public enum AccessRole {

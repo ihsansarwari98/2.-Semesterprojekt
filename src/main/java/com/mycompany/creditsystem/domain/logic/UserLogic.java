@@ -22,7 +22,13 @@ public class UserLogic implements IUserHandler {
         return foundUser;
     }
 
+    @Override
     public boolean createUser(User user) {
         return UserHandler.getInstance().createUser(user);
+    }
+
+    @Override
+    public boolean deleteUser(int user_id) {
+        return UserHandler.getInstance().deleteUser(user_id);
     }
 }

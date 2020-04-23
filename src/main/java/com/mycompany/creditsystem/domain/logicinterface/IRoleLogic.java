@@ -1,10 +1,10 @@
-package com.mycompany.creditsystem.domain.interfaces;
+package com.mycompany.creditsystem.domain.logicinterface;
 
 import com.mycompany.creditsystem.domain.logic.Role;
 
 import java.util.ArrayList;
 
-public interface IRoleHandler {
+public interface IRoleLogic {
     public ArrayList<Role> getRoles();
     public Role getRole(int id);
     public boolean createRole (Role Role);

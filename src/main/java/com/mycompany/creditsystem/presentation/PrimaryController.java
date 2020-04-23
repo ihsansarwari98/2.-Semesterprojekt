@@ -143,10 +143,8 @@ public class PrimaryController implements Initializable {
     private HBox descriptionTitleHBox;
 
     // idk what im doing
-    //private ProductionLogic productionLogic = new ProductionLogic();
     private SystemFacade systemFacade = new SystemFacade();
 
-    private boolean loggedin;
     HBox switchButtonHBox = new HBox();
     SwitchButton switchButton = new SwitchButton();
     Label editLabel = new Label("Toggle \nEditability");
@@ -158,59 +156,11 @@ public class PrimaryController implements Initializable {
 
         enableElements(User.AccessRole.publicUser);
 
+        /*
         Info.productions.addListener((ListChangeListener<Production>) change -> {
             updateProductionList();
         });
-        
-
-        // TRASH FOR TESTING
-        Info.productions.add(new Production("1"));
-        Info.productions.add(new Production("2"));
-        Info.productions.add(new Production("2"));
-        Info.productions.add(new Production("3"));
-        Info.productions.add(new Production("3"));
-        Info.productions.add(new Production("3"));
-        Info.productions.add(new Production("4"));
-        Info.productions.add(new Production("4"));
-        Info.productions.add(new Production("4"));
-        Info.productions.add(new Production("4"));
-        Info.productions.add(new Production("5"));
-        Info.productions.add(new Production("5"));
-        Info.productions.add(new Production("5"));
-        Info.productions.add(new Production("5"));
-        Info.productions.add(new Production("5"));
-        Info.productions.add(new Production("6"));
-        Info.productions.add(new Production("6"));
-        Info.productions.add(new Production("6"));
-        Info.productions.add(new Production("6"));
-        Info.productions.add(new Production("6"));
-        Info.productions.add(new Production("6"));
-        Info.productions.add(new Production("Pulp Fiction"));
-        Info.productions.add(new Production("Taxidermlia"));
-        Info.productions.add(new Production("Naked Lunch"));
-        Info.productions.add(new Production("There Will Be Blood"));
-
-        Info.getProduction("There Will Be Blood").setStatus(Status.Green);
-
-        Info.credits.add(new Credit("Maren Jytte Jensen"));
-        Info.credits.add(new Credit("Jeppe Jytte Jensen"));
-        Info.credits.add(new Credit("Holger Jytte Jensen"));
-        Info.credits.add(new Credit("Frede Jytte Jensen"));
-        Info.credits.add(new Credit("Mustafa Jytte Jensen"));
-        Info.credits.add(new Credit("Maren2 Jytte Jensen"));
-        Info.credits.add(new Credit("123PENIS Jytte Jensen"));
-
-        Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(1));
-        Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(2));
-        Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(3));
-        Info.getProduction("There Will Be Blood").addCredit(Info.credits.get(4));
-
-        Info.users.add(new Producer("John", "1", "1"));
-        Info.users.add(new Producer("Kim", "3", "3"));
-        Info.users.add(new Administrator("Lars", "2", "2"));
-        Info.users.add(new ProductionCompany("Penis Joe", "4", "4"));
-
-        /////
+         */
 
         homeButtonAction();
         Info.sidePanelOn = true;
@@ -225,13 +175,12 @@ public class PrimaryController implements Initializable {
 
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
-
     }
 
-    // Updates the graphical style and fill
+    // Updates the graphical style and fill of the application
     private void updateProperties() {
         Info.updateColors();
-        // BUTTONS
+        // -- BUTTONS
         // Set the color of the buttons
         loginCircle.setStroke(Info.accentGradient);
         loginCircle1.setFill(Info.accentGradient);
@@ -243,17 +192,17 @@ public class PrimaryController implements Initializable {
         minimizeRectangle.setFill(Info.accentGradient);
         homeText.setFill(Info.accentGradient);
 
-        // SEARCH BAR
+        // -- SEARCH BAR
         // Set the color and round the corners of the search bar 
         searchBarBackground.setStyle("-fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + "; -fx-background-color: " + Info.forgroundColor + ";");
         searchRectangleBG.setFill(Info.accentGradient);
 
-        // BACKGROUND
+        // -- BACKGROUND
         // Set the color of the shade in the background
         backgroundShade.setFill(Paint.valueOf(Info.backgroundShadeColor));
         backgroundAP.setStyle("-fx-background-color: " + Info.backgroundColor + ";");
 
-        // SIDE BAR
+        // -- SIDE BAR
         // Set the color of side bar top
         sideBarTopColor.setFill(Info.accentGradient);
         // Set the color of side bar curves
@@ -269,7 +218,7 @@ public class PrimaryController implements Initializable {
         loginRectangleBG.setFill(Info.accentGradient);
         rectangleLogoutSplitter.setFill(Info.accentGradient);
 
-        // DESCRIPTION
+        // -- DESCRIPTION
         descriptionScrollPane.getStyleClass().add("dark-thumb");
         descriptionTitleText.setStyle("-fx-text-fill: " + Info.forgroundColor + ";");
 
@@ -366,17 +315,17 @@ public class PrimaryController implements Initializable {
         enableElements(User.AccessRole.publicUser);
     }
 
-    // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Shows the list of credits connected to a production
     private void showCreditList(Production production) {
         descriptionVBox.getChildren().clear();
-        for (int i = 0; i < production.getCredits().size(); i++) {
-            Credit credit = (Credit) production.getCredits().get(i);
-            // TODO get credit role on production (production_credit_role_subscription)
-            //Text roleText = new Text(credit.getRole());
-            Label name = new Label(credit.getName());
+        for (int i = 0; i < systemFacade.creditLogic.getCredits(production.getId()).size(); i++) {
+
+            // gets the role of the credit
+            Text roleText = new Text(systemFacade.roleHandler.getRoleFromCredit(production.getId(), systemFacade.creditLogic.getCredits(production.getId()).get(i).getId()).getTitle());
+            Label name = new Label(systemFacade.creditLogic.getCredits(production.getId()).get(i).getName());
             VBox vb = new VBox();
 
-            //roleText.setFill(Info.accentGradient);
+            roleText.setFill(Info.accentGradient);
             roleText.setStyle("-fx-font-weight: bold; -fx-font-size:" + Info.fontSizeBig + ";");
             name.setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.forgroundColor + ";");
             vb.setAlignment(Pos.TOP_CENTER);
@@ -392,14 +341,10 @@ public class PrimaryController implements Initializable {
                     VBox vbox = (VBox) descriptionVBox.getChildren().get(j);
                     Text role = (Text) vbox.getChildren().get(0);
 
-                    // TODO get credit role on production (production_credit_role_subscription)
-                    /*
-                    if (credit.getRole().equals(role.getText())) {
+                    if (systemFacade.roleHandler.getRoleFromCredit(production.getId(), systemFacade.creditLogic.getCredits(production.getId()).get(i).getId()).getTitle().equals(role.getText())) {
                         vbox.getChildren().add(name);
                         foundRole = true;
                     }
-
-                    */
                 }
                 if (!foundRole) {
                     descriptionVBox.getChildren().add(vb);
@@ -411,24 +356,28 @@ public class PrimaryController implements Initializable {
     }
 
     // Makes the search text white when focused and clicking ENTER searches the focused text
-
     private void handleSearchFocus() {
         for (int i = 0; i < searchResults.getChildren().size(); i++) {
             AnchorPane ap = (AnchorPane) searchResults.getChildren().get(i);
             Label titleText = (Label) ap.getChildren().get(0);
-            if (titleText.isFocused()) {
-                titleText.setOnKeyPressed(e -> {
-                    if (e.getCode() == KeyCode.ENTER) {
-                        textFieldSearchBar.setText(titleText.getText());
-                        handleSearch();
-                    }
-                });
-                titleText.setStyle("-fx-text-fill: white; -fx-font-size: " + Info.fontSizeDefault + ";"); // same as hover
+            if (titleText.isHover()) {
+                titleText.setStyle("-fx-text-fill: white; -fx-font-size: " + Info.fontSizeDefault + ";");
             } else {
-                titleText.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+                if (titleText.isFocused()) {
+                    titleText.setOnKeyPressed(e -> {
+                        if (e.getCode() == KeyCode.ENTER) {
+                            textFieldSearchBar.setText(titleText.getText());
+                            handleSearch();
+                        }
+                    });
+                    titleText.setStyle("-fx-text-fill: white; -fx-font-size: " + Info.fontSizeDefault + ";"); // same as hover
+                } else {
+                    titleText.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+                }
             }
         }
     }
+
 
     // Holds the last updated text in the search bar
     private String tempUserSearch = "";
@@ -461,7 +410,7 @@ public class PrimaryController implements Initializable {
 
             } else {
                 // triggers if the search bar becomes empty while the using is typing
-                if (systemFacade.currentUser.getSearchHistory() != null) {
+                if (systemFacade.currentUser.getSearchHistory().size() > 0) {
                     displaySearchHistory();
                     styleSearchResults();
                 } else {
@@ -538,30 +487,12 @@ public class PrimaryController implements Initializable {
     // TODO
     @FXML
     private void handleSearch() { // TODO: REWORK EVERYTHING
-
         String addProgramCommand = "!addProgram ";
-        String addCreditCommand = "!addCredit ";
 
         // Add program logic
         if ((textFieldSearchBar.getText().startsWith(addProgramCommand))) {
             String programTitle = textFieldSearchBar.getText().substring(addProgramCommand.length());
             systemFacade.productionLogic.createProduction(new Production(programTitle));
-        }
-        // Add credit logic
-        else if (textFieldSearchBar.getText().startsWith(addCreditCommand)) {
-            String line = (textFieldSearchBar.getText().substring(addCreditCommand.length()));
-            String[] content = line.split(" ");
-
-
-            /*
-            for (int i = 0; i < Info.productions.size(); i++) {
-                if (content[0].equals(Info.productions.get(i).getTitle())) {
-                    Info.productions.get(i).addCredit(new Credit(content[1], content[2]));
-                    System.out.println("added " + content[1] + " with the role " + content[2] + " to " + Info.productions.get(i).getTitle());
-                }
-            }
-
-             */
         }
         // Actual search function
         else {
@@ -577,7 +508,7 @@ public class PrimaryController implements Initializable {
                 descriptionTitleText.setText(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()).getTitle());
                 // add production to search history
                 systemFacade.currentUser.addToSearchHistory(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()));
-                // TODO showCreditList(production);
+                showCreditList(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()));
                 calculateSearchBarAnchors();
 
             } else {
@@ -693,6 +624,7 @@ public class PrimaryController implements Initializable {
     private void loadTitleAndDescriptionElements() {
         backgroundAP.getChildren().remove(searchBarBP);
         backgroundAP.getChildren().add(2, titleAndDescriptionBP);
+        descriptionVBox.setAlignment(Pos.TOP_CENTER);
         descriptionTitleText.applyCss();
         backgroundAP.getChildren().add(3, searchBarBP);
         searchBarBP.getChildren().remove(logoVBox);
@@ -714,6 +646,8 @@ public class PrimaryController implements Initializable {
         // closes the side panel
         if (Info.sidePanelOn) {
             Info.sidePanelOn = false;
+            usernameTextField.setFocusTraversable(false);
+            passwordTextField.setFocusTraversable(false);
             // check if the application just opened
             if (backgroundAP.getHeight() == 0) {
                 sideBar.setPrefWidth(0); // closes the side panel without animation
@@ -724,6 +658,8 @@ public class PrimaryController implements Initializable {
             // opens the side panel
         } else {
             Info.sidePanelOn = true;
+            usernameTextField.setFocusTraversable(true);
+            passwordTextField.setFocusTraversable(true);
             menuCurve.setOpacity(100);
             animateSidePanel(Info.sideBarWidth);
         }

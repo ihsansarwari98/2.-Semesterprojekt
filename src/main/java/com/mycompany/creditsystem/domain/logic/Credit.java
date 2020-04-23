@@ -9,6 +9,11 @@ public class Credit {
         this.name = name;
     }
 
+    public Credit (int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return name;

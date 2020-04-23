@@ -414,7 +414,7 @@
                      <top>
                         <VBox fx:id="logoVBox" alignment="BOTTOM_CENTER" spacing="20.0" BorderPane.alignment="BOTTOM_CENTER">
                            <children>
-                              <Text fx:id="logoText" boundsType="VISUAL" strokeType="OUTSIDE" strokeWidth="0.0" text="CREDIT" textAlignment="CENTER">
+                              <Text fx:id="logoText" boundsType="VISUAL" strokeType="OUTSIDE" strokeWidth="0.0" text="CRED.IT" textAlignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="100.0" />
                                  </font>
