@@ -16,6 +16,8 @@
 
 .scroll-bar:horizontal, .scroll-bar:vertical{
     -fx-background-color: transparent;
+    -fx-pref-width: 16;
+    -fx-padding: 2;
 }
 
 .increment-button, .decrement-button {
@@ -46,10 +48,10 @@
 }
 
 .scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
-    -fx-background-color: -fx-color-white /*#242424*/;
-    -fx-background-radius: 5em;
-    -fx-pref-width: 4px;
-    -fx-background-insets: 5, 0, 0;
+    -fx-background-color: -fx-color-white;
+    -fx-background-radius: 2em;
+    -fx-pref-width: 2px;
+    -fx-background-insets: 2, 0, 0;
 }
 
 .text-field {
@@ -58,4 +60,48 @@
 }
 
 
+
+
+.titled-pane
+{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+}
+
+.titled-pane .title
+{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.titled-pane > .title > .arrow-button
+{
+    -fx-background-color: null;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0.0em 1em 0.0em 0.0em; /* 0 3 0 0 */
+}
+
+.titled-pane > .title > .arrow-button .arrow
+{
+    -fx-background-color: white;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.25em 0.3125em 0.25em 0.3125em; /* 3 3.75 3 3.75 */
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+
+.titled-pane:collapsed > .title > .arrow-button .arrow
+{
+    -fx-rotate: -90;
+}
+
+.titled-pane > *.content
+{
+    -fx-background-color: transparant;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0, 0 1 1 1;
+    -fx-padding: 0em;
+}
 

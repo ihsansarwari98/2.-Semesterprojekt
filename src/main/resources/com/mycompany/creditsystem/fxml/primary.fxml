@@ -6,6 +6,7 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -129,19 +130,16 @@
                            </VBox.margin>
                         </AnchorPane>
                         <AnchorPane fx:id="mineProduktioner" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets bottom="30.0" />
-                           </VBox.margin>
                            <children>
-                              <Polygon fx:id="sideBarTopColor1" fill="#bdbdbd00" points="0.0, 12.0, 320.0, 12.0, 320.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
-                              <VBox fx:id="programListVBox" prefHeight="89.0" prefWidth="290.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
+                              <Polygon fx:id="sideBarTopColor1" fill="#bdbdbd00" points="0.0, 12.0, 206.0, 12.0, 206.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
+                              <VBox fx:id="programListVBox" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Label text="Mine produktioner" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <ScrollPane fx:id="productionScrollPane" fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+                                    <ScrollPane fx:id="productionScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                                        <content>
                                           <VBox fx:id="programList" spacing="20.0" />
                                        </content>
@@ -152,6 +150,28 @@
                                  </children>
                               </VBox>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="30.0" />
+                           </VBox.margin>
+                        </AnchorPane>
+                        <AnchorPane fx:id="mineProduktionerProductionCompany" VBox.vgrow="ALWAYS">
+                           <children>
+                              <TitledPane text="Mine produktioner" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                                 <content>
+                                    <ScrollPane fx:id="productionScrollPaneProductionCompany" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                                       <content>
+                                          <VBox fx:id="programListProductionCompany" spacing="20.0" />
+                                       </content>
+                                    </ScrollPane>
+                                 </content>
+                              </TitledPane>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="30.0" />
+                           </VBox.margin>
                         </AnchorPane>
                         <AnchorPane fx:id="loginAP" VBox.vgrow="ALWAYS">
                            <children>
@@ -305,15 +325,88 @@
                      <center>
                         <VBox alignment="TOP_CENTER">
                            <children>
-                              <HBox fx:id="descriptionTitleHBox" alignment="CENTER" spacing="20.0">
+                              <VBox fx:id="descriptionTitleVBox" alignment="TOP_CENTER" VBox.vgrow="NEVER">
                                  <children>
+                                    <HBox fx:id="editOptionsHBox" alignment="CENTER" spacing="20.0">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                       <children>
+                                          <StackPane fx:id="editProductionButton" onMouseClicked="#handleEditProductionClick">
+                                             <children>
+                                                <Rectangle fx:id="editProductionRectangle" arcHeight="16.0" arcWidth="16.0" height="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="135.0">
+                                                   <fill>
+                                                      <LinearGradient endX="1.0" endY="0.13809523809523805" startY="1.0">
+                                                         <stops>
+                                                            <Stop color="#20ffc7" />
+                                                            <Stop color="#23bdff" offset="1.0" />
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </fill>
+                                                </Rectangle>
+                                                <Label fx:id="editProductionText" text="Edit Production" textFill="WHITE" StackPane.alignment="CENTER">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </StackPane>
+                                          <StackPane fx:id="cancelEditProductionButton" onMouseClicked="#handleCancelEditProductionClick">
+                                             <children>
+                                                <Rectangle fx:id="cancelEditProductionRectangle" arcHeight="16.0" arcWidth="16.0" height="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="66.0">
+                                                   <fill>
+                                                      <LinearGradient endX="1.0" endY="0.13809523809523805" startY="1.0">
+                                                         <stops>
+                                                            <Stop color="#20ffc7" />
+                                                            <Stop color="#23bdff" offset="1.0" />
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </fill>
+                                                </Rectangle>
+                                                <Label fx:id="cancelEditProductionText" text="Cancel" textFill="WHITE" StackPane.alignment="CENTER">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </StackPane>
+                                          <StackPane fx:id="saveEditProductionButton" onMouseClicked="#handleSaveEditProductionClick">
+                                             <children>
+                                                <Rectangle fx:id="saveEditProductionRectangle" arcHeight="16.0" arcWidth="16.0" height="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="50.0">
+                                                   <fill>
+                                                      <LinearGradient endX="1.0" endY="0.13809523809523805" startY="1.0">
+                                                         <stops>
+                                                            <Stop color="#20ffc7" />
+                                                            <Stop color="#23bdff" offset="1.0" />
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </fill>
+                                                </Rectangle>
+                                                <Label fx:id="saveEditProductionText" text="Save" textFill="WHITE" StackPane.alignment="CENTER">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </StackPane>
+                                       </children>
+                                    </HBox>
                                     <Label fx:id="descriptionTitleText" text="Title">
                                        <font>
                                           <Font name="System Bold" size="48.0" />
                                        </font>
                                     </Label>
                                  </children>
-                              </HBox>
+                              </VBox>
                               <ScrollPane fx:id="descriptionScrollPane" fitToHeight="true" fitToWidth="true" styleClass="dark-thumb" VBox.vgrow="ALWAYS">
                                  <content>
                                     <HBox fx:id="descriptionHBox" alignment="TOP_CENTER" spacing="20.0">
@@ -508,48 +601,52 @@
                         </StackPane>
                      </children>
                   </HBox>
-                  <HBox fx:id="leftTopMenuHBox" layoutX="30.0" layoutY="30.0" spacing="16.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
+                  <VBox fx:id="topLeftCornerVBox" layoutX="30.0" layoutY="30.0" spacing="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
                      <children>
-                        <StackPane onMouseClicked="#sidePanelAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
+                        <HBox fx:id="leftTopMenuHBox" spacing="16.0">
                            <children>
-                              <Circle fx:id="loginCircle1" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateY="-2.0" StackPane.alignment="BOTTOM_CENTER">
-                                 <fill>
-                                    <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
-                                       <stops>
-                                          <Stop color="#57ffcd" />
-                                          <Stop color="#74c5ff" offset="1.0" />
-                                       </stops>
-                                    </LinearGradient>
-                                 </fill>
-                              </Circle>
-                              <Circle fx:id="loginCircle2" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateY="-3.0">
-                                 <fill>
-                                    <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
-                                       <stops>
-                                          <Stop color="#57ffcd" />
-                                          <Stop color="#74c5ff" offset="1.0" />
-                                       </stops>
-                                    </LinearGradient>
-                                 </fill>
-                              </Circle>
-                              <Circle fx:id="loginCircle" fill="TRANSPARENT" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
-                           </children>
-                        </StackPane>
-                        <StackPane onMouseClicked="#homeButtonAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
-                           <children>
-                              <VBox alignment="CENTER">
+                              <StackPane onMouseClicked="#sidePanelAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
                                  <children>
-                                    <Text fx:id="homeText" onMouseClicked="#homeButtonAction" strokeType="OUTSIDE" strokeWidth="0.0" text="Home">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Text>
+                                    <Circle fx:id="loginCircle1" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateY="-2.0" StackPane.alignment="BOTTOM_CENTER">
+                                       <fill>
+                                          <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
+                                             <stops>
+                                                <Stop color="#57ffcd" />
+                                                <Stop color="#74c5ff" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </fill>
+                                    </Circle>
+                                    <Circle fx:id="loginCircle2" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateY="-3.0">
+                                       <fill>
+                                          <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
+                                             <stops>
+                                                <Stop color="#57ffcd" />
+                                                <Stop color="#74c5ff" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </fill>
+                                    </Circle>
+                                    <Circle fx:id="loginCircle" fill="TRANSPARENT" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
                                  </children>
-                              </VBox>
+                              </StackPane>
+                              <StackPane onMouseClicked="#homeButtonAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
+                                 <children>
+                                    <VBox alignment="CENTER">
+                                       <children>
+                                          <Text fx:id="homeText" onMouseClicked="#homeButtonAction" strokeType="OUTSIDE" strokeWidth="0.0" text="Home">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </StackPane>
                            </children>
-                        </StackPane>
+                        </HBox>
                      </children>
-                  </HBox>
+                  </VBox>
                </children>
             </AnchorPane>
          </children>

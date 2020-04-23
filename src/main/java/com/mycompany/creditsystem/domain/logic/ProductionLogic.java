@@ -58,5 +58,30 @@ public class ProductionLogic implements IProductionLogic {
         return ProductionHandler.getInstance().getProduction(title);
     }
 
+    public ArrayList<Production> getProductionsLinkedToProductionCompany(int production_company_id) {
+        return ProductionHandler.getInstance().getProductionsLinkedToProductionCompany(production_company_id);
+    }
+
+    public boolean isProductionLinkedToProducer (int procuction_id, int producer_id) {
+        ArrayList<Production> temp = ProductionHandler.getInstance().getProductionsLinkedToProducer(producer_id);
+        boolean foundProduction = false;
+        for (int i = 0; i < temp.size(); i++) {
+            if (temp.get(i).getId() == procuction_id) {
+                foundProduction = true;
+            }
+        }
+        return foundProduction;
+    }
+
+    public boolean isProductionLinkedToProductionCompany (int procuction_id, int user_id) {
+        ArrayList<Production> temp = ProductionHandler.getInstance().getProductionsLinkedToProductionCompany(user_id);
+        boolean foundProduction = false;
+        for (int i = 0; i < temp.size(); i++) {
+            if (temp.get(i).getId() == procuction_id) {
+                foundProduction = true;
+            }
+        }
+        return foundProduction;
+    }
 
 }

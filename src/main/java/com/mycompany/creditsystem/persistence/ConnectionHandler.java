@@ -31,7 +31,9 @@ public class ConnectionHandler {
                 connection = DriverManager.getConnection("jdbc:postgresql://" + url + ":" + port + "/" + databaseName, username, password);
             } catch (SQLException | IllegalArgumentException ex) {
                 ex.printStackTrace(System.err);
-            } finally {
+                System.out.println("Error while loading database, check your connection or wait a few minutes.");
+            }
+            finally {
                 if (connection == null) System.exit(-1);
             }
         }

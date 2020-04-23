@@ -94,4 +94,22 @@ public class UserHandler {
             return null;
         }
     }
+
+    public ArrayList<User> getUsersFromAccessRole(int accessRole) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM users WHERE access_role = ?");
+            statement.setInt(1, accessRole);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<User> returnValue = new ArrayList<>();
+            while (sqlReturnValues.next()) {
+                returnValue.add(new User(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getString(3), sqlReturnValues.getString(4), sqlReturnValues.getDate(5), sqlReturnValues.getInt(6)));
+            }
+            return returnValue;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+
 }

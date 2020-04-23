@@ -138,35 +138,47 @@ public class PrimaryController implements Initializable {
     @FXML
     private VBox logoVBox;
     @FXML
-    private HBox leftTopMenuHBox;
+    private VBox topLeftCornerVBox;
     @FXML
-    private HBox descriptionTitleHBox;
+    private VBox descriptionTitleVBox;
+    @FXML
+    private AnchorPane mineProduktionerProductionCompany;
+    @FXML
+    private VBox programListProductionCompany;
+    @FXML
+    private Label editProductionText;
+    @FXML
+    private Label cancelEditProductionText;
+    @FXML
+    private Label saveEditProductionText;
+    @FXML
+    private Rectangle editProductionRectangle;
+    @FXML
+    private Rectangle cancelEditProductionRectangle;
+    @FXML
+    private Rectangle saveEditProductionRectangle;
+    @FXML
+    private HBox editOptionsHBox;
+    @FXML
+    private StackPane editProductionButton;
+    @FXML
+    private StackPane cancelEditProductionButton;
+    @FXML
+    private StackPane saveEditProductionButton;
+    @FXML
+    private HBox descriptionHBox;
 
     // idk what im doing
     private SystemFacade systemFacade = new SystemFacade();
 
-    HBox switchButtonHBox = new HBox();
-    SwitchButton switchButton = new SwitchButton();
-    Label editLabel = new Label("Toggle \nEditability");
-    private Production activeProduction;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateProperties();
-
         enableElements(User.AccessRole.publicUser);
-
-        /*
-        Info.productions.addListener((ListChangeListener<Production>) change -> {
-            updateProductionList();
-        });
-         */
-
+        checkCanEdit();
         homeButtonAction();
         Info.sidePanelOn = true;
         sidePanelAction();
-
-        switchButtonHBox.getChildren().addAll(switchButton, editLabel);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), (ActionEvent event) -> {
             // this code will be called every second
@@ -191,6 +203,12 @@ public class PrimaryController implements Initializable {
         maximizeRectangle.setFill(Info.accentGradient);
         minimizeRectangle.setFill(Info.accentGradient);
         homeText.setFill(Info.accentGradient);
+        editProductionRectangle.setFill(Info.accentGradient);
+        cancelEditProductionRectangle.setFill(Info.accentGradient);
+        saveEditProductionRectangle.setFill(Info.accentGradient);
+//        editProductionText.setText("Rediger Produktion");
+//        cancelEditProductionText.setText("Fortryd");
+//        saveEditProductionText.setText("Gem");
 
         // -- SEARCH BAR
         // Set the color and round the corners of the search bar 
@@ -241,7 +259,12 @@ public class PrimaryController implements Initializable {
             enableElements(systemFacade.currentUser.getUser().getAccessRole());
 
             // Sets myProductions
-            systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToProducer(systemFacade.currentUser.getUser().getId()));
+            if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.producer) {
+                systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToProducer(systemFacade.currentUser.getUser().getId()));
+
+            } else if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.productionCompany) {
+                systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToProductionCompany(systemFacade.currentUser.getUser().getId()));
+            }
 
             setNameAndRole();
             sidePanelBackground.getChildren().remove(loginAP);
@@ -267,12 +290,34 @@ public class PrimaryController implements Initializable {
         roleText.setText(capitalizedRoleName.toString());
     }
 
-    private void editableElement() {
-        switchButton.setAlignment(Pos.CENTER);
-        editLabel.setStyle("-fx-font-size: " + 11 + "; -fx-font-weight: regular; -fx-text-fill: " + Info.forgroundColor + ";");
-        switchButtonHBox.setSpacing(10);
-        switchButtonHBox.setAlignment(Pos.CENTER);
-        descriptionTitleHBox.getChildren().add(switchButtonHBox);
+    private boolean checkCanEdit() {
+        // Checks if the active production isn't the home screen and the User is logged in
+        // As well as if the User has access to the active production
+        if (systemFacade.getActiveProduction() != null &
+                systemFacade.currentUser.getUser() != null &&
+                ((systemFacade.currentUser.getUser().getAccessRole().equals(User.AccessRole.producer) &&
+                        systemFacade.productionLogic.isProductionLinkedToProducer(systemFacade.getActiveProduction().getId(), systemFacade.currentUser.getUser().getId())) ||
+                        (systemFacade.currentUser.getUser().getAccessRole().equals(User.AccessRole.productionCompany) &&
+                                systemFacade.productionLogic.isProductionLinkedToProductionCompany(systemFacade.getActiveProduction().getId(), systemFacade.currentUser.getUser().getId())) ||
+                        (systemFacade.currentUser.getUser().getAccessRole().equals(User.AccessRole.admin)))) {
+            loadEditElement(true);
+            return true;
+        } else {
+            loadEditElement(false);
+            return false;
+        }
+    }
+
+    private void loadEditElement(boolean toggle) {
+        if (toggle) {
+            descriptionTitleVBox.getChildren().remove(editOptionsHBox);
+            descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
+            editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton, editProductionButton);
+            editOptionsHBox.getChildren().add(editProductionButton);
+
+        } else {
+            descriptionTitleVBox.getChildren().remove(editOptionsHBox);
+        }
     }
 
     private void enableElements(User.AccessRole accessRole) {
@@ -285,24 +330,27 @@ public class PrimaryController implements Initializable {
                 nameAndRoleAP.getChildren().remove(nameAndRole);
                 nameAndRoleAP.getChildren().remove(sortingBorderPane);
 
-                descriptionTitleHBox.getChildren().remove(switchButtonHBox);
-
                 usernameTextField.clear();
                 passwordTextField.clear();
+
+                checkCanEdit();
                 break;
             case producer:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
                 sidePanelBackground.getChildren().add(mineProduktioner);
-                editableElement();
+                checkCanEdit();
                 break;
             case productionCompany:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
+                sidePanelBackground.getChildren().add(mineProduktionerProductionCompany);
+                checkCanEdit();
                 break;
             case admin:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
+                checkCanEdit();
                 break;
             default:
                 System.out.println("ERROR while loading user access type.");
@@ -482,38 +530,27 @@ public class PrimaryController implements Initializable {
         }
     }
 
-
     // Handles what happens when you search
     // TODO
     @FXML
     private void handleSearch() { // TODO: REWORK EVERYTHING
-        String addProgramCommand = "!addProgram ";
-
-        // Add program logic
-        if ((textFieldSearchBar.getText().startsWith(addProgramCommand))) {
-            String programTitle = textFieldSearchBar.getText().substring(addProgramCommand.length());
-            systemFacade.productionLogic.createProduction(new Production(programTitle));
-        }
-        // Actual search function
-        else {
-            if (!textFieldSearchBar.getText().isBlank()) {
-
-                // if active production is null (home screen) -> load elements
-                if (activeProduction == null) {
-                    loadTitleAndDescriptionElements();
-                }
-                // set the active production to be the current production
-                activeProduction = systemFacade.productionLogic.getProduction(textFieldSearchBar.getText());
-                // add title to title text element
-                descriptionTitleText.setText(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()).getTitle());
-                // add production to search history
-                systemFacade.currentUser.addToSearchHistory(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()));
-                showCreditList(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()));
-                calculateSearchBarAnchors();
-
-            } else {
-                System.out.println("Production doesn't exist in the database");
+        if (!textFieldSearchBar.getText().isBlank()) {
+            // if active production is null (home screen) -> load elements
+            if (systemFacade.getActiveProduction() == null) {
+                loadTitleAndDescriptionElements();
             }
+            // set the active production to be the current production
+            systemFacade.setActiveProduction(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()));
+            // add title to title text element
+            descriptionTitleText.setText(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()).getTitle());
+            // add production to search history
+            systemFacade.currentUser.addToSearchHistory(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()));
+            showCreditList(systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()));
+            calculateSearchBarAnchors();
+            checkCanEdit();
+
+        } else {
+            System.out.println("Production doesn't exist in the database");
         }
 
         textFieldSearchBar.clear();
@@ -521,45 +558,90 @@ public class PrimaryController implements Initializable {
         updateProperties();
     }
 
-    private void updateProductionList() {
-        if (systemFacade.currentUser.getUser() != null) {
-            if (systemFacade.currentUser.getUser().getAccessRole().equals(User.AccessRole.producer)) {
-                programList.getChildren().clear();
-                for (Production production : systemFacade.currentUser.getMyProductions()) {
-                    HBox hb = new HBox();
-                    Circle circle = new Circle(4);
-                    AnchorPane ap = new AnchorPane();
-                    VBox vb = new VBox();
-                    Label title = new Label(production.getTitle());
-                    Label deadline = new Label(production.getDeadlineString());
+    private void editProduction() {
+        if (systemFacade.getActiveProduction() != null) {
+            descriptionVBox.getChildren().clear();
+            for (int i = 0; i < systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).size(); i++) {
 
-                    programList.getChildren().add(hb);
-                    hb.getChildren().addAll(circle, ap);
-                    ap.getChildren().add(vb);
-                    vb.getChildren().addAll(title, deadline);
-                    HBox.setHgrow(ap, Priority.ALWAYS);
+                // gets the role of the credit
+                Text roleText = new Text(systemFacade.roleHandler.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle());
+                Label name = new Label(systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName());
+                VBox vb = new VBox();
 
-                    hb.setSpacing(25);
-                    hb.setAlignment(Pos.CENTER_LEFT);
-                    ap.setCursor(Cursor.HAND);
+                roleText.setFill(Info.accentGradient);
+                roleText.setStyle("-fx-font-weight: bold; -fx-font-size:" + Info.fontSizeBig + ";");
+                name.setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.forgroundColor + ";");
+                vb.setAlignment(Pos.TOP_CENTER);
+                vb.setSpacing(10);
 
-                    if (production.getStatus() == Status.Red) {
-                        circle.setFill(Paint.valueOf(Info.statusRed)); // DATABASE
-                    } else if (production.getStatus() == Status.Yellow) {
-                        circle.setFill(Paint.valueOf(Info.statusYellow)); // DATABASE
-                    } else {
-                        circle.setFill(Paint.valueOf(Info.statusGreen)); // DATABASE
+                if (descriptionVBox.getChildren().size() <= 0) {
+                    descriptionVBox.getChildren().add(vb);
+                    vb.getChildren().add(roleText);
+                    vb.getChildren().add(name);
+                } else {
+                    boolean foundRole = false;
+                    for (int j = 0; j < descriptionVBox.getChildren().size(); j++) {
+                        VBox vbox = (VBox) descriptionVBox.getChildren().get(j);
+                        Text role = (Text) vbox.getChildren().get(0);
+
+                        // gets the role of the credit
+                        if (systemFacade.roleHandler.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle().equals(role.getText())) {
+                            vbox.getChildren().add(name);
+                            foundRole = true;
+                        }
                     }
-
-                    ap.setOnMouseClicked(e -> {
-                        textFieldSearchBar.setText(title.getText());
-                        handleSearch();
-                    });
-
-                    title.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-                    deadline.setStyle("-fx-text-fill: " + Info.fontColor3 + "; -fx-font-size: " + Info.fontSizeSmall + ";");
+                    if (!foundRole) {
+                        descriptionVBox.getChildren().add(vb);
+                        vb.getChildren().add(roleText);
+                        vb.getChildren().add(name);
+                    }
                 }
             }
+        }
+    }
+
+    private void updateProductionList() {
+        programList.getChildren().clear();
+        programListProductionCompany.getChildren().clear();
+        for (Production production : systemFacade.currentUser.getMyProductions()) {
+            HBox hb = new HBox();
+            Circle circle = new Circle(4);
+            AnchorPane ap = new AnchorPane();
+            VBox vb = new VBox();
+            Label title = new Label(production.getTitle());
+            Label deadline = new Label(production.getDeadlineString());
+
+            if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.producer) {
+                programList.getChildren().add(hb);
+            } else if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.productionCompany) {
+                programListProductionCompany.getChildren().add(hb);
+            }
+
+            hb.getChildren().addAll(circle, ap);
+            ap.getChildren().add(vb);
+            vb.getChildren().addAll(title, deadline);
+            title.setWrapText(true);
+            HBox.setHgrow(ap, Priority.ALWAYS);
+
+            hb.setSpacing(25);
+            hb.setAlignment(Pos.CENTER_LEFT);
+            ap.setCursor(Cursor.HAND);
+
+            if (production.getStatus() == Status.Red) {
+                circle.setFill(Paint.valueOf(Info.statusRed)); // DATABASE
+            } else if (production.getStatus() == Status.Yellow) {
+                circle.setFill(Paint.valueOf(Info.statusYellow)); // DATABASE
+            } else {
+                circle.setFill(Paint.valueOf(Info.statusGreen)); // DATABASE
+            }
+
+            ap.setOnMouseClicked(e -> {
+                textFieldSearchBar.setText(title.getText());
+                handleSearch();
+            });
+
+            title.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+            deadline.setStyle("-fx-text-fill: " + Info.fontColor3 + "; -fx-font-size: " + Info.fontSizeSmall + ";");
         }
     }
 
@@ -607,7 +689,7 @@ public class PrimaryController implements Initializable {
     }
 
     public void calculateSearchBarAnchors() {
-        if (activeProduction == null) {
+        if (systemFacade.getActiveProduction() == null) {
             // triggers when the problem opens
             if (backgroundAP.getHeight() == 0) {
                 int windowStartHeight = 720; // Can't seem to get backgroundAP.prefHeight(-1) to give 720, so i'm hardcoding it for now
@@ -632,13 +714,13 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void homeButtonAction() {
-        activeProduction = null;
+        systemFacade.setActiveProduction(null);
         backgroundAP.getChildren().remove(titleAndDescriptionBP);
         searchBarBP.getChildren().remove(logoVBox);
         searchBarBP.setTop(logoVBox);
         BorderPane.setAlignment(logoVBox, Pos.TOP_CENTER);
         calculateSearchBarAnchors();
-        updateProductionList();
+        checkCanEdit();
     }
 
     @FXML
@@ -671,6 +753,33 @@ public class PrimaryController implements Initializable {
         KeyFrame kf = new KeyFrame(Duration.seconds(0.5), kv);
         timeline.getKeyFrames().add(kf);
         timeline.play();
+    }
+
+    @FXML
+    private void handleEditProductionClick(MouseEvent event) {
+        System.out.println(systemFacade.getActiveProduction().getTitle());
+        descriptionTitleVBox.getChildren().remove(editOptionsHBox);
+        descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
+        editOptionsHBox.getChildren().remove(editProductionButton);
+        editOptionsHBox.getChildren().addAll(cancelEditProductionButton, saveEditProductionButton);
+    }
+
+    @FXML
+    private void handleCancelEditProductionClick(MouseEvent event) {
+        System.out.println("canceled edit");
+        descriptionTitleVBox.getChildren().remove(editOptionsHBox);
+        descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
+        editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
+        editOptionsHBox.getChildren().add(editProductionButton);
+    }
+
+    @FXML
+    private void handleSaveEditProductionClick(MouseEvent event) {
+        System.out.println("saving");
+        descriptionTitleVBox.getChildren().remove(editOptionsHBox);
+        descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
+        editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
+        editOptionsHBox.getChildren().add(editProductionButton);
     }
 
     @FXML

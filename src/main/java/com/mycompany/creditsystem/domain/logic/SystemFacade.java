@@ -9,6 +9,7 @@ public class SystemFacade {
     public UserLogic userLogic;
     public CreditLogic creditLogic;
     public RoleHandler roleHandler;
+    public Production activeProduction;
 
     public SystemFacade() {
         productionLogic = new ProductionLogic();
@@ -16,6 +17,14 @@ public class SystemFacade {
         creditLogic = new CreditLogic();
         roleHandler = new RoleHandler();
         currentUser = CurrentUser.getInstance();
+        activeProduction = null;
+    }
 
+    public void setActiveProduction(Production activeProduction) {
+        this.activeProduction = activeProduction;
+    }
+
+    public Production getActiveProduction() {
+        return activeProduction;
     }
 }

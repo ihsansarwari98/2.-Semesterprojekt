@@ -227,4 +227,20 @@ public class ProductionHandler implements IProductionHandler {
             return null;
         }
     }
+
+    public ArrayList<Production> getProductionsLinkedToProductionCompany(int user_id) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT productions.production_id, productions.title, productions.deadline, productions.status  FROM company_production_subscriptions, users, productions WHERE company_production_subscriptions.production_company_id = users.user_id AND production_company_id = ? AND company_production_subscriptions.production_id = productions.production_id");
+            statement.setInt(1, user_id);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<Production> returnValue = new ArrayList<>();
+            while (sqlReturnValues.next()) {
+                returnValue.add(new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4)));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
