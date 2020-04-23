@@ -1,9 +1,6 @@
 package com.mycompany.creditsystem.domain.logic;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -12,17 +9,12 @@ public class Production implements Comparable<Production>  {
     private String title;
     private Date deadline;
     private Status status;
-    private ArrayList<Credit> credits;
-    private ArrayList<Producer> assosiatedProducers;
     private int id;
-
 
     public Production(String title) {
         this.title = title;
         this.status = Status.Red;
         deadline = new Date();
-        credits = new ArrayList<>();
-        assosiatedProducers = new ArrayList<>();
     }
 
     public Production(int id, String title, Date deadline, int status) {
@@ -30,8 +22,6 @@ public class Production implements Comparable<Production>  {
         this.title = title;
         this.status = calcStatus(status);
         this.deadline = deadline;
-        credits = new ArrayList<>();
-        assosiatedProducers = new ArrayList<>();
     }
 
     public Status calcStatus (int statusNumber) {
@@ -41,10 +31,6 @@ public class Production implements Comparable<Production>  {
             return Status.Green;
         }
         return Status.Red;
-    }
-
-    public void addCredit(Credit credit) {
-        credits.add(credit);
     }
 
     @Override
@@ -96,22 +82,6 @@ public class Production implements Comparable<Production>  {
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
-    }
-
-    public ArrayList<Credit> getCredits() {
-        return credits;
-    }
-
-    public ArrayList<Producer> getAssosiatedProducers(){
-        return assosiatedProducers;
-    }
-
-    public void addAssosiatedProducers(Producer producer){
-        assosiatedProducers.add(producer);
-    }
-
-    public void addCredits(Credit credit) {
-        credits.add(credit);
     }
 
     public int getId() {

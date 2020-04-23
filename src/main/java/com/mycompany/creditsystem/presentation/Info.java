@@ -1,7 +1,6 @@
 package com.mycompany.creditsystem.presentation;
 
 import com.mycompany.creditsystem.domain.logic.Credit;
-import com.mycompany.creditsystem.domain.logic.Producer;
 import com.mycompany.creditsystem.domain.logic.Production;
 import com.mycompany.creditsystem.domain.logic.User;
 import javafx.collections.FXCollections;
