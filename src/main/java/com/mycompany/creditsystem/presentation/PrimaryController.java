@@ -534,7 +534,7 @@ public class PrimaryController implements Initializable {
     // TODO
     @FXML
     private void handleSearch() { // TODO: REWORK EVERYTHING
-        if (!textFieldSearchBar.getText().isBlank()) {
+        if (!textFieldSearchBar.getText().isBlank() && systemFacade.productionLogic.getProduction(textFieldSearchBar.getText()) != null) {
             // if active production is null (home screen) -> load elements
             if (systemFacade.getActiveProduction() == null) {
                 loadTitleAndDescriptionElements();
@@ -563,39 +563,18 @@ public class PrimaryController implements Initializable {
             descriptionVBox.getChildren().clear();
             for (int i = 0; i < systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).size(); i++) {
 
+                VBox descriptionVBoxLeft = new VBox();
+                descriptionHBox.getChildren().add(descriptionVBoxLeft);
+
                 // gets the role of the credit
                 Text roleText = new Text(systemFacade.roleHandler.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle());
                 Label name = new Label(systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName());
-                VBox vb = new VBox();
 
+                descriptionVBox.getChildren().add(name);
+                descriptionVBoxLeft.getChildren().add(roleText);
                 roleText.setFill(Info.accentGradient);
                 roleText.setStyle("-fx-font-weight: bold; -fx-font-size:" + Info.fontSizeBig + ";");
                 name.setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.forgroundColor + ";");
-                vb.setAlignment(Pos.TOP_CENTER);
-                vb.setSpacing(10);
-
-                if (descriptionVBox.getChildren().size() <= 0) {
-                    descriptionVBox.getChildren().add(vb);
-                    vb.getChildren().add(roleText);
-                    vb.getChildren().add(name);
-                } else {
-                    boolean foundRole = false;
-                    for (int j = 0; j < descriptionVBox.getChildren().size(); j++) {
-                        VBox vbox = (VBox) descriptionVBox.getChildren().get(j);
-                        Text role = (Text) vbox.getChildren().get(0);
-
-                        // gets the role of the credit
-                        if (systemFacade.roleHandler.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle().equals(role.getText())) {
-                            vbox.getChildren().add(name);
-                            foundRole = true;
-                        }
-                    }
-                    if (!foundRole) {
-                        descriptionVBox.getChildren().add(vb);
-                        vb.getChildren().add(roleText);
-                        vb.getChildren().add(name);
-                    }
-                }
             }
         }
     }
