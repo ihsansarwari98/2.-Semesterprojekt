@@ -409,9 +409,10 @@
                               </VBox>
                               <ScrollPane fx:id="descriptionScrollPane" fitToHeight="true" fitToWidth="true" styleClass="dark-thumb" VBox.vgrow="ALWAYS">
                                  <content>
-                                    <HBox fx:id="descriptionHBox" alignment="TOP_CENTER" spacing="20.0">
+                                    <HBox fx:id="descriptionHBox" alignment="TOP_CENTER" spacing="10.0">
                                        <children>
                                           <VBox fx:id="descriptionVBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS" />
+                                          <VBox fx:id="descriptionVBoxRight" spacing="10.0" HBox.hgrow="ALWAYS" />
                                        </children>
                                     </HBox>
                                  </content>

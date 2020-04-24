@@ -138,7 +138,7 @@ public class PrimaryController implements Initializable {
     @FXML
     private VBox logoVBox;
     @FXML
-    private VBox topLeftCornerVBox;
+    private VBox descriptionVBoxRight;
     @FXML
     private VBox descriptionTitleVBox;
     @FXML
@@ -247,10 +247,10 @@ public class PrimaryController implements Initializable {
     // Is getting called many times a second
     private void updateEverySecond() {
         if (textFieldSearchBar.isFocused()) {
-            updateSearchResultList();
+            updateSearchResultList(searchResults, textFieldSearchBar);
         }
 
-        handleSearchFocus();
+        handleSearchFocus(searchResults, textFieldSearchBar);
     }
 
     @FXML
@@ -365,7 +365,10 @@ public class PrimaryController implements Initializable {
 
     // Shows the list of credits connected to a production
     private void showCreditList(Production production) {
+        descriptionHBox.getChildren().remove(descriptionVBoxRight);
         descriptionVBox.getChildren().clear();
+        descriptionHBox.setSpacing(0);
+        descriptionVBox.setAlignment(Pos.TOP_CENTER);
         for (int i = 0; i < systemFacade.creditLogic.getCredits(production.getId()).size(); i++) {
 
             // gets the role of the credit
@@ -403,66 +406,59 @@ public class PrimaryController implements Initializable {
         }
     }
 
-    // Makes the search text white when focused and clicking ENTER searches the focused text
-    private void handleSearchFocus() {
-        for (int i = 0; i < searchResults.getChildren().size(); i++) {
-            AnchorPane ap = (AnchorPane) searchResults.getChildren().get(i);
-            Label titleText = (Label) ap.getChildren().get(0);
-            if (titleText.isHover()) {
-                titleText.setStyle("-fx-text-fill: white; -fx-font-size: " + Info.fontSizeDefault + ";");
-            } else {
-                if (titleText.isFocused()) {
-                    titleText.setOnKeyPressed(e -> {
-                        if (e.getCode() == KeyCode.ENTER) {
-                            textFieldSearchBar.setText(titleText.getText());
-                            handleSearch();
-                        }
-                    });
-                    titleText.setStyle("-fx-text-fill: white; -fx-font-size: " + Info.fontSizeDefault + ";"); // same as hover
-                } else {
-                    titleText.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-                }
-            }
-        }
-    }
-
-
     // Holds the last updated text in the search bar
     private String tempUserSearch = "";
     private boolean selectBlank = true;
 
     // Updates and displays the search results
-    private void updateSearchResultList() {
-        String userSearch = textFieldSearchBar.getText().toLowerCase();
+    private void updateSearchResultList(VBox vbox, TextField textField) {
+        String userSearch = textField.getText().toLowerCase();
+
+
+
+
+
+
+
+        // TODO: : : : : : : : : : : : : Make methods more flexible/dynamic
+
+
+
+
+
+
+
+
+
 
         // TODO: Fix select/deselect and writing visibility
         // Only updates when a change is made in the textField
         if (!userSearch.equals(tempUserSearch)) {
             tempUserSearch = userSearch;
             if (!userSearch.isBlank()) {
-                searchResults.getChildren().clear();
+                vbox.getChildren().clear();
                 for (int i = 0; i < systemFacade.productionLogic.getProductions(userSearch).size(); i++) {
                     // if the text written in the search bar is equal to any result in the production list // DATABASE
                     AnchorPane ap = new AnchorPane();
                     Label titleText = new Label(systemFacade.productionLogic.getProductions(userSearch).get(i).getTitle());
 
-                    searchResults.getChildren().add(ap);
+                    vbox.getChildren().add(ap);
                     ap.getChildren().addAll(titleText);
                 }
 
-                if (searchResults.getChildren().size() == 0) {
+                if (vbox.getChildren().size() == 0) {
                     searchRectangleBG.setHeight(searchBarBackground.getHeight());
                 }
 
-                styleSearchResults();
+                styleSearchResults(vbox);
 
             } else {
                 // triggers if the search bar becomes empty while the using is typing
                 if (systemFacade.currentUser.getSearchHistory().size() > 0) {
                     displaySearchHistory();
-                    styleSearchResults();
+                    styleSearchResults(vbox);
                 } else {
-                    searchResults.getChildren().clear();
+                    vbox.getChildren().clear();
                     searchRectangleBG.setHeight(searchBarBackground.getHeight());
                 }
             }
@@ -471,7 +467,69 @@ public class PrimaryController implements Initializable {
             if (selectBlank) {
                 selectBlank = false;
                 displaySearchHistory();
-                styleSearchResults();
+                styleSearchResults(vbox);
+            }
+        }
+    }
+
+    private void styleSearchResults(VBox vbox) {
+        int searchResultSpacing = 10;
+        int searchResultTextPadding = 50;
+
+        for (int i = 0; i < vbox.getChildren().size(); i++) {
+            AnchorPane ap = (AnchorPane) vbox.getChildren().get(i);
+            Label titleText = (Label) ap.getChildren().get(0);
+
+            vbox.setAlignment(Pos.TOP_LEFT);
+            vbox.setSpacing(searchResultSpacing);
+            ap.setCursor(Cursor.HAND);
+
+            titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
+            titleText.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+            titleText.setAlignment(Pos.CENTER_LEFT);
+            titleText.setFocusTraversable(true);
+
+            ap.setOnMouseEntered(this::handleSearchMenuHoveringEnter);
+            ap.setOnMouseExited(this::handleSearchMenuHoveringExit);
+            ap.setOnMouseClicked(this::handleSearchMenuHoveringClicked);
+
+            titleText.applyCss();
+            calculateSearchResultsHeight(vbox, titleText);
+        }
+    }
+
+    // Calculates and sets the height of the search result tab
+    private void calculateSearchResultsHeight(VBox vbox, Label titleText) {
+        int searchResultSize = vbox.getChildren().size();
+
+        if (searchResultSize == 0) {
+            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1)); // no results
+        } else if (searchResultSize < Info.visibleResults) { // Maximum amount of search results shown
+            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1) + (titleText.prefHeight(-1) + vbox.getSpacing()) * (searchResultSize));
+        } else {
+            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1) + (titleText.prefHeight(-1) + vbox.getSpacing()) * (Info.visibleResults));
+        }
+    }
+
+    // Makes the search text white when focused and clicking ENTER searches the focused text
+    private void handleSearchFocus(VBox vbox, TextField textField) {
+        for (int i = 0; i < vbox.getChildren().size(); i++) {
+            AnchorPane ap = (AnchorPane) vbox.getChildren().get(i);
+            Label titleText = (Label) ap.getChildren().get(0);
+            if (titleText.isHover()) {
+                titleText.setStyle("-fx-text-fill: white; -fx-font-size: " + Info.fontSizeDefault + ";");
+            } else {
+                if (titleText.isFocused()) {
+                    titleText.setOnKeyPressed(e -> {
+                        if (e.getCode() == KeyCode.ENTER) {
+                            textField.setText(titleText.getText());
+                            handleSearch();
+                        }
+                    });
+                    titleText.setStyle("-fx-text-fill: white; -fx-font-size: " + Info.fontSizeDefault + ";"); // same as hover
+                } else {
+                    titleText.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+                }
             }
         }
     }
@@ -488,45 +546,6 @@ public class PrimaryController implements Initializable {
                 searchResults.getChildren().add(ap);
                 ap.getChildren().addAll(titleText);
             }
-        }
-    }
-
-    private void styleSearchResults() {
-        int searchResultSpacing = 10;
-        int searchResultTextPadding = 50;
-
-        for (int i = 0; i < searchResults.getChildren().size(); i++) {
-            AnchorPane ap = (AnchorPane) searchResults.getChildren().get(i);
-            Label titleText = (Label) ap.getChildren().get(0);
-
-            searchResults.setAlignment(Pos.TOP_LEFT);
-            searchResults.setSpacing(searchResultSpacing);
-            ap.setCursor(Cursor.HAND);
-
-            titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
-            titleText.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-            titleText.setAlignment(Pos.CENTER_LEFT);
-            titleText.setFocusTraversable(true);
-
-            ap.setOnMouseEntered(this::handleSearchMenuHoveringEnter);
-            ap.setOnMouseExited(this::handleSearchMenuHoveringExit);
-            ap.setOnMouseClicked(this::handleSearchMenuHoveringClicked);
-
-            titleText.applyCss();
-            calculateSearchResultsHeight(titleText);
-        }
-    }
-
-    // Calculates and sets the height of the search result tab
-    private void calculateSearchResultsHeight(Label titleText) {
-        int searchResultSize = searchResults.getChildren().size();
-
-        if (searchResultSize == 0) {
-            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1)); // no results
-        } else if (searchResultSize < Info.visibleResults) { // Maximum amount of search results shown
-            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1) + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (searchResultSize));
-        } else {
-            searchRectangleBG.setHeight(searchBarBackground.prefHeight(-1) + (titleText.prefHeight(-1) + searchResults.getSpacing()) * (Info.visibleResults));
         }
     }
 
@@ -560,20 +579,49 @@ public class PrimaryController implements Initializable {
 
     private void editProduction() {
         if (systemFacade.getActiveProduction() != null) {
+            descriptionHBox.getChildren().add(descriptionVBoxRight);
+            descriptionHBox.setSpacing(10);
             descriptionVBox.getChildren().clear();
+            descriptionVBoxRight.getChildren().clear();
+
+            VBox creditNameVBox = new VBox();
+            VBox creditRoleVBox = new VBox();
+            VBox descriptionVBoxNameCaption = new VBox();
+            VBox descriptionVBoxRoleCaption = new VBox();
+
+            Text nameCaption = new Text("Credit name");
+            Text roleCaption = new Text("Credit role");
+
+            nameCaption.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+            roleCaption.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+            nameCaption.setFill(Info.accentGradient);
+            roleCaption.setFill(Info.accentGradient);
+
+            descriptionVBox.getChildren().addAll(descriptionVBoxNameCaption, creditNameVBox);
+            descriptionVBoxRight.getChildren().addAll(descriptionVBoxRoleCaption, creditRoleVBox);
+
+            descriptionVBoxNameCaption.getChildren().add(nameCaption);
+            descriptionVBoxRoleCaption.getChildren().add(roleCaption);
+
+            descriptionVBoxNameCaption.setAlignment(Pos.TOP_RIGHT);
+            descriptionVBoxRoleCaption.setAlignment(Pos.TOP_LEFT);
+
             for (int i = 0; i < systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).size(); i++) {
 
-                VBox descriptionVBoxLeft = new VBox();
-                descriptionHBox.getChildren().add(descriptionVBoxLeft);
-
                 // gets the role of the credit
-                Text roleText = new Text(systemFacade.roleHandler.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle());
-                Label name = new Label(systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName());
+                TextField roleText = new TextField(systemFacade.roleHandler.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle());
+                TextField name = new TextField(systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName());
 
-                descriptionVBox.getChildren().add(name);
-                descriptionVBoxLeft.getChildren().add(roleText);
-                roleText.setFill(Info.accentGradient);
-                roleText.setStyle("-fx-font-weight: bold; -fx-font-size:" + Info.fontSizeBig + ";");
+                creditNameVBox.getChildren().add(name);
+                creditRoleVBox.getChildren().add(roleText);
+
+                creditNameVBox.setAlignment(Pos.TOP_RIGHT);
+                creditRoleVBox.setAlignment(Pos.TOP_LEFT);
+
+                name.setAlignment(Pos.TOP_RIGHT);
+                roleText.setAlignment(Pos.TOP_LEFT);
+
+                roleText.setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.forgroundColor + ";");
                 name.setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.forgroundColor + ";");
             }
         }
@@ -741,6 +789,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().remove(editProductionButton);
         editOptionsHBox.getChildren().addAll(cancelEditProductionButton, saveEditProductionButton);
+        editProduction();
     }
 
     @FXML
@@ -750,6 +799,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
         editOptionsHBox.getChildren().add(editProductionButton);
+        showCreditList(systemFacade.getActiveProduction());
     }
 
     @FXML
@@ -759,6 +809,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
         editOptionsHBox.getChildren().add(editProductionButton);
+        showCreditList(systemFacade.getActiveProduction());
     }
 
     @FXML
