@@ -30,12 +30,12 @@ public class CurrentUser {
     }
 
     public void addToSearchHistory(Production production) {
-        for (int i = 0; i < CurrentUser.searchHistory.size(); i++) {
-            if (CurrentUser.searchHistory.get(i).getId() == production.getId()) {
-                CurrentUser.searchHistory.remove(i);
+        for (int i = 0; i < searchHistory.size(); i++) {
+            if (searchHistory.get(i).getId() == production.getId()) {
+                searchHistory.remove(i);
             }
         }
-        CurrentUser.searchHistory.add(0, production);
+        searchHistory.add(0, production);
     }
 
     public ArrayList<Production> getMyProductions() {
@@ -44,6 +44,33 @@ public class CurrentUser {
 
     public void setMyProductions(ArrayList<Production> myProductions) {
         CurrentUser.myProductions = myProductions;
+    }
 
+    private boolean nameComparatorShift = true;
+    public boolean sortMyProductionsByName() {
+        ProductionNameComparator nameComparator = new ProductionNameComparator();
+        if (nameComparatorShift) {
+            CurrentUser.myProductions.sort(nameComparator);
+            nameComparatorShift = false;
+            return true;
+        } else {
+            CurrentUser.myProductions.sort(nameComparator.reversed());
+            nameComparatorShift = true;
+            return false;
+        }
+    }
+
+    private boolean deadlineComparatorShift = true;
+    public boolean sortMyProductionsByDeadline() {
+        ProductionDeadlineComparator deadlineComparator = new ProductionDeadlineComparator();
+        if (deadlineComparatorShift) {
+            CurrentUser.myProductions.sort(deadlineComparator);
+            deadlineComparatorShift = false;
+            return true;
+        } else {
+            CurrentUser.myProductions.sort(deadlineComparator.reversed());
+            deadlineComparatorShift = true;
+            return false;
+        }
     }
 }

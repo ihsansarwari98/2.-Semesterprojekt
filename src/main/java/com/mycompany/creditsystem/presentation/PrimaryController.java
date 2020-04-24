@@ -633,37 +633,21 @@ public class PrimaryController implements Initializable {
         selectBlank = true;
     }
 
-    private Boolean nameComparatorShift = true;
-
     @FXML
     private void sortByName() {
-        ProductionNameComparator nameComparator = new ProductionNameComparator();
-        if (nameComparatorShift) {
-            systemFacade.currentUser.getMyProductions().sort(nameComparator);
-            nameComparatorShift = false;
+        if (systemFacade.currentUser.sortMyProductionsByName()) {
             topSortingLabel.setText("A");
             bottomSortingLabel.setText("Z");
         } else {
-            systemFacade.currentUser.getMyProductions().sort(nameComparator.reversed());
-            nameComparatorShift = true;
             topSortingLabel.setText("Z");
             bottomSortingLabel.setText("A");
         }
         updateProductionList();
     }
 
-    private Boolean deadlineComparatorShift = true;
-
     @FXML
     private void sortByDeadline() {
-        ProductionDeadlineComparator deadlineComparator = new ProductionDeadlineComparator();
-        if (deadlineComparatorShift) {
-            systemFacade.currentUser.getMyProductions().sort(deadlineComparator);
-            deadlineComparatorShift = false;
-        } else {
-            systemFacade.currentUser.getMyProductions().sort(deadlineComparator.reversed());
-            deadlineComparatorShift = true;
-        }
+        systemFacade.currentUser.sortMyProductionsByDeadline();
         updateProductionList();
     }
 
