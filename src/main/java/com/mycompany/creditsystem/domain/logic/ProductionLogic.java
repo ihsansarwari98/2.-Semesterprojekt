@@ -58,26 +58,43 @@ public class ProductionLogic implements IProductionLogic {
         return ProductionHandler.getInstance().getProduction(title);
     }
 
+    @Override
+    public boolean linkProductionToProducer(int production_id, int producer_id) {
+        return ProductionHandler.getInstance().linkProductionToProducer(production_id, producer_id);
+    }
+
     public ArrayList<Production> getProductionsLinkedToProductionCompany(int production_company_id) {
         return ProductionHandler.getInstance().getProductionsLinkedToProductionCompany(production_company_id);
     }
 
-    public boolean isProductionLinkedToProducer (int procuction_id, int producer_id) {
+    @Override
+    public boolean linkProductionToProductionCompany(int production_id, int production_company_id) {
+        return ProductionHandler.getInstance().linkProductionToProductionCompany(production_id, production_company_id);
+    }
+
+    @Override
+    public boolean addCreditAndRoleToProduction(int production_id, int credit_id, int role_id) {
+        return ProductionHandler.getInstance().addCreditAndRoleToProduction(production_id, credit_id, role_id);
+    }
+
+    @Override
+    public boolean isProductionLinkedToProducer (int production_id, int producer_id) {
         ArrayList<Production> temp = ProductionHandler.getInstance().getProductionsLinkedToProducer(producer_id);
         boolean foundProduction = false;
         for (int i = 0; i < temp.size(); i++) {
-            if (temp.get(i).getId() == procuction_id) {
+            if (temp.get(i).getId() == production_id) {
                 foundProduction = true;
             }
         }
         return foundProduction;
     }
 
-    public boolean isProductionLinkedToProductionCompany (int procuction_id, int user_id) {
+    @Override
+    public boolean isProductionLinkedToProductionCompany (int production_id, int user_id) {
         ArrayList<Production> temp = ProductionHandler.getInstance().getProductionsLinkedToProductionCompany(user_id);
         boolean foundProduction = false;
         for (int i = 0; i < temp.size(); i++) {
-            if (temp.get(i).getId() == procuction_id) {
+            if (temp.get(i).getId() == production_id) {
                 foundProduction = true;
             }
         }

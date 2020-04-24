@@ -57,6 +57,7 @@ public class ProductionHandler implements IProductionHandler {
         }
     }
 
+    @Override
     public Production getProduction(String title) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM productions WHERE title = ?");
@@ -167,7 +168,7 @@ public class ProductionHandler implements IProductionHandler {
         }
     }
 
-
+    @Override
     public boolean addCreditAndRoleToProduction(int production_id, int credit_id, int role_id) {
         try {
             PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO production_credit_role_subscriptions (production_id, credit_id, role_id) VALUES (?,?,?)");
@@ -183,6 +184,7 @@ public class ProductionHandler implements IProductionHandler {
         }
     }
 
+    @Override
     public boolean linkProductionToProductionCompany(int production_id, int production_company_id) {
         try {
             PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO company_production_subscriptions (production_id, production_company_id) VALUES (?,?)");
@@ -197,6 +199,7 @@ public class ProductionHandler implements IProductionHandler {
         }
     }
 
+    @Override
     public boolean linkProductionToProducer(int production_id, int producer_id) {
         try {
             PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO producer_production_subscriptions (production_id, producer_id) VALUES (?,?)");
@@ -228,6 +231,7 @@ public class ProductionHandler implements IProductionHandler {
         }
     }
 
+    @Override
     public ArrayList<Production> getProductionsLinkedToProductionCompany(int user_id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT productions.production_id, productions.title, productions.deadline, productions.status  FROM company_production_subscriptions, users, productions WHERE company_production_subscriptions.production_company_id = users.user_id AND production_company_id = ? AND company_production_subscriptions.production_id = productions.production_id");

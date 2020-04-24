@@ -1,12 +1,13 @@
 package com.mycompany.creditsystem.domain.logic;
 
 import com.mycompany.creditsystem.domain.interfaces.IUserHandler;
+import com.mycompany.creditsystem.domain.logicinterface.IUserLogic;
 import com.mycompany.creditsystem.persistence.UserHandler;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class UserLogic implements IUserHandler {
+public class UserLogic implements IUserLogic {
 
     @Override
     public ArrayList<User> getUsers() {
@@ -33,6 +34,7 @@ public class UserLogic implements IUserHandler {
         return UserHandler.getInstance().deleteUser(user_id);
     }
 
+    @Override
     public ArrayList<User> getUsersFromAccessRole(int accessRole) {
         return UserHandler.getInstance().getUsersFromAccessRole(accessRole);
     }
