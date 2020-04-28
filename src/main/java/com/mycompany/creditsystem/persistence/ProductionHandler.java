@@ -1,7 +1,6 @@
 package com.mycompany.creditsystem.persistence;
 
 import com.mycompany.creditsystem.domain.interfaces.IProductionHandler;
-import com.mycompany.creditsystem.domain.logic.Production;
 
 import java.sql.*;
 import java.util.Date;

@@ -1,6 +1,6 @@
 package com.mycompany.creditsystem.domain.interfaces;
 
-import com.mycompany.creditsystem.domain.logic.User;
+import com.mycompany.creditsystem.persistence.User;
 
 import java.util.ArrayList;
 

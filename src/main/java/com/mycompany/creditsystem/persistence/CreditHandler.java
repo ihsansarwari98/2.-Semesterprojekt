@@ -1,15 +1,11 @@
 package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.creditsystem.domain.logic.Credit;
 import com.mycompany.creditsystem.domain.interfaces.ICreditHandler;
-import com.mycompany.creditsystem.domain.logic.Production;
-import com.mycompany.creditsystem.domain.logic.Role;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CreditHandler implements ICreditHandler {
 
@@ -42,6 +38,23 @@ public class CreditHandler implements ICreditHandler {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT credits.credit_id, credits.name FROM production_credit_role_subscriptions, credits, productions  WHERE production_credit_role_subscriptions.production_id = ? AND credits.credit_id = production_credit_role_subscriptions.credit_id AND productions.production_id = production_credit_role_subscriptions.production_id");
             statement.setInt(1, production_id);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<Credit> returnValue = new ArrayList<>();
+            while (sqlReturnValues.next()) {
+                returnValue.add(new Credit(sqlReturnValues.getInt(1), sqlReturnValues.getString(2)));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Credit> getCredits(String namePart) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM credits WHERE name ~* ?");
+            statement.setString(1, namePart);
             ResultSet sqlReturnValues = statement.executeQuery();
             ArrayList<Credit> returnValue = new ArrayList<>();
             while (sqlReturnValues.next()) {

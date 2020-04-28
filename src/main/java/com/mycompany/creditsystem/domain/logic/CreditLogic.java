@@ -1,6 +1,7 @@
 package com.mycompany.creditsystem.domain.logic;
 
 import com.mycompany.creditsystem.domain.logicinterface.ICreditLogic;
+import com.mycompany.creditsystem.persistence.Credit;
 import com.mycompany.creditsystem.persistence.CreditHandler;
 
 import java.util.ArrayList;
@@ -45,6 +46,11 @@ public class CreditLogic implements ICreditLogic {
     @Override
     public ArrayList<Credit> getCredits(int production_id) {
         return CreditHandler.getInstance().getCredits(production_id);
+    }
+
+    @Override
+    public ArrayList<Credit> getCredits(String namePart) {
+        return CreditHandler.getInstance().getCredits(namePart);
     }
 
 

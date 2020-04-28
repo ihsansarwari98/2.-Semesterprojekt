@@ -1,6 +1,7 @@
 package com.mycompany.creditsystem.domain.logic;
 
 import com.mycompany.creditsystem.domain.logicinterface.IRoleLogic;
+import com.mycompany.creditsystem.persistence.Role;
 import com.mycompany.creditsystem.persistence.RoleHandler;
 
 import java.util.ArrayList;

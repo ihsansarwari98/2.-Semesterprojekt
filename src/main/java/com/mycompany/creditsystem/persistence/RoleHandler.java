@@ -1,14 +1,11 @@
 package com.mycompany.creditsystem.persistence;
 
 import com.mycompany.creditsystem.domain.interfaces.IRoleHandler;
-import com.mycompany.creditsystem.domain.logic.Credit;
-import com.mycompany.creditsystem.domain.logic.Role;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RoleHandler implements IRoleHandler {
 

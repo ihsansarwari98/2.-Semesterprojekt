@@ -1,6 +1,6 @@
 package com.mycompany.creditsystem.domain.logicinterface;
 
-import com.mycompany.creditsystem.domain.logic.Production;
+import com.mycompany.creditsystem.persistence.Production;
 
 import java.util.ArrayList;
 import java.util.Date;

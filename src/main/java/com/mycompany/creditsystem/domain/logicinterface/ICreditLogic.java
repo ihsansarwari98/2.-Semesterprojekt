@@ -1,8 +1,6 @@
 package com.mycompany.creditsystem.domain.logicinterface;
 
-import com.mycompany.creditsystem.domain.logic.Credit;
-import com.mycompany.creditsystem.domain.logic.Production;
-import com.mycompany.creditsystem.domain.logic.Role;
+import com.mycompany.creditsystem.persistence.Credit;
 
 import java.util.ArrayList;
 
@@ -15,5 +13,6 @@ public interface ICreditLogic {
     public boolean deleteCreditFromSystem (int id);
     public boolean addCreditRelation(int production_id, int credit_id, int role_id);
     public ArrayList<Credit> getCredits(int production_id);
+    public ArrayList<Credit> getCredits(String namePart);
 }
 

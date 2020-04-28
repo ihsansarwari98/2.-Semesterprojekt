@@ -1,5 +1,7 @@
 package com.mycompany.creditsystem.domain.logic;
 
+import com.mycompany.creditsystem.persistence.Production;
+
 import java.util.Comparator;
 
 public class ProductionDeadlineComparator implements Comparator<Production> {

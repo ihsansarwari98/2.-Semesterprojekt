@@ -241,6 +241,9 @@
                                              <VBox.margin>
                                                 <Insets left="80.0" right="80.0" />
                                              </VBox.margin>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
                                           </StackPane>
                                        </children>
                                     </VBox>
@@ -426,7 +429,7 @@
                   </BorderPane>
                   <BorderPane fx:id="searchBarBP" layoutX="280.0" layoutY="219.0" onMousePressed="#handleDeselect" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
                      <center>
-                        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+                        <StackPane fx:id="searchBarStackPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="500.0" BorderPane.alignment="CENTER">
                            <BorderPane.margin>
                               <Insets />
                            </BorderPane.margin>
@@ -444,14 +447,14 @@
                                     <Insets />
                                  </StackPane.margin>
                               </Rectangle>
-                              <VBox StackPane.alignment="TOP_CENTER">
+                              <VBox fx:id="searchBarVBox" StackPane.alignment="TOP_CENTER">
                                  <children>
                                     <AnchorPane fx:id="searchBarBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="500.0" style="-fx-background-color: #242424; -fx-background-radius: 25; -fx-border-radius: 25;">
                                        <cursor>
                                           <Cursor fx:constant="TEXT" />
                                        </cursor>
                                        <children>
-                                          <HBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <HBox fx:id="searchBarHBox" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <children>
                                                 <BorderPane prefHeight="25.0" prefWidth="25.0" HBox.hgrow="NEVER">
                                                    <center>

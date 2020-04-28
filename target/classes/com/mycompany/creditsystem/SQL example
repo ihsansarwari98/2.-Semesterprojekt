@@ -4,7 +4,7 @@ CREATE TABLE users
     name         VARCHAR(100)              NOT NULL,
     username     VARCHAR(100) UNIQUE       NOT NULL,
     password     VARCHAR(100)              NOT NULL,
-    date_created timestamp DEFAULT now()   NOT NULL,
+    date_created TIMESTAMP DEFAULT now()   NOT NULL,
     access_role  SMALLINT  DEFAULT 0       NOT NULL
 );
 
@@ -12,8 +12,8 @@ CREATE TABLE productions
 (
     production_id SERIAL UNIQUE PRIMARY KEY NOT NULL,
     title         VARCHAR(100)              NOT NULL,
-    deadline      DATE     DEFAULT now()    NOT NULL,
-    status        SMALLINT DEFAULT 0        NOT NULL
+    deadline      TIMESTAMP DEFAULT now()   NOT NULL,
+    status        SMALLINT  DEFAULT 0       NOT NULL
 );
 
 CREATE TABLE roles
@@ -37,8 +37,8 @@ CREATE TABLE company_producer_subscriptions
 
 CREATE TABLE company_production_subscriptions
 (
-    production_id         INTEGER REFERENCES users (user_id) NOT NULL,
-    production_company_id INTEGER REFERENCES users (user_id) NOT NULL,
+    production_id         INTEGER REFERENCES productions (production_id) NOT NULL,
+    production_company_id INTEGER REFERENCES users (user_id)             NOT NULL,
     PRIMARY KEY (production_id, production_company_id)
 );
 

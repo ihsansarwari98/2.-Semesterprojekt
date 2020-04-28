@@ -2,11 +2,7 @@ package com.mycompany.creditsystem.persistence;
 
 import com.mycompany.creditsystem.domain.interfaces.IUserHandler;
 import com.mycompany.creditsystem.domain.logic.MD5Encryption;
-import com.mycompany.creditsystem.domain.logic.Production;
-import com.mycompany.creditsystem.domain.logic.User;
-import org.postgresql.util.MD5Digest;
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

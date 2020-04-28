@@ -1,4 +1,4 @@
-package com.mycompany.creditsystem.domain.logic;
+package com.mycompany.creditsystem.persistence;
 
 import java.util.Date;
 

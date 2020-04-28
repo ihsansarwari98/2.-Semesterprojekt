@@ -1,6 +1,7 @@
 package com.mycompany.creditsystem.domain.logic;
 
 import com.mycompany.creditsystem.domain.logicinterface.IProductionLogic;
+import com.mycompany.creditsystem.persistence.Production;
 import com.mycompany.creditsystem.persistence.ProductionHandler;
 
 import java.util.ArrayList;

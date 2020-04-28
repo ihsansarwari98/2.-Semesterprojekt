@@ -1,5 +1,8 @@
 package com.mycompany.creditsystem.domain.logic;
 
+import com.mycompany.creditsystem.persistence.Production;
+import com.mycompany.creditsystem.persistence.User;
+
 import java.util.ArrayList;
 
 public class CurrentUser {
