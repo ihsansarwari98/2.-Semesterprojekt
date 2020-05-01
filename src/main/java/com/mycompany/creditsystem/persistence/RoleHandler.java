@@ -1,13 +1,11 @@
 package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.creditsystem.domain.interfaces.IRoleHandler;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class RoleHandler implements IRoleHandler {
+public class RoleHandler {
 
     public static RoleHandler instance;
 
@@ -18,8 +16,6 @@ public class RoleHandler implements IRoleHandler {
         return instance;
     }
 
-
-    @Override
     public ArrayList<Role> getRoles() {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM roles");
@@ -35,7 +31,6 @@ public class RoleHandler implements IRoleHandler {
         }
     }
 
-    @Override
     public Role getRole(int id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM roles WHERE role_id = ?");
@@ -51,7 +46,6 @@ public class RoleHandler implements IRoleHandler {
         }
     }
 
-    @Override
     public Role getRoleFromCredit(int production_id, int credit_id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT roles.role_id, role_title FROM production_credit_role_subscriptions, roles WHERE production_credit_role_subscriptions.role_id = roles.role_id AND production_id = ? AND credit_id = ?");
@@ -68,7 +62,6 @@ public class RoleHandler implements IRoleHandler {
         }
     }
 
-    @Override
     public boolean createRole(Role role) {
         try {
             PreparedStatement insertStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO roles (role_title) " +
@@ -83,7 +76,6 @@ public class RoleHandler implements IRoleHandler {
         }
     }
 
-    @Override
     public boolean deleteRole(int id) {
         try {
 
@@ -98,7 +90,6 @@ public class RoleHandler implements IRoleHandler {
         }
     }
 
-    @Override
     public boolean updateRole(Role role) {
         try {
             PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("UPDATE roles SET role_title=?, WHERE role_id =?");

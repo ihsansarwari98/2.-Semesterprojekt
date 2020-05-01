@@ -1,6 +1,5 @@
 package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.creditsystem.domain.interfaces.IUserHandler;
 import com.mycompany.creditsystem.domain.logic.MD5Encryption;
 
 import java.sql.PreparedStatement;
@@ -8,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class UserHandler implements IUserHandler {
+public class UserHandler {
 
     public static UserHandler instance;
 

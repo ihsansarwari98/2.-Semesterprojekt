@@ -18,7 +18,7 @@ public class SearchField {
     private HBox hbox;
     private AnchorPane anchorPaneBackground;
     private TextField textField;
-    private  ScrollPane scrollPane;
+    private ScrollPane scrollPane;
     private VBox vBoxResults;
     private ArrayList searchResults;
 

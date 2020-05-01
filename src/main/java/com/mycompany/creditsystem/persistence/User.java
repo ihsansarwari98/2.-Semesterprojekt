@@ -60,6 +60,20 @@ public class User {
         }
     }
 
+    public int getAccessRoleInt() {
+        if (accessRole == AccessRole.publicUser) {
+            return 0;
+        } else if (accessRole == AccessRole.producer) {
+            return 1;
+        } else if (accessRole == AccessRole.productionCompany) {
+            return 2;
+        } else if (accessRole == AccessRole.admin) {
+            return 3;
+        } else {
+            return -1;
+        }
+    }
+
     public enum AccessRole {
         publicUser,
         producer,

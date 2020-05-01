@@ -20,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -180,12 +181,13 @@ public class PrimaryController implements Initializable {
     private SystemFacade systemFacade = new SystemFacade();
     private TextField focusedTextField = null;
     private SearchField focusedSearchField = null;
+    private SearchField lastSearchField = null;
     private SearchField productionSearchField = new SearchField(searchBarStackPane, searchRectangleBG, searchBarVBox, searchBarBackground, searchBarHBox, textFieldSearchBar, searchResultScrollPane, searchResults);
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateProperties();
-        enableElements(User.AccessRole.publicUser);
+        enableElements(0);
         checkCanEdit();
         homeButtonAction();
         Info.sidePanelOn = true;
@@ -200,19 +202,6 @@ public class PrimaryController implements Initializable {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
-    }
-
-    private <T> List<T> getNodesOfType(Pane parent, Class<T> type) {
-        List<T> elements = new ArrayList<>();
-        for (Node node : parent.getChildren()) {
-            if (node instanceof Pane) {
-                elements.addAll(getNodesOfType((Pane) node, type));
-            } else if (type.isAssignableFrom(node.getClass())) {
-                //noinspection unchecked
-                elements.add((T) node);
-            }
-        }
-        return Collections.unmodifiableList(elements);
     }
 
     // Updates the graphical style and fill of the application
@@ -278,6 +267,7 @@ public class PrimaryController implements Initializable {
     private void updateEverySecond() {
 
         getFocusedSearchField();
+        System.out.println(lastSearchField + " | " + focusedSearchField);
     }
 
     private void getFocusedSearchField() {
@@ -289,37 +279,45 @@ public class PrimaryController implements Initializable {
             VBox vbox = (VBox) stackPane.getChildren().get(1);
             AnchorPane anchorPaneBackground = (AnchorPane) vbox.getChildren().get(0);
             HBox hbox = (HBox) anchorPaneBackground.getChildren().get(0);
-            TextField textField = null;
             ScrollPane scrollPane = (ScrollPane) vbox.getChildren().get(1);
             VBox vboxResults = (VBox) scrollPane.getContent();
 
-            // get the textfield from the hbox
-            for (int i = 0; i < hbox.getChildren().size(); i++) {
-                if (hbox.getChildren().get(i) instanceof TextField) {
-                    textField = (TextField) hbox.getChildren().get(i);
-                    break;
+            // TODO : fix focus
+
+            if (focusedSearchField != null) {
+                if (!focusedSearchField.equals(lastSearchField)) {
+                    lastSearchField = focusedSearchField;
+                    handleDeselect(focusedSearchField);
+                    focusedSearchField = new SearchField(stackPane, rectangle, vbox, anchorPaneBackground, hbox, focusedTextField, scrollPane, vboxResults);
+                    System.out.println("!");
                 }
+
+            } else if (lastSearchField != null) {
+                focusedSearchField = new SearchField(stackPane, rectangle, vbox, anchorPaneBackground, hbox, focusedTextField, scrollPane, vboxResults);
+                System.out.println("?");
+            } else {
+                focusedSearchField = new SearchField(stackPane, rectangle, vbox, anchorPaneBackground, hbox, focusedTextField, scrollPane, vboxResults);
+                lastSearchField = focusedSearchField;
             }
 
-            focusedSearchField = new SearchField(stackPane, rectangle, vbox, anchorPaneBackground, hbox, textField, scrollPane, vboxResults);
+
         }
         if (focusedSearchField != null) {
-            handleSearchFocus(focusedSearchField);
+            handleSearchFocus();
+
         }
-
-
     }
 
     @FXML
     private void handleLogin() {
         if (systemFacade.userLogic.userLogin(usernameTextField.getText(), passwordTextField.getText())) {
-            enableElements(systemFacade.currentUser.getUser().getAccessRole());
+            enableElements(systemFacade.currentUser.getUser().getAccessRoleInt());
 
             // Sets myProductions
-            if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.producer) {
+            if (systemFacade.currentUser.getUser().getAccessRoleInt() == 1) {
                 systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToProducer(systemFacade.currentUser.getUser().getId()));
 
-            } else if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.productionCompany) {
+            } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 2) {
                 systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToProductionCompany(systemFacade.currentUser.getUser().getId()));
             }
 
@@ -331,7 +329,7 @@ public class PrimaryController implements Initializable {
             textFieldSearchBar.requestFocus();
 
         } else {
-            enableElements(User.AccessRole.publicUser);
+            enableElements(0);
             System.out.println("password and username doesn't match");
         }
     }
@@ -353,11 +351,11 @@ public class PrimaryController implements Initializable {
         // As well as if the User has access to the active production
         if (systemFacade.getActiveProduction() != null &
                 systemFacade.currentUser.getUser() != null &&
-                ((systemFacade.currentUser.getUser().getAccessRole().equals(User.AccessRole.producer) &&
+                ((systemFacade.currentUser.getUser().getAccessRoleInt() == 1 &&
                         systemFacade.productionLogic.isProductionLinkedToProducer(systemFacade.getActiveProduction().getId(), systemFacade.currentUser.getUser().getId())) ||
-                        (systemFacade.currentUser.getUser().getAccessRole().equals(User.AccessRole.productionCompany) &&
+                        (systemFacade.currentUser.getUser().getAccessRoleInt() == 2 &&
                                 systemFacade.productionLogic.isProductionLinkedToProductionCompany(systemFacade.getActiveProduction().getId(), systemFacade.currentUser.getUser().getId())) ||
-                        (systemFacade.currentUser.getUser().getAccessRole().equals(User.AccessRole.admin)))) {
+                        (systemFacade.currentUser.getUser().getAccessRoleInt() == 3))) {
             loadEditElement(true);
             return true;
         } else {
@@ -378,9 +376,9 @@ public class PrimaryController implements Initializable {
         }
     }
 
-    private void enableElements(User.AccessRole accessRole) {
-        switch (accessRole) {
-            case publicUser:
+    private void enableElements(int accessRoleNumber) {
+        switch (accessRoleNumber) {
+            case 0:
                 sidePanelBackground.getChildren().clear();
                 sidePanelBackground.getChildren().add(nameAndRoleAP);
                 sidePanelBackground.getChildren().add(loginAP);
@@ -393,19 +391,19 @@ public class PrimaryController implements Initializable {
 
                 checkCanEdit();
                 break;
-            case producer:
+            case 1:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
                 sidePanelBackground.getChildren().add(mineProduktioner);
                 checkCanEdit();
                 break;
-            case productionCompany:
+            case 2:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
                 sidePanelBackground.getChildren().add(mineProduktionerProductionCompany);
                 checkCanEdit();
                 break;
-            case admin:
+            case 3:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
                 checkCanEdit();
@@ -418,20 +416,20 @@ public class PrimaryController implements Initializable {
     @FXML
     private void handleLogout() {
         systemFacade.currentUser.setUser(null);
-        enableElements(User.AccessRole.publicUser);
+        enableElements(0);
     }
 
     // Shows the list of credits connected to a production
-    private void showCreditList(Production production) {
+    private void showCreditList() {
         descriptionHBox.getChildren().remove(descriptionVBoxRight);
         descriptionVBox.getChildren().clear();
         descriptionHBox.setSpacing(0);
         descriptionVBox.setAlignment(Pos.TOP_CENTER);
-        for (int i = 0; i < systemFacade.creditLogic.getCredits(production.getId()).size(); i++) {
+        for (int i = 0; i < systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).size(); i++) {
 
             // gets the role of the credit
-            Text roleText = new Text(systemFacade.roleLogic.getRoleFromCredit(production.getId(), systemFacade.creditLogic.getCredits(production.getId()).get(i).getId()).getTitle());
-            Label name = new Label(systemFacade.creditLogic.getCredits(production.getId()).get(i).getName());
+            Text roleText = new Text(systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle());
+            Label name = new Label(systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName());
             VBox vb = new VBox();
 
             roleText.setFill(Info.accentGradient);
@@ -450,7 +448,7 @@ public class PrimaryController implements Initializable {
                     VBox vbox = (VBox) descriptionVBox.getChildren().get(j);
                     Text role = (Text) vbox.getChildren().get(0);
 
-                    if (systemFacade.roleLogic.getRoleFromCredit(production.getId(), systemFacade.creditLogic.getCredits(production.getId()).get(i).getId()).getTitle().equals(role.getText())) {
+                    if (systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle().equals(role.getText())) {
                         vbox.getChildren().add(name);
                         foundRole = true;
                     }
@@ -539,7 +537,7 @@ public class PrimaryController implements Initializable {
             AnchorPane ap = (AnchorPane) searchField.getvBoxResults().getChildren().get(i);
             Label titleText = (Label) ap.getChildren().get(0);
 
-            searchField.getvBoxResults().setAlignment(Pos.TOP_LEFT);
+            searchField.getvBoxResults().setAlignment(Pos.TOP_CENTER);
             searchField.getvBoxResults().setSpacing(searchResultSpacing);
             ap.setCursor(Cursor.HAND);
 
@@ -548,17 +546,13 @@ public class PrimaryController implements Initializable {
 
             if (searchField.getTextField().getUserData().equals(0)) {
                 titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
-                titleText.setAlignment(Pos.CENTER_LEFT);
+
             } else if (searchField.getTextField().getUserData().equals(1)) {
-                titleText.setPadding(new Insets(0,10,0,0));
-                titleText.setAlignment(Pos.CENTER_RIGHT);
-                AnchorPane.setTopAnchor(ap, (double) 0);
-                AnchorPane.setBottomAnchor(ap, (double) 0);
+                AnchorPane.setRightAnchor(titleText, (double) searchResultTextPadding);
                 AnchorPane.setRightAnchor(ap, (double) 0);
-                AnchorPane.setLeftAnchor(ap, (double) 0);
-                System.out.println("right");
+
             } else if (searchField.getTextField().getUserData().equals(2)) {
-                titleText.setPadding(new Insets(0,0,0,10));
+                titleText.setPadding(new Insets(0, 0, 0, 10));
                 titleText.setAlignment(Pos.CENTER_LEFT);
             }
 
@@ -583,25 +577,25 @@ public class PrimaryController implements Initializable {
     }
 
     // Makes the search text white when focused and clicking ENTER searches the focused text
-    private void handleSearchFocus(SearchField searchField) {
+    private void handleSearchFocus() {
 
         if (!focusedSearchField.getTextField().getUserData().equals(-1)) {
             ArrayList search = new ArrayList();
 
-            if (searchField.getTextField().getUserData().equals(0)) {
+            if (focusedSearchField.getTextField().getUserData().equals(0)) {
                 search = systemFacade.productionLogic.getProductions(focusedTextField.getText());
-            } else if (searchField.getTextField().getUserData().equals(1)) {
+            } else if (focusedSearchField.getTextField().getUserData().equals(1)) {
                 search = systemFacade.creditLogic.getCredits(focusedTextField.getText());
-            } else if (searchField.getTextField().getUserData().equals(2)) {
+            } else if (focusedSearchField.getTextField().getUserData().equals(2)) {
                 //search = systemFacade.roleLogic.getRoles(focusedTextField.getText());
             } else {
                 System.out.println("error");
             }
 
             focusedSearchField.setSearchResults(search);
-            updateSearchResultList(searchField);
+            updateSearchResultList(focusedSearchField);
 
-            for (int i = 0; i < searchField.getvBoxResults().getChildren().size(); i++) {
+            for (int i = 0; i < focusedSearchField.getvBoxResults().getChildren().size(); i++) {
                 AnchorPane ap = (AnchorPane) focusedSearchField.getvBoxResults().getChildren().get(i);
                 Label titleText = (Label) ap.getChildren().get(0);
 
@@ -660,7 +654,7 @@ public class PrimaryController implements Initializable {
                 descriptionTitleText.setText(systemFacade.productionLogic.getProduction(searchField.getTextField().getText()).getTitle());
                 // add production to search history
                 systemFacade.currentUser.addToSearchHistory(systemFacade.productionLogic.getProduction(searchField.getTextField().getText()));
-                showCreditList(systemFacade.productionLogic.getProduction(searchField.getTextField().getText()));
+                showCreditList();
                 calculateSearchBarAnchors();
                 checkCanEdit();
 
@@ -670,7 +664,6 @@ public class PrimaryController implements Initializable {
         } else if (focusedTextField.getParent() instanceof AnchorPane) {
             System.out.println("parent is anchorpane AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         }
-
 
         textFieldSearchBar.clear();
         handleDeselect();
@@ -711,11 +704,9 @@ public class PrimaryController implements Initializable {
 
             for (int i = 0; i < systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).size(); i++) {
 
-
                 SearchField creditSearchField = new SearchField();
                 creditNameVBox.getChildren().add(creditSearchField.getStackPane());
                 creditNameVBox.setAlignment(Pos.TOP_RIGHT);
-
 
                 // gets the role of the credit
                 //TextField roleText = new TextField(systemFacade.roleHandler.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle());
@@ -772,6 +763,7 @@ public class PrimaryController implements Initializable {
                 creditSearchField.getStackPane().setAlignment(Pos.CENTER_RIGHT);
                 creditSearchField.getvBoxResults().setAlignment(Pos.TOP_RIGHT);
                 creditSearchField.getScrollPane().setFitToWidth(true);
+                creditSearchField.getvBoxResults().setMaxWidth(textBoxLength);
                 styleSearchResults(creditSearchField);
             }
         }
@@ -780,13 +772,14 @@ public class PrimaryController implements Initializable {
     private void updateProductionList() {
         programList.getChildren().clear();
         programListProductionCompany.getChildren().clear();
-        for (Production production : systemFacade.currentUser.getMyProductions()) {
+        for (int i = 0; i < systemFacade.currentUser.getMyProductions().size(); i++) {
+
             HBox hb = new HBox();
             Circle circle = new Circle(4);
             AnchorPane ap = new AnchorPane();
             VBox vb = new VBox();
-            Label title = new Label(production.getTitle());
-            Label deadline = new Label(production.getDeadlineString());
+            Label title = new Label(systemFacade.currentUser.getMyProductions().get(i).getTitle());
+            Label deadline = new Label(systemFacade.currentUser.getMyProductions().get(i).getDeadlineString());
 
             if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.producer) {
                 programList.getChildren().add(hb);
@@ -805,9 +798,9 @@ public class PrimaryController implements Initializable {
             hb.setAlignment(Pos.CENTER_LEFT);
             ap.setCursor(Cursor.HAND);
 
-            if (production.getStatus() == Status.Red) {
+            if (systemFacade.currentUser.getMyProductions().get(i).getStatusInt() == 0) {
                 circle.setFill(Paint.valueOf(Info.statusRed)); // DATABASE
-            } else if (production.getStatus() == Status.Yellow) {
+            } else if (systemFacade.currentUser.getMyProductions().get(i).getStatusInt() == 1) {
                 circle.setFill(Paint.valueOf(Info.statusYellow)); // DATABASE
             } else {
                 circle.setFill(Paint.valueOf(Info.statusGreen)); // DATABASE
@@ -815,11 +808,13 @@ public class PrimaryController implements Initializable {
 
             ap.setOnMouseClicked(e -> {
                 AnchorPane source = (AnchorPane) e.getSource();
+                VBox vBox = (VBox) source.getChildren().get(0);
+                Label productionTitle = (Label) vBox.getChildren().get(0);
                 if (source.getUserData().equals(0)) {
                     getFocusedSearchField();
                     focusedSearchField = new SearchField(searchBarStackPane, searchRectangleBG, searchBarVBox, searchBarBackground, searchBarHBox, textFieldSearchBar, searchResultScrollPane, searchResults);
                     focusedSearchField.setSearchResults(systemFacade.productionLogic.getProductions(focusedTextField.getText()));
-                    focusedSearchField.getTextField().setText(production.getTitle());
+                    focusedSearchField.getTextField().setText(systemFacade.productionLogic.getProduction(productionTitle.getText()).getTitle());
                     handleSearch(focusedSearchField);
 
                 }
@@ -831,6 +826,20 @@ public class PrimaryController implements Initializable {
     }
 
     // Handles when the user clicks on the background to deselect what was previously focused
+    private void handleDeselect(SearchField searchField) {
+        if (searchField != null) {
+            if (!searchField.getTextField().getUserData().equals(-1)) {
+                searchField.getRectangle().setHeight(searchField.getAnchorPaneBackground().getHeight());
+                searchField.getvBoxResults().getChildren().clear();
+            }
+        }
+
+        searchField = null;
+        selectBlank = true;
+        backgroundAP.requestFocus();
+
+    }
+
     @FXML
     private void handleDeselect() {
         if (focusedSearchField != null) {
@@ -840,8 +849,8 @@ public class PrimaryController implements Initializable {
             }
         }
 
-        selectBlank = true;
         focusedSearchField = null;
+        selectBlank = true;
         backgroundAP.requestFocus();
 
     }
@@ -948,7 +957,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
         editOptionsHBox.getChildren().add(editProductionButton);
-        showCreditList(systemFacade.getActiveProduction());
+        showCreditList();
     }
 
     @FXML
@@ -958,7 +967,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
         editOptionsHBox.getChildren().add(editProductionButton);
-        showCreditList(systemFacade.getActiveProduction());
+        showCreditList();
     }
 
     @FXML

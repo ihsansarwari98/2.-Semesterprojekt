@@ -58,7 +58,15 @@ public class Production implements Comparable<Production>  {
     }
 
     public int getStatusInt() {
-        return status.ordinal();
+        if (status == Status.Red) {
+            return 0;
+        } else if (status == Status.Yellow) {
+            return 1;
+        } else if (status == Status.Green) {
+            return 2;
+        } else {
+            return -1;
+        }
     }
 
     public Status getStatus() {
