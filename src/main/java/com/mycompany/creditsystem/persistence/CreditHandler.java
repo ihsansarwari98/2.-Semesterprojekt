@@ -1,17 +1,11 @@
 package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.creditsystem.domain.logic.Credit;
-import com.mycompany.creditsystem.domain.interfaces.ICreditHandler;
-import com.mycompany.creditsystem.domain.logic.Production;
-import com.mycompany.creditsystem.domain.logic.Role;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
-public class CreditHandler implements ICreditHandler {
+public class CreditHandler {
 
     public static CreditHandler instance;
 
@@ -22,7 +16,6 @@ public class CreditHandler implements ICreditHandler {
         return instance;
     }
 
-    @Override
     public ArrayList<Credit> getCredits() {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM credits");
@@ -54,7 +47,22 @@ public class CreditHandler implements ICreditHandler {
         }
     }
 
-    @Override
+    public ArrayList<Credit> getCredits(String namePart) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM credits WHERE name ~* ?");
+            statement.setString(1, namePart);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<Credit> returnValue = new ArrayList<>();
+            while (sqlReturnValues.next()) {
+                returnValue.add(new Credit(sqlReturnValues.getInt(1), sqlReturnValues.getString(2)));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public Credit getCredit(int id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM credits WHERE credit_id = ?");
@@ -70,7 +78,6 @@ public class CreditHandler implements ICreditHandler {
         }
     }
 
-    @Override
     public boolean createCredit(Credit credit) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO credits (name) VALUES (?)");
@@ -84,7 +91,6 @@ public class CreditHandler implements ICreditHandler {
         }
     }
 
-    @Override
     public boolean deleteCreditRelation(int credit_id, int production_id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_subscriptions WHERE credit_id = ? AND production_id = ?");
@@ -99,7 +105,6 @@ public class CreditHandler implements ICreditHandler {
         }
     }
 
-    @Override
     public boolean deleteCreditFromSystem(int id) {
         try {
             PreparedStatement statement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_subscriptions WHERE production_credit_role_subscriptions.credit_id = ?");
@@ -116,7 +121,6 @@ public class CreditHandler implements ICreditHandler {
         }
     }
 
-    @Override
     public boolean addCreditRelation(int production_id, int credit_id, int role_id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO production_credit_role_subscriptions (production_id, credit_id, role_id) VALUES (?,?,?)");
@@ -132,7 +136,6 @@ public class CreditHandler implements ICreditHandler {
         }
     }
 
-    @Override
     public boolean updateCreditName(String name, int id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("UPDATE credits SET name = ? WHERE credit_id = ?");

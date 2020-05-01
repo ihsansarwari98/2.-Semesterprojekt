@@ -1,5 +1,6 @@
 package com.mycompany.creditsystem.domain.logic;
 
+import com.mycompany.creditsystem.persistence.Production;
 import com.mycompany.creditsystem.persistence.RoleHandler;
 
 public class SystemFacade {
@@ -8,14 +9,14 @@ public class SystemFacade {
     public CurrentUser currentUser;
     public UserLogic userLogic;
     public CreditLogic creditLogic;
-    public RoleHandler roleHandler;
+    public RoleLogic roleLogic;
     public Production activeProduction;
 
     public SystemFacade() {
         productionLogic = new ProductionLogic();
         userLogic = new UserLogic();
         creditLogic = new CreditLogic();
-        roleHandler = new RoleHandler();
+        roleLogic = new RoleLogic();
         currentUser = CurrentUser.getInstance();
         activeProduction = null;
     }
