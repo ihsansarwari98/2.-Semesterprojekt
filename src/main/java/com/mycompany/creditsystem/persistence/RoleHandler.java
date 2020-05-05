@@ -31,6 +31,25 @@ public class RoleHandler {
         }
     }
 
+
+    public ArrayList<Role> getRoles(String titlePart) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM roles WHERE role_title ~* ?");
+            statement.setString(1, titlePart);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<Role> returnValue = new ArrayList<>();
+            int iterator = 0;
+            while (sqlReturnValues.next() && iterator < 5) {
+                iterator++;
+                returnValue.add(new Role(sqlReturnValues.getInt(1), sqlReturnValues.getString(2)));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public Role getRole(int id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM roles WHERE role_id = ?");

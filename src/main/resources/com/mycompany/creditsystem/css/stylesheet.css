@@ -42,16 +42,23 @@
 
 .dark-thumb .scroll-bar:horizontal .thumb, .dark-thumb .scroll-bar:vertical .thumb {
     -fx-background-color: -fx-color-dark /*#242424*/;
-    -fx-background-radius: 5em;
-    -fx-pref-width: 4px;
-    -fx-background-insets: 5, 0, 0;
+    -fx-background-radius: 2em;
+    -fx-pref-width: 2px;
+    -fx-background-insets: 3, 0, 0;
+}
+
+.white-thumb .scroll-bar:horizontal .thumb, .white-thumb .scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-color-white /*#242424*/;
+    -fx-background-radius: 2em;
+    -fx-pref-width: 2px;
+    -fx-background-insets: 3, 0, 0;
 }
 
 .scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
     -fx-background-color: -fx-color-white;
     -fx-background-radius: 2em;
     -fx-pref-width: 2px;
-    -fx-background-insets: 2, 0, 0;
+    -fx-background-insets: 3, 0, 0;
 }
 
 .text-field {

@@ -11,6 +11,10 @@ public class RoleLogic {
         return RoleHandler.getInstance().getRoles();
     }
 
+    public ArrayList<Role> getRoles(String titlePart) {
+        return RoleHandler.getInstance().getRoles(titlePart);
+    }
+
     public Role getRole(int id) {
         return RoleHandler.getInstance().getRole(id);
     }
@@ -30,4 +34,6 @@ public class RoleLogic {
     public Role getRoleFromCredit(int production_id, int credit_id) {
         return RoleHandler.getInstance().getRoleFromCredit(production_id, credit_id);
     }
+
+
 }
