@@ -15,7 +15,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -273,6 +272,7 @@ public class PrimaryController implements Initializable {
     private void getFocusedSearchField() {
         // If the focused node is a textfield and the UserData isn't = -1 (meaning that the textfield is not for searching)
         if ((App.scene.focusOwnerProperty().get() instanceof TextField) &&
+                (App.scene.focusOwnerProperty().get().getUserData() != null) &&
                 (!App.scene.focusOwnerProperty().get().getUserData().equals(-1))) {
             focusedTextField = (TextField) App.scene.focusOwnerProperty().get();
             StackPane stackPane = (StackPane) focusedTextField.getParent().getParent().getParent().getParent();
@@ -531,7 +531,6 @@ public class PrimaryController implements Initializable {
             Label titleText = (Label) ap.getChildren().get(0);
 
             searchField.getvBoxResults().setAlignment(Pos.TOP_CENTER);
-
             searchField.getvBoxResults().setSpacing(searchResultSpacing);
             ap.setCursor(Cursor.HAND);
 
@@ -540,15 +539,12 @@ public class PrimaryController implements Initializable {
 
             if (searchField.getTextField().getUserData().equals(0)) {
                 titleText.setPadding(new Insets(0, 0, 0, mainSearchResultTextPadding));
-
             } else if (searchField.getTextField().getUserData().equals(1)) {
                 AnchorPane.setRightAnchor(titleText, (double) 0);
                 titleText.setPadding(new Insets(0, searchResultTextPadding, 0, 0));
-
             } else if (searchField.getTextField().getUserData().equals(2)) {
-                titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
                 AnchorPane.setLeftAnchor(titleText, (double) 0);
-
+                titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
             }
 
             ap.setOnMouseEntered(this::handleSearchMenuHoveringEnter);
@@ -669,6 +665,70 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    private SearchField createSearchField(Object userData, String textFieldText, int width, NodeOrientation orientation) {
+        SearchField searchField = new SearchField();
+
+        // Setup the order of the searchField
+        searchField.getStackPane().getChildren().addAll(searchField.getRectangle(), searchField.getvBox());
+        searchField.getvBox().getChildren().addAll(searchField.getAnchorPaneBackground(), searchField.getScrollPane());
+        searchField.getAnchorPaneBackground().getChildren().add(searchField.getHbox());
+        searchField.getHbox().getChildren().add(searchField.getTextField());
+        searchField.getScrollPane().setContent(searchField.getvBoxResults());
+
+        // assign the parameters
+        searchField.getTextField().setUserData(userData);
+        searchField.getTextField().setText(textFieldText);
+        searchField.getRectangle().setWidth(width);
+        //searchField.getAnchorPaneBackground().setNodeOrientation(orientation);
+
+        // Set other properties
+        HBox.setHgrow(searchField.getTextField(), Priority.ALWAYS);
+        searchField.getTextField().setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.backgroundColor + ";");
+        searchField.getTextField().applyCss();
+        searchField.getAnchorPaneBackground().applyCss();
+        searchField.getRectangle().setHeight(searchField.getAnchorPaneBackground().prefHeight(-1));
+
+        searchField.getvBox().setFillWidth(true);
+        searchField.getvBoxResults().setFillWidth(true);
+        searchField.getScrollPane().setFitToWidth(true);
+        searchField.getScrollPane().setFitToHeight(true);
+
+        // handle orientation
+        if (orientation.equals(NodeOrientation.LEFT_TO_RIGHT)) {
+            searchField.getStackPane().setAlignment(Pos.TOP_LEFT);
+            searchField.getvBox().setAlignment(Pos.TOP_LEFT);
+            searchField.getHbox().setAlignment(Pos.TOP_LEFT);
+            StackPane.setAlignment(searchField.getRectangle(), Pos.TOP_LEFT);
+            searchField.getvBox().setAlignment(Pos.TOP_LEFT);
+            searchField.getvBoxResults().setAlignment(Pos.TOP_LEFT);
+            searchField.getStackPane().setAlignment(Pos.CENTER_LEFT);
+            searchField.getTextField().setAlignment(Pos.CENTER_LEFT);
+
+            AnchorPane.setTopAnchor(searchField.getHbox(), (double) 0);
+            AnchorPane.setRightAnchor(searchField.getHbox(), (double) 0);
+            AnchorPane.setLeftAnchor(searchField.getHbox(), (double) 10);
+            AnchorPane.setBottomAnchor(searchField.getHbox(), (double) 0);
+
+        } else {
+            searchField.getStackPane().setAlignment(Pos.TOP_RIGHT);
+            searchField.getvBox().setAlignment(Pos.TOP_RIGHT);
+            searchField.getHbox().setAlignment(Pos.TOP_RIGHT);
+            StackPane.setAlignment(searchField.getRectangle(), Pos.TOP_RIGHT);
+            searchField.getvBox().setAlignment(Pos.TOP_RIGHT);
+            searchField.getvBoxResults().setAlignment(Pos.TOP_RIGHT);
+            searchField.getStackPane().setAlignment(Pos.CENTER_RIGHT);
+            searchField.getTextField().setAlignment(Pos.CENTER_RIGHT);
+
+            AnchorPane.setTopAnchor(searchField.getHbox(), (double) 0);
+            AnchorPane.setRightAnchor(searchField.getHbox(), (double) 10);
+            AnchorPane.setLeftAnchor(searchField.getHbox(), (double) 0);
+            AnchorPane.setBottomAnchor(searchField.getHbox(), (double) 0);
+
+        }
+
+        return searchField;
+    }
+
     private void editProduction() {
         if (systemFacade.getActiveProduction() != null) {
             int searchFieldLength = 300;
@@ -676,28 +736,13 @@ public class PrimaryController implements Initializable {
             descriptionHBox.setSpacing(10);
             descriptionVBox.getChildren().clear();
             descriptionVBoxRight.getChildren().clear();
+            descriptionVBox.setFillWidth(true);
+            descriptionVBoxRight.setFillWidth(true);
+            descriptionHBox.setFillHeight(false);
+            descriptionHBox.setAlignment(Pos.TOP_CENTER);
 
             VBox creditNameVBox = new VBox();
             VBox creditRoleVBox = new VBox();
-            VBox descriptionVBoxNameCaption = new VBox();
-            VBox descriptionVBoxRoleCaption = new VBox();
-
-            Text nameCaption = new Text("Credit name");
-            Text roleCaption = new Text("Credit role");
-
-            nameCaption.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
-            roleCaption.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
-            nameCaption.setFill(Info.accentGradient);
-            roleCaption.setFill(Info.accentGradient);
-
-            descriptionVBox.getChildren().addAll(descriptionVBoxNameCaption, creditNameVBox);
-            descriptionVBoxRight.getChildren().addAll(descriptionVBoxRoleCaption, creditRoleVBox);
-
-            descriptionVBoxNameCaption.getChildren().add(nameCaption);
-            descriptionVBoxRoleCaption.getChildren().add(roleCaption);
-
-            descriptionVBoxNameCaption.setAlignment(Pos.TOP_RIGHT);
-            descriptionVBoxRoleCaption.setAlignment(Pos.TOP_LEFT);
 
             creditNameVBox.setSpacing(10);
             creditNameVBox.setFillWidth(false);
@@ -707,104 +752,50 @@ public class PrimaryController implements Initializable {
             creditRoleVBox.setFillWidth(false);
             creditRoleVBox.setAlignment(Pos.TOP_LEFT);
 
+            VBox descriptionVBoxNameCaption = new VBox();
+            VBox descriptionVBoxRoleCaption = new VBox();
+
+            descriptionVBoxNameCaption.setFillWidth(false);
+            descriptionVBoxNameCaption.setPrefWidth(searchFieldLength);
+            descriptionVBoxRoleCaption.setFillWidth(false);
+            descriptionVBoxRoleCaption.setPrefWidth(searchFieldLength);
+
+
+            Text nameCaption = new Text("Credit name");
+            Text roleCaption = new Text("Credit role");
+
+            nameCaption.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+            roleCaption.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+
+            nameCaption.setFill(Info.accentGradient);
+            roleCaption.setFill(Info.accentGradient);
+
+            descriptionVBoxNameCaption.getChildren().add(nameCaption);
+            descriptionVBoxRoleCaption.getChildren().add(roleCaption);
+
+            descriptionVBoxNameCaption.setAlignment(Pos.TOP_RIGHT);
+            AnchorPane.setRightAnchor(descriptionVBoxNameCaption, (double) 10);
+            descriptionVBoxRoleCaption.setAlignment(Pos.TOP_LEFT);
+            AnchorPane.setLeftAnchor(descriptionVBoxRoleCaption, (double) 10);
+
+
+            descriptionVBox.getChildren().addAll(descriptionVBoxNameCaption, creditNameVBox);
+            descriptionVBoxRight.getChildren().addAll(descriptionVBoxRoleCaption, creditRoleVBox);
+
             for (int i = 0; i < systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).size(); i++) {
 
-                SearchField creditSearchField = new SearchField();
-                SearchField roleSearchField = new SearchField();
+                SearchField creditSearchField = createSearchField(1,
+                        systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName(),
+                        searchFieldLength,
+                        NodeOrientation.RIGHT_TO_LEFT);
                 creditNameVBox.getChildren().add(creditSearchField.getStackPane());
-                creditRoleVBox.getChildren().add(roleSearchField.getStackPane());
-
-                // gets the role of the credit
-                roleSearchField.setTextField(new TextField(systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle()));
-                creditSearchField.setTextField(new TextField(systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName()));
-
-                roleSearchField.getStackPane().getChildren().addAll(roleSearchField.getRectangle(), roleSearchField.getvBox());
-                roleSearchField.getvBox().getChildren().addAll(roleSearchField.getAnchorPaneBackground(), roleSearchField.getScrollPane());
-
-                roleSearchField.getAnchorPaneBackground().getChildren().add(roleSearchField.getHbox());
-                roleSearchField.getHbox().getChildren().add(roleSearchField.getTextField());
-                roleSearchField.getScrollPane().setContent(roleSearchField.getvBoxResults());
-
-                creditSearchField.getStackPane().getChildren().addAll(creditSearchField.getRectangle(), creditSearchField.getvBox());
-                creditSearchField.getvBox().getChildren().addAll(creditSearchField.getAnchorPaneBackground(), creditSearchField.getScrollPane());
-
-                creditSearchField.getAnchorPaneBackground().getChildren().add(creditSearchField.getHbox());
-                creditSearchField.getHbox().getChildren().add(creditSearchField.getTextField());
-                creditSearchField.getScrollPane().setContent(creditSearchField.getvBoxResults());
-
-                roleSearchField.getvBox().setSpacing(0);
-                roleSearchField.getvBox().setAlignment(Pos.TOP_LEFT);
-                roleSearchField.getHbox().setAlignment(Pos.CENTER_LEFT);
-
-                creditSearchField.getvBox().setSpacing(0);
-                creditSearchField.getvBox().setAlignment(Pos.TOP_RIGHT);
-                creditSearchField.getHbox().setAlignment(Pos.CENTER_RIGHT);
-
-                AnchorPane.setBottomAnchor(creditSearchField.getHbox(), (double) 0);
-                AnchorPane.setTopAnchor(creditSearchField.getHbox(), (double) 0);
-                AnchorPane.setLeftAnchor(creditSearchField.getHbox(), (double) 0);
-                AnchorPane.setRightAnchor(creditSearchField.getHbox(), (double) 10);
-
-                AnchorPane.setBottomAnchor(roleSearchField.getHbox(), (double) 0);
-                AnchorPane.setTopAnchor(roleSearchField.getHbox(), (double) 0);
-                AnchorPane.setLeftAnchor(roleSearchField.getHbox(), (double) 10);
-                AnchorPane.setRightAnchor(roleSearchField.getHbox(), (double) 0);
-
-                creditSearchField.getStackPane().setAlignment(Pos.TOP_RIGHT);
-                roleSearchField.getStackPane().setAlignment(Pos.TOP_LEFT);
-
-                HBox.setHgrow(creditSearchField.getTextField(), Priority.ALWAYS);
-                StackPane.setAlignment(creditSearchField.getRectangle(), Pos.TOP_RIGHT);
-
-                HBox.setHgrow(roleSearchField.getTextField(), Priority.ALWAYS);
-                StackPane.setAlignment(roleSearchField.getRectangle(), Pos.TOP_RIGHT);
-
-                creditSearchField.getTextField().setAlignment(Pos.CENTER_RIGHT);
-                creditSearchField.getTextField().setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.backgroundColor + ";");
-
-                creditSearchField.getAnchorPaneBackground().setStyle("-fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + "; -fx-background-color: " + Info.forgroundColor + ";");
-
-                creditSearchField.getTextField().applyCss();
-
-                creditSearchField.getTextField().setUserData(1);
-                creditSearchField.getvBox().setFillWidth(true);
-                creditSearchField.getvBoxResults().setFillWidth(true);
-
-                creditSearchField.getAnchorPaneBackground().applyCss();
-                creditSearchField.getRectangle().setWidth(searchFieldLength);
-                creditSearchField.getRectangle().setHeight(creditSearchField.getAnchorPaneBackground().prefHeight(-1));
-
-                creditSearchField.getvBox().setAlignment(Pos.TOP_RIGHT);
-                creditSearchField.getStackPane().setAlignment(Pos.CENTER_RIGHT);
-                creditSearchField.getvBoxResults().setAlignment(Pos.TOP_RIGHT);
-                creditSearchField.getScrollPane().setFitToWidth(true);
-                creditSearchField.getScrollPane().setFitToHeight(true);
                 styleSearchResults(creditSearchField);
-                styleSearchResults(roleSearchField);
 
-                // -----------
-
-                roleSearchField.getTextField().setAlignment(Pos.CENTER_LEFT);
-                roleSearchField.getTextField().setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.backgroundColor + ";");
-
-                roleSearchField.getAnchorPaneBackground().setStyle("-fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + "; -fx-background-color: " + Info.forgroundColor + ";");
-
-                roleSearchField.getTextField().applyCss();
-
-                roleSearchField.getTextField().setUserData(2);
-                roleSearchField.getvBox().setFillWidth(true);
-                roleSearchField.getvBoxResults().setFillWidth(true);
-
-                roleSearchField.getAnchorPaneBackground().applyCss();
-                roleSearchField.getRectangle().setWidth(searchFieldLength);
-                roleSearchField.getRectangle().setHeight(roleSearchField.getAnchorPaneBackground().prefHeight(-1));
-
-                roleSearchField.getvBox().setAlignment(Pos.TOP_LEFT);
-                roleSearchField.getStackPane().setAlignment(Pos.CENTER_LEFT);
-                roleSearchField.getvBoxResults().setAlignment(Pos.TOP_LEFT);
-                roleSearchField.getScrollPane().setFitToWidth(true);
-                roleSearchField.getScrollPane().setFitToHeight(true);
-                styleSearchResults(roleSearchField);
+                SearchField roleSearchField = createSearchField(2,
+                        systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle(),
+                        searchFieldLength,
+                        NodeOrientation.LEFT_TO_RIGHT);
+                creditRoleVBox.getChildren().add(roleSearchField.getStackPane());
                 styleSearchResults(roleSearchField);
             }
         }
@@ -978,7 +969,6 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void handleEditProductionClick(MouseEvent event) {
-        System.out.println(systemFacade.getActiveProduction().getTitle());
         descriptionTitleVBox.getChildren().remove(editOptionsHBox);
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().remove(editProductionButton);

@@ -1,6 +1,6 @@
 package com.mycompany.creditsystem.presentation;
 
-import javafx.scene.AccessibleAction;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -93,4 +93,5 @@ public class SearchField {
     public VBox getvBox() {
         return vBox;
     }
+
 }
