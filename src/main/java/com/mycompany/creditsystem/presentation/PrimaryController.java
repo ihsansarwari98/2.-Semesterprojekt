@@ -215,8 +215,6 @@ public class PrimaryController implements Initializable {
 
     // Updates the graphical style and fill of the application
     private void updateProperties() {
-        creditBorderPane.getChildren().remove(addCreditPane);//HEY _HO
-
         Info.updateColors();
         // -- BUTTONS
         // Set the color of the buttons
@@ -382,6 +380,8 @@ public class PrimaryController implements Initializable {
     private void enableElements(int accessRoleNumber) {
         switch (accessRoleNumber) {
             case 0:
+                vBoxHeader.getChildren().remove(creditBorderPane);
+
                 sidePanelBackground.getChildren().clear();
                 sidePanelBackground.getChildren().add(nameAndRoleAP);
                 sidePanelBackground.getChildren().add(loginAP);
@@ -432,7 +432,7 @@ public class PrimaryController implements Initializable {
         descriptionVBox.getChildren().add(creditSearchField.getStackPane());
         styleSearchResults(creditSearchField);
 
-        SearchField roleSearchField = createSearchField(1,
+        SearchField roleSearchField = createSearchField(2,
                 "",
                 300,
                 NodeOrientation.LEFT_TO_RIGHT);
@@ -764,15 +764,15 @@ public class PrimaryController implements Initializable {
 
     private void editProduction() {
         if (systemFacade.getActiveProduction() != null) {
-                int searchFieldLength = 300;
-                descriptionHBox.getChildren().add(descriptionVBoxRight);
-                descriptionHBox.setSpacing(10);
-                descriptionVBox.getChildren().clear();
-                descriptionVBoxRight.getChildren().clear();
-                descriptionVBox.setFillWidth(true);
-                descriptionVBoxRight.setFillWidth(true);
-                descriptionHBox.setFillHeight(false);
-                descriptionHBox.setAlignment(Pos.TOP_CENTER);
+            int searchFieldLength = 300;
+            descriptionHBox.getChildren().add(descriptionVBoxRight);
+            descriptionHBox.setSpacing(10);
+            descriptionVBox.getChildren().clear();
+            descriptionVBoxRight.getChildren().clear();
+            descriptionVBox.setFillWidth(true);
+            descriptionVBoxRight.setFillWidth(true);
+            descriptionHBox.setFillHeight(false);
+            descriptionHBox.setAlignment(Pos.TOP_CENTER);
 
             descriptionVBox.setSpacing(10);
             descriptionVBox.setFillWidth(false);
@@ -784,7 +784,6 @@ public class PrimaryController implements Initializable {
 
             descriptionHBoxHeader.setFillHeight(false);
             descriptionHBoxHeader.setPrefWidth(searchFieldLength);
-
 
             Text nameCaption = new Text("Credit name");
             Text roleCaption = new Text("Credit role");
@@ -818,23 +817,20 @@ public class PrimaryController implements Initializable {
     }
 
     private void saveCredits() {
-        VBox creditNameVBox = (VBox) descriptionVBox.getChildren().get(1);
-        VBox creditRoleVBox = (VBox) descriptionVBoxRight.getChildren().get(1);
-
         // Removes all credits from a production
         systemFacade.creditLogic.removeAllCreditsFromProduction(systemFacade.getActiveProduction().getId());
 
         // Loop through and get Credit name and role TextFields
-        for (int i = 0; i < creditNameVBox.getChildren().size(); i++) {
+        for (int i = 0; i < descriptionVBox.getChildren().size(); i++) {
             // Credit name Textfield
-            StackPane stackPane1 = (StackPane) creditNameVBox.getChildren().get(i);
+            StackPane stackPane1 = (StackPane) descriptionVBox.getChildren().get(i);
             VBox vBox1 = (VBox) stackPane1.getChildren().get(1);
             AnchorPane anchorPane1 = (AnchorPane) vBox1.getChildren().get(0);
             HBox hBox1 = (HBox) anchorPane1.getChildren().get(0);
             TextField creditNameTextField = (TextField) hBox1.getChildren().get(0);
 
             // Credit role Textfield
-            StackPane stackPane2 = (StackPane) creditRoleVBox.getChildren().get(i);
+            StackPane stackPane2 = (StackPane) descriptionVBoxRight.getChildren().get(i);
             VBox vBox2 = (VBox) stackPane2.getChildren().get(1);
             AnchorPane anchorPane2 = (AnchorPane) vBox2.getChildren().get(0);
             HBox hBox2 = (HBox) anchorPane2.getChildren().get(0);
@@ -1032,9 +1028,9 @@ public class PrimaryController implements Initializable {
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().remove(editProductionButton);
         editOptionsHBox.getChildren().addAll(cancelEditProductionButton, saveEditProductionButton);
+        vBoxHeader.getChildren().add(creditBorderPane);
         creditBorderPane.setTop(addCreditPane);
         addCreditButton.setCursor(Cursor.HAND);
-
         editProduction();
     }
 
@@ -1045,7 +1041,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
         editOptionsHBox.getChildren().add(editProductionButton);
-        creditBorderPane.getChildren().remove(addCreditPane); //Hey_ HO
+        vBoxHeader.getChildren().remove(creditBorderPane); //Hey_ HO
         descriptionHBoxHeader.getChildren().clear(); //Delete
 
         showCreditList();
@@ -1059,7 +1055,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
         editOptionsHBox.getChildren().add(editProductionButton);
-        creditBorderPane.getChildren().remove(addCreditPane); //Hey_ho
+        vBoxHeader.getChildren().remove(creditBorderPane); //Hey_ho
         descriptionHBoxHeader.getChildren().clear(); //Delete
 
         showCreditList();
