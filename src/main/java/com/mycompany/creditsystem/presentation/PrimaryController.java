@@ -814,6 +814,46 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    private void saveCredits() {
+        VBox creditNameVBox = (VBox) descriptionVBox.getChildren().get(1);
+        VBox creditRoleVBox = (VBox) descriptionVBoxRight.getChildren().get(1);
+
+        // Removes all credits from a production
+        systemFacade.creditLogic.removeAllCreditsFromProduction(systemFacade.getActiveProduction().getId());
+
+        // Loop through and get Credit name and role TextFields
+        for (int i = 0; i < creditNameVBox.getChildren().size(); i++) {
+            StackPane stackPane1 = (StackPane) creditNameVBox.getChildren().get(i);
+            VBox vBox1 = (VBox) stackPane1.getChildren().get(1);
+            AnchorPane anchorPane1 = (AnchorPane) vBox1.getChildren().get(0);
+            HBox hBox1 = (HBox) anchorPane1.getChildren().get(0);
+            TextField creditNameTextField = (TextField) hBox1.getChildren().get(0);
+
+            StackPane stackPane2 = (StackPane) creditRoleVBox.getChildren().get(i);
+            VBox vBox2 = (VBox) stackPane2.getChildren().get(1);
+            AnchorPane anchorPane2 = (AnchorPane) vBox2.getChildren().get(0);
+            HBox hBox2 = (HBox) anchorPane2.getChildren().get(0);
+            TextField creditRoleTextField = (TextField) hBox2.getChildren().get(0);
+
+            // If the credit doesn't exist, add it to the system
+            if (systemFacade.creditLogic.getCredits(creditNameTextField.getText()).size() <= 0) {
+                System.out.println("Adding " + creditNameTextField.getText() + " to the database in Credits");
+                systemFacade.creditLogic.createCredit(new Credit(creditNameTextField.getText()));
+            }
+
+            // If the role doesn't exist, add it to the system
+            if (systemFacade.roleLogic.getRoles(creditRoleTextField.getText()).size() <= 0) {
+                System.out.println("Adding " + creditRoleTextField.getText() + " to the database in Roles");
+                systemFacade.roleLogic.createRole(new Role(creditRoleTextField.getText()));
+            }
+
+            int roleId = systemFacade.roleLogic.getRoles(creditRoleTextField.getText()).get(0).getId();
+            int creditId = systemFacade.creditLogic.getCredits(creditNameTextField.getText()).get(0).getId();
+
+            systemFacade.creditLogic.addCreditRelation(systemFacade.activeProduction.getId(), creditId, roleId);
+        }
+    }
+
     private void updateProductionList() {
         programList.getChildren().clear();
         programListProductionCompany.getChildren().clear();
@@ -1007,6 +1047,7 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void handleSaveEditProductionClick(MouseEvent event) {
+        saveCredits();
         System.out.println("saving");
         descriptionTitleVBox.getChildren().remove(editOptionsHBox);
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);

@@ -39,6 +39,10 @@ public class CreditLogic{
         return CreditHandler.getInstance().getCredits(production_id);
     }
 
+    public boolean removeAllCreditsFromProduction (int production_id) {
+        return CreditHandler.getInstance().removeAllCreditsFromProduction(production_id);
+    }
+
     public ArrayList<Credit> getCredits(String namePart) {
         return CreditHandler.getInstance().getCredits(namePart);
     }
