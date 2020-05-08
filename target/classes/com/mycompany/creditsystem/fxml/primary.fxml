@@ -411,17 +411,53 @@
                                  </children>
                               </VBox>
                               <ScrollPane fx:id="descriptionScrollPane" fitToHeight="true" fitToWidth="true" styleClass="dark-thumb" VBox.vgrow="ALWAYS">
-                                 <content>
-                                    <HBox fx:id="descriptionHBox" alignment="TOP_CENTER" spacing="10.0">
-                                       <children>
-                                          <VBox fx:id="descriptionVBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS" />
-                                          <VBox fx:id="descriptionVBoxRight" spacing="10.0" HBox.hgrow="ALWAYS" />
-                                       </children>
-                                    </HBox>
-                                 </content>
                                  <VBox.margin>
                                     <Insets top="20.0" />
                                  </VBox.margin>
+                                 <content>
+                                    <VBox fx:id="vBoxHeader" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <HBox fx:id="descriptionHBoxHeader" alignment="TOP_CENTER" spacing="10.0" />
+                                          <HBox fx:id="descriptionHBox" alignment="TOP_CENTER" spacing="10.0">
+                                             <children>
+                                                <VBox fx:id="descriptionVBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS" />
+                                                <VBox fx:id="descriptionVBoxRight" spacing="10.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <BorderPane fx:id="creditBorderPane" VBox.vgrow="ALWAYS">
+                                             <top>
+                                                <StackPane fx:id="addCreditPane" alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
+                                                   <children>
+                                                      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="40.0">
+                                                         <children>
+                                                            <Circle fx:id="addCreditButton" fill="DODGERBLUE" onMouseClicked="#addCredit" radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+                                                               <StackPane.margin>
+                                                                  <Insets />
+                                                               </StackPane.margin>
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                            </Circle>
+                                                            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="2.0" onMouseClicked="#addCredit" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="10.0">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor></Rectangle>
+                                                            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="10.0" onMouseClicked="#addCredit" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor></Rectangle>
+                                                         </children>
+                                                      </StackPane>
+                                                   </children>
+                                                   <BorderPane.margin>
+                                                      <Insets top="10.0" />
+                                                   </BorderPane.margin>
+                                                </StackPane>
+                                             </top>
+                                          </BorderPane>
+                                       </children>
+                                    </VBox>
+                                 </content>
                               </ScrollPane>
                            </children>
                         </VBox>
