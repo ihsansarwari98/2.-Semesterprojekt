@@ -83,8 +83,7 @@ public class RoleHandler {
 
     public boolean createRole(Role role) {
         try {
-            PreparedStatement insertStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO roles (role_title) " +
-                    "+ VALUES (?)");
+            PreparedStatement insertStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO roles (role_title) VALUES (?)");
             insertStatement.setString(1, role.getTitle());
 
             return insertStatement.execute();

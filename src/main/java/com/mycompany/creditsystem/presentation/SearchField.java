@@ -22,6 +22,17 @@ public class SearchField {
     private VBox vBoxResults;
     private ArrayList searchResults;
 
+    /*
+    stackpane
+        rectangle
+        vBox
+            anchorPaneBackground
+                hBox
+                    textField
+            scrollpane
+                vBoxResults
+     */
+
     public SearchField(StackPane stackPane, Rectangle rectangle, VBox vBox, AnchorPane anchorPaneBackground, HBox hbox, TextField textField, ScrollPane scrollPane, VBox vBoxResults) {
         this.stackPane = stackPane;
         this.rectangle = rectangle;
@@ -94,4 +105,31 @@ public class SearchField {
         return vBox;
     }
 
+    public void setAnchorPaneBackground(AnchorPane anchorPaneBackground) {
+        this.anchorPaneBackground = anchorPaneBackground;
+    }
+
+    public void setHbox(HBox hbox) {
+        this.hbox = hbox;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    public void setScrollPane(ScrollPane scrollPane) {
+        this.scrollPane = scrollPane;
+    }
+
+    public void setStackPane(StackPane stackPane) {
+        this.stackPane = stackPane;
+    }
+
+    public void setvBox(VBox vBox) {
+        this.vBox = vBox;
+    }
+
+    public void setvBoxResults(VBox vBoxResults) {
+        this.vBoxResults = vBoxResults;
+    }
 }

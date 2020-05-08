@@ -47,6 +47,18 @@ public class CreditHandler {
         }
     }
 
+    public boolean removeAllCreditsFromProduction(int production_id) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_subscriptions WHERE production_credit_role_subscriptions.production_id = ?");
+            statement.setInt(1, production_id);
+            return statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public ArrayList<Credit> getCredits(String namePart) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM credits WHERE name ~* ?");
