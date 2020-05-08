@@ -194,7 +194,7 @@ public class PrimaryController implements Initializable {
 
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(30), (ActionEvent event) -> {
-            // this code will be called every second
+            // this code will be called every 30 milliseconds
             updateEverySecond();
         }));
 
@@ -220,9 +220,6 @@ public class PrimaryController implements Initializable {
         editProductionRectangle.setFill(Info.accentGradient);
         cancelEditProductionRectangle.setFill(Info.accentGradient);
         saveEditProductionRectangle.setFill(Info.accentGradient);
-//        editProductionText.setText("Rediger Produktion");
-//        cancelEditProductionText.setText("Fortryd");
-//        saveEditProductionText.setText("Gem");
 
         // -- SEARCH BAR
         // Set the color and round the corners of the search bar 
@@ -355,6 +352,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    // Loads the edit production button, and removes the save and cancel button
     private void loadEditElement(boolean toggle) {
         if (toggle) {
             descriptionTitleVBox.getChildren().remove(editOptionsHBox);
@@ -367,6 +365,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    // Loads and removes node elements based on the users access role
     private void enableElements(int accessRoleNumber) {
         switch (accessRoleNumber) {
             case 0:
@@ -413,43 +412,47 @@ public class PrimaryController implements Initializable {
 
     // Shows the list of credits connected to a production
     private void showCreditList() {
+        // Sets properties for the parent VBox
         descriptionHBox.getChildren().remove(descriptionVBoxRight);
         descriptionVBox.getChildren().clear();
         descriptionHBox.setSpacing(0);
         descriptionVBox.setAlignment(Pos.TOP_CENTER);
+
+        // Loops through every credit in the active production
         for (int i = 0; i < systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).size(); i++) {
 
-            // gets the role of the credit
+            // Gets the role of the credit
             Text roleText = new Text(systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle());
+            // Gets the name of the credit
             Label name = new Label(systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName());
+
+            // Creates a vBox for storing credits with the same role
             VBox vb = new VBox();
 
+            // Style the roleText, name and Vbox
             roleText.setFill(Info.accentGradient);
             roleText.setStyle("-fx-font-weight: bold; -fx-font-size:" + Info.fontSizeBig + ";");
             name.setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.forgroundColor + ";");
             vb.setAlignment(Pos.TOP_CENTER);
             vb.setSpacing(10);
 
-            if (descriptionVBox.getChildren().size() <= 0) {
+            boolean foundRole = false;
+            // Loop through the descriptionVBox to check if the role of the credit exists as it's own vBox
+            for (int j = 0; j < descriptionVBox.getChildren().size(); j++) {
+                VBox vbox = (VBox) descriptionVBox.getChildren().get(j);
+                Text role = (Text) vbox.getChildren().get(0);
+
+                // If the role is already in the list, add the credit's name to the vBox
+                if (systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle().equals(role.getText())) {
+                    vbox.getChildren().add(name);
+                    foundRole = true;
+                }
+            }
+            // If the role isn't in the vBox, add it to the descriptionVBox
+            if (!foundRole) {
                 descriptionVBox.getChildren().add(vb);
                 vb.getChildren().add(roleText);
                 vb.getChildren().add(name);
-            } else {
-                boolean foundRole = false;
-                for (int j = 0; j < descriptionVBox.getChildren().size(); j++) {
-                    VBox vbox = (VBox) descriptionVBox.getChildren().get(j);
-                    Text role = (Text) vbox.getChildren().get(0);
-
-                    if (systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle().equals(role.getText())) {
-                        vbox.getChildren().add(name);
-                        foundRole = true;
-                    }
-                }
-                if (!foundRole) {
-                    descriptionVBox.getChildren().add(vb);
-                    vb.getChildren().add(roleText);
-                    vb.getChildren().add(name);
-                }
             }
         }
     }
@@ -809,12 +812,14 @@ public class PrimaryController implements Initializable {
 
         // Loop through and get Credit name and role TextFields
         for (int i = 0; i < creditNameVBox.getChildren().size(); i++) {
+            // Credit name Textfield
             StackPane stackPane1 = (StackPane) creditNameVBox.getChildren().get(i);
             VBox vBox1 = (VBox) stackPane1.getChildren().get(1);
             AnchorPane anchorPane1 = (AnchorPane) vBox1.getChildren().get(0);
             HBox hBox1 = (HBox) anchorPane1.getChildren().get(0);
             TextField creditNameTextField = (TextField) hBox1.getChildren().get(0);
 
+            // Credit role Textfield
             StackPane stackPane2 = (StackPane) creditRoleVBox.getChildren().get(i);
             VBox vBox2 = (VBox) stackPane2.getChildren().get(1);
             AnchorPane anchorPane2 = (AnchorPane) vBox2.getChildren().get(0);
@@ -836,6 +841,7 @@ public class PrimaryController implements Initializable {
             int roleId = systemFacade.roleLogic.getRoles(creditRoleTextField.getText()).get(0).getId();
             int creditId = systemFacade.creditLogic.getCredits(creditNameTextField.getText()).get(0).getId();
 
+            // Add credit and role to the production
             systemFacade.creditLogic.addCreditRelation(systemFacade.activeProduction.getId(), creditId, roleId);
         }
     }
