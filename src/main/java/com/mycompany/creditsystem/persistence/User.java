@@ -35,6 +35,11 @@ public class User {
         this.accessRole = calcAccessRole(accessRole);
     }
 
+    public User (int id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
     private AccessRole calcAccessRole(int accessRoleNumber) {
         if (accessRoleNumber == 1) {
             return AccessRole.producer;

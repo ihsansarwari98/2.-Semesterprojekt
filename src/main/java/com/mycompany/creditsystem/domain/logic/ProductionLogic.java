@@ -2,6 +2,7 @@ package com.mycompany.creditsystem.domain.logic;
 
 import com.mycompany.creditsystem.persistence.Production;
 import com.mycompany.creditsystem.persistence.ProductionHandler;
+import com.mycompany.creditsystem.persistence.User;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +63,9 @@ public class ProductionLogic {
 
     public boolean addCreditAndRoleToProduction(int production_id, int credit_id, int role_id) {
         return ProductionHandler.getInstance().addCreditAndRoleToProduction(production_id, credit_id, role_id);
+    }
+    public ArrayList<User> getProducersLinkedToProduction(int production_id) {
+        return ProductionHandler.getInstance().getProducersLinkedToProduction(production_id);
     }
 
     public boolean isProductionLinkedToProducer (int production_id, int producer_id) {

@@ -214,6 +214,22 @@ public class ProductionHandler {
         }
     }
 
+    public ArrayList<User> getProducersLinkedToProduction(int production_id){
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT  users.id, users.name  FROM users, producer_production_subscriptions, productions WHERE productions.production_id = producer_production_supscriptions.production_id AND production_id = ? AND producer_production_subscriptions.producer_id = users.user_id");
+            statement.setInt(1,production_id);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<User> returnValue = new ArrayList<>();
+            while(sqlReturnValues.next()){
+                returnValue.add(new User(sqlReturnValues.getInt(1),sqlReturnValues.getString(2)));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public ArrayList<Production> getProductionsLinkedToProductionCompany(int user_id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT productions.production_id, productions.title, productions.deadline, productions.status  FROM company_production_subscriptions, users, productions WHERE company_production_subscriptions.production_company_id = users.user_id AND production_company_id = ? AND company_production_subscriptions.production_id = productions.production_id");
