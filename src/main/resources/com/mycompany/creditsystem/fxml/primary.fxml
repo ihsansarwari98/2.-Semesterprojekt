@@ -735,7 +735,7 @@
                   </VBox>
                   <BorderPane fx:id="addNewBP" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
                      <center>
-                        <GridPane alignment="TOP_CENTER" style="-fx-background-color: #ff0000;" BorderPane.alignment="CENTER">
+                        <GridPane alignment="TOP_CENTER" BorderPane.alignment="CENTER">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -789,6 +789,9 @@
                                              </stops>
                                           </LinearGradient>
                                        </fill>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </Rectangle>
                                     <Label alignment="CENTER" text="SUBMIT" textAlignment="CENTER" textFill="WHITE">
                                        <font>

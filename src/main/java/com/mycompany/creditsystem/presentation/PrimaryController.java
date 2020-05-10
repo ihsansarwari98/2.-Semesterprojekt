@@ -204,6 +204,7 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private TextField bottomLeftInput;
+    
 
     // idk what im doing
     private SystemFacade systemFacade = new SystemFacade();
@@ -348,7 +349,7 @@ public class PrimaryController implements Initializable {
     // Method is used for adding new Productions
     @FXML
     void addProductionHandler(MouseEvent event) {
-        backgroundAP.getChildren().removeAll(middleLeftInput, bottomLeftInput, bottomRightInput);
+     //   backgroundAP.getChildren().removeAll(middleLeftInput, bottomLeftInput, bottomRightInput);
         addNewHandler();
         setAddType("production");
 
@@ -388,17 +389,8 @@ public class PrimaryController implements Initializable {
         backgroundAP.getChildren().remove(titleAndDescriptionBP);
         backgroundAP.getChildren().add(addNewBP);
 
-        GridPane formula = new GridPane();
-        TextField testField = new TextField();
-        TextField topRightInput = new TextField();
-        StackPane buttonPane = new StackPane();
+        addNewBP.setOpacity(1);
 
-      //  formula.setStyle("-fx-background-color: #6a2a96");
-
-        addNewBP.setCenter(formula);
-
-        GridPane.setConstraints(testField, 0, 0);
-        testField.setPromptText("test000125s1ad95sa165dsa");
     }
 
     // Handler for Submit button in window.
@@ -413,6 +405,7 @@ public class PrimaryController implements Initializable {
                 setAddType(null);
                 break;
             case "company":
+
                 setAddType(null);
                 break;
             case "producer":
@@ -1206,5 +1199,9 @@ public class PrimaryController implements Initializable {
     @FXML
     public void closeButtonAction() {
         Platform.exit();
+    }
+
+    @FXML
+    private void addCredit(MouseEvent mouseEvent) {
     }
 }
