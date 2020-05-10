@@ -326,7 +326,7 @@
                   </AnchorPane>
                   <BorderPane fx:id="titleAndDescriptionBP" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
                      <center>
-                        <VBox alignment="TOP_CENTER">
+                        <VBox fx:id="titleAndDescriptionVBox" alignment="TOP_CENTER">
                            <children>
                               <VBox fx:id="descriptionTitleVBox" alignment="TOP_CENTER" VBox.vgrow="NEVER">
                                  <children>
@@ -410,22 +410,25 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <ScrollPane fx:id="descriptionScrollPane" fitToHeight="true" fitToWidth="true" styleClass="dark-thumb" VBox.vgrow="ALWAYS">
+                              <VBox fx:id="vBoxHeader" alignment="TOP_CENTER" VBox.vgrow="NEVER">
+                                 <children>
+                                    <HBox fx:id="descriptionHBoxHeader" alignment="TOP_CENTER" spacing="200.0">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
                                  <VBox.margin>
                                     <Insets top="20.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <ScrollPane fx:id="descriptionScrollPane" fitToHeight="true" fitToWidth="true" styleClass="dark-thumb" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets />
                                  </VBox.margin>
                                  <content>
                                     <VBox fx:id="descriptionBodyVBox" spacing="10.0">
                                        <children>
-                                          <VBox fx:id="vBoxHeader" alignment="TOP_CENTER" VBox.vgrow="NEVER">
-                                             <children>
-                                                <HBox fx:id="descriptionHBoxHeader" alignment="TOP_CENTER" spacing="20.0">
-                                                   <VBox.margin>
-                                                      <Insets />
-                                                   </VBox.margin>
-                                                </HBox>
-                                             </children>
-                                          </VBox>
                                           <VBox fx:id="descriptionVBox" alignment="TOP_CENTER" fillWidth="false" spacing="10.0" VBox.vgrow="NEVER" />
                                           <BorderPane fx:id="creditBorderPane" VBox.vgrow="ALWAYS">
                                              <top>
