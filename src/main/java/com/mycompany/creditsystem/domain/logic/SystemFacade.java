@@ -11,6 +11,7 @@ public class SystemFacade {
     public CreditLogic creditLogic;
     public RoleLogic roleLogic;
     public Production activeProduction;
+    public String state;
 
     public SystemFacade() {
         productionLogic = new ProductionLogic();
@@ -27,5 +28,13 @@ public class SystemFacade {
 
     public Production getActiveProduction() {
         return activeProduction;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

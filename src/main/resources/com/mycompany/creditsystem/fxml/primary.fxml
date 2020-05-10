@@ -330,7 +330,7 @@
                            <children>
                               <VBox fx:id="descriptionTitleVBox" alignment="TOP_CENTER" VBox.vgrow="NEVER">
                                  <children>
-                                    <HBox fx:id="editOptionsHBox" alignment="CENTER" spacing="20.0">
+                                    <HBox fx:id="editOptionsHBox" alignment="TOP_CENTER" spacing="20.0">
                                        <VBox.margin>
                                           <Insets top="10.0" />
                                        </VBox.margin>
@@ -415,15 +415,18 @@
                                     <Insets top="20.0" />
                                  </VBox.margin>
                                  <content>
-                                    <VBox fx:id="vBoxHeader" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                    <VBox fx:id="descriptionBodyVBox" spacing="10.0">
                                        <children>
-                                          <HBox fx:id="descriptionHBoxHeader" alignment="TOP_CENTER" spacing="10.0" />
-                                          <HBox fx:id="descriptionHBox" alignment="TOP_CENTER" spacing="10.0">
+                                          <VBox fx:id="vBoxHeader" alignment="TOP_CENTER" VBox.vgrow="NEVER">
                                              <children>
-                                                <VBox fx:id="descriptionVBox" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS" />
-                                                <VBox fx:id="descriptionVBoxRight" spacing="10.0" HBox.hgrow="ALWAYS" />
+                                                <HBox fx:id="descriptionHBoxHeader" alignment="TOP_CENTER" spacing="20.0">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </HBox>
                                              </children>
-                                          </HBox>
+                                          </VBox>
+                                          <VBox fx:id="descriptionVBox" alignment="TOP_CENTER" fillWidth="false" spacing="10.0" VBox.vgrow="NEVER" />
                                           <BorderPane fx:id="creditBorderPane" VBox.vgrow="ALWAYS">
                                              <top>
                                                 <StackPane fx:id="addCreditPane" alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
@@ -449,16 +452,21 @@
                                                             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="2.0" onMouseClicked="#addCredit" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="10.0">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
-                                                               </cursor></Rectangle>
+                                                               </cursor>
+                                                            </Rectangle>
                                                             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="10.0" onMouseClicked="#addCredit" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
-                                                               </cursor></Rectangle>
+                                                               </cursor>
+                                                            </Rectangle>
                                                          </children>
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
                                                       </StackPane>
                                                    </children>
                                                    <BorderPane.margin>
-                                                      <Insets top="10.0" />
+                                                      <Insets />
                                                    </BorderPane.margin>
                                                 </StackPane>
                                              </top>
