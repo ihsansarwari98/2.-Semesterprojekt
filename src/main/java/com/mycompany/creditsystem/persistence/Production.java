@@ -24,6 +24,11 @@ public class Production implements Comparable<Production>  {
         this.deadline = deadline;
     }
 
+    public Production(String title, Date deadline) {
+        this.title = title;
+        this.deadline = deadline;
+    }
+
     public Status calcStatus (int statusNumber) {
         if (statusNumber == 1) {
             return Status.Yellow;
