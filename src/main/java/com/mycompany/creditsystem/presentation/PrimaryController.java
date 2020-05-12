@@ -1,6 +1,7 @@
 package com.mycompany.creditsystem.presentation;
 
 import java.net.URL;
+import java.sql.BatchUpdateException;
 import java.util.*;
 
 import com.mycompany.creditsystem.domain.logic.*;
@@ -25,6 +26,7 @@ import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -187,6 +189,17 @@ public class PrimaryController implements Initializable {
     private VBox vBoxHeader;
     @FXML
     private VBox titleAndDescriptionVBox;
+    @FXML
+    private Rectangle addProductionRectangle;
+    @FXML
+    private Rectangle addProductionRectangle1;
+
+    TextField nameTextField;
+    TextField usernameTextField1;
+    TextField passwordTextField1;
+    TextField companyTextField;
+    TextField producerTextField;
+
 
     private boolean scrollableEdit = false;
     private SystemFacade systemFacade = new SystemFacade();
@@ -269,6 +282,9 @@ public class PrimaryController implements Initializable {
 
         usernameTextField.setUserData(-1);
         passwordTextField.setUserData(-1);
+        // Set color for button used to add new.
+        addProductionRectangle1.setFill(Info.accentGradient);
+        addProductionRectangle.setFill(Info.accentGradient);
 
         // -- DESCRIPTION
         descriptionScrollPane.getStyleClass().add("dark-thumb");
@@ -313,6 +329,146 @@ public class PrimaryController implements Initializable {
         if (focusedSearchField != null) {
             handleSearchFocus();
         }
+    }
+
+
+    String addType = null;
+
+    public String getAddType() {
+        return addType;
+    }
+
+    public void setAddType(String addType) {
+        this.addType = addType;
+    }
+
+    // Method is used for adding new Productions
+    @FXML
+    void addProductionHandler(MouseEvent event) {
+        addNewHandler();
+        setAddType("production");
+        descriptionTitleText.setText("ADD PRODUCTION");
+
+        nameTextField.setPromptText("Name");
+        if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.admin) {
+            companyTextField.setPromptText("Associated Production company");
+        } else {
+            companyTextField.setText("Your company");
+            companyTextField.setEditable(false);
+            companyTextField.setCursor(Cursor.DEFAULT);
+
+            // TODO Need a method for getting production company for current user.
+        }
+
+
+    }
+
+    void addProductionCompanyHandler() {
+        addNewHandler();
+        setAddType("company");
+        descriptionTitleText.setText("ADD COMPANY");
+
+        companyTextField.setPromptText("Production company name");
+        usernameTextField.setPromptText("Username");
+        passwordTextField.setPromptText("Temporary password");
+
+    }
+
+
+    // Sets up UI for adding a new entity.
+    void addNewHandler() {
+
+        // TODO Lav Labels over TextFields
+        // Removes unnecessary elements
+        backgroundAP.getChildren().remove(searchBarBP);
+        backgroundAP.getChildren().remove(logoVBox);
+        backgroundAP.getChildren().add(titleAndDescriptionBP);
+
+        int searchFieldLength = 300;
+        descriptionVBox.getChildren().clear();
+        descriptionVBox.setSpacing(10);
+        descriptionVBox.setFillWidth(false);
+        descriptionVBox.setAlignment(Pos.TOP_CENTER);
+
+        descriptionHBoxHeader.setFillHeight(false);
+        descriptionHBoxHeader.setPrefWidth(searchFieldLength);
+
+
+
+        Label nameLabel = new Label();
+        nameLabel.setText("Name:");
+        Label companyLabel = new Label();
+        companyLabel.setText("Company:");
+        Label usernameLabel = new Label();
+        usernameLabel.setText("Username:");
+        Label passwordLabel = new Label();
+        passwordLabel.setText("Password:");
+        Label producerLabel = new Label();
+        producerLabel.setText("Producer:");
+
+        HBox hBox1 = new HBox();
+        nameTextField = new TextField();
+        nameTextField.setPromptText("Name");
+        companyTextField = new TextField();
+        companyTextField.setPromptText("Company Name");
+        VBox nameVBox = new VBox();
+        VBox companyVBox = new VBox();
+        nameVBox.getChildren().addAll(nameLabel, nameTextField);
+        companyVBox.getChildren().addAll(companyLabel, companyTextField);
+        hBox1.getChildren().addAll(nameVBox, companyVBox);
+
+        HBox hBox2 = new HBox();
+        usernameTextField1 = new TextField();
+        usernameTextField1.setPromptText("Username");
+        passwordTextField1 = new TextField();
+        passwordTextField1.setPromptText("Password");
+        VBox usernameVBox = new VBox();
+        VBox passwordVBox = new VBox();
+        usernameVBox.getChildren().addAll(usernameLabel, usernameTextField1);
+        passwordVBox.getChildren().addAll(passwordLabel, passwordTextField1);
+        hBox2.getChildren().addAll(usernameVBox, passwordVBox);
+
+
+        HBox hBox3 = new HBox();
+        producerTextField = new TextField();
+        producerTextField.setPromptText("Producer");
+        hBox3.getChildren().add(producerTextField);
+        VBox producerVBox = new VBox();
+        producerVBox.getChildren().addAll(producerLabel, producerTextField);
+        hBox3.getChildren().add(producerVBox);
+
+        descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox3);
+
+    }
+
+    // Handler for Submit button in window.
+    @FXML
+    void submitButtonHandler(MouseEvent event) {
+        String addType = getAddType();
+
+        switch (addType) {
+            case "production":
+                Production p = new Production(nameTextField.getText());
+                systemFacade.productionLogic.createProduction(p);
+
+
+                setAddType(null);
+                break;
+            case "company":
+                setAddType(null);
+                break;
+            case "producer":
+                setAddType(null);
+                break;
+            default:
+                setAddType(null);
+                System.out.println("Something went wrong...");
+                break;
+
+
+        }
+
+
     }
 
     @FXML
@@ -839,9 +995,9 @@ public class PrimaryController implements Initializable {
         r2.setRotate(-45);
 
         // add properties to stackPane
-        stackPane.getChildren().addAll(r1,r2);
+        stackPane.getChildren().addAll(r1, r2);
         stackPane.setAlignment(Pos.TOP_CENTER);
-        stackPane.setPadding(new Insets(10,0,0,0));
+        stackPane.setPadding(new Insets(10, 0, 0, 0));
         stackPane.setCursor(Cursor.HAND);
 
         // add an onClick event to the stackPane, that removes the credit

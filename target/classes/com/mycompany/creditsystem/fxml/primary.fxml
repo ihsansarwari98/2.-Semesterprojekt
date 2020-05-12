@@ -37,6 +37,7 @@
                                     <LinearGradient cycleMethod="REFLECT" endX="1.0" endY="0.1428571428571429" startY="1.0">
                                        <stops>
                                           <Stop color="#57ffcd" />
+                                          <Stop color="#57ffcd" offset="0.007434944237918215" />
                                           <Stop color="#74c5ff" offset="1.0" />
                                        </stops>
                                     </LinearGradient>
@@ -134,11 +135,52 @@
                               <Polygon fx:id="sideBarTopColor1" fill="#bdbdbd00" points="0.0, 12.0, 206.0, 12.0, 206.0, 0.0, 0.0, 0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
                               <VBox fx:id="programListVBox" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Label text="Mine produktioner" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Label>
+                                    <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="2.0" prefWidth="260.0">
+                                       <children>
+                                          <Label text="Mine produktioner" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <StackPane onMouseClicked="#addProductionHandler" prefHeight="26.0" prefWidth="19.0">
+                                             <children>
+                                                <Rectangle fx:id="addProductionRectangle" arcHeight="5.0" arcWidth="5.0" height="2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="10.0">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <StackPane.margin>
+                                                      <Insets />
+                                                   </StackPane.margin>
+                                                   <fill>
+                                                      <LinearGradient endX="1.0" endY="1.0" startY="1.0">
+                                                         <stops>
+                                                            <Stop color="#0a0a0a" />
+                                                            <Stop color="#0a0a0a" offset="0.007434944237918215" />
+                                                            <Stop color="#57ffcd" offset="0.007434944237918215" />
+                                                            <Stop color="#74c5ff" offset="1.0" />
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </fill>
+                                                </Rectangle>
+                                                <Rectangle fx:id="addProductionRectangle1" arcHeight="5.0" arcWidth="5.0" height="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <fill>
+                                                      <LinearGradient endX="1.0" endY="1.0" startY="1.0">
+                                                         <stops>
+                                                            <Stop color="#0a0a0a" />
+                                                            <Stop color="#0a0a0a" offset="0.007434944237918215" />
+                                                            <Stop color="#57ffcd" offset="0.007434944237918215" />
+                                                            <Stop color="#74c5ff" offset="1.0" />
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </fill>
+                                                </Rectangle>
+                                             </children>
+                                          </StackPane>
+                                       </children>
+                                    </HBox>
                                     <ScrollPane fx:id="productionScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                                        <content>
                                           <VBox fx:id="programList" spacing="20.0" />
