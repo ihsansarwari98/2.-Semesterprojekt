@@ -4,19 +4,13 @@ import java.net.URL;
 import java.util.*;
 
 import com.mycompany.creditsystem.domain.logic.*;
-import com.mycompany.creditsystem.persistence.Production;
-import com.mycompany.creditsystem.persistence.Production.Status;
+import com.mycompany.creditsystem.persistence.*;
 
-import com.mycompany.creditsystem.persistence.Credit;
-import com.mycompany.creditsystem.persistence.Role;
-import com.mycompany.creditsystem.persistence.User;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,7 +18,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -456,13 +449,15 @@ public class PrimaryController implements Initializable {
         descriptionVBox.setAlignment(Pos.TOP_CENTER);
         systemFacade.setState("searching");
 
+        List<CreditWithRole> creditWithRolesInProduction = systemFacade.creditLogic.getCreditWithRole(systemFacade.getActiveProduction().getId());
+
         // Loops through every credit in the active production
-        for (int i = 0; i < systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).size(); i++) {
+        for (CreditWithRole credit : creditWithRolesInProduction) {
 
             // Gets the role of the credit
-            Text roleText = new Text(systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle());
+            Text roleText = new Text(credit.getRole().getTitle());
             // Gets the name of the credit
-            Label name = new Label(systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName());
+            Label name = new Label(credit.getCredit().getName());
 
             // Creates a vBox for storing credits with the same role
             VBox vb = new VBox();
@@ -481,7 +476,7 @@ public class PrimaryController implements Initializable {
                 Text role = (Text) vbox.getChildren().get(0);
 
                 // If the role is already in the list, add the credit's name to the vBox
-                if (systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle().equals(role.getText())) {
+                if (credit.getRole().getTitle().equals(role.getText())) {
                     vbox.getChildren().add(name);
                     foundRole = true;
                 }
@@ -794,24 +789,28 @@ public class PrimaryController implements Initializable {
             descriptionHBoxHeader.getChildren().clear();
             descriptionHBoxHeader.getChildren().addAll(nameCaption, roleCaption);
 
-            for (int i = 0; i < systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).size(); i++) {
+            List<CreditWithRole> creditWithRolesInProduction = systemFacade.creditLogic.getCreditWithRole(systemFacade.getActiveProduction().getId());
 
+            for (CreditWithRole creditWithRole : creditWithRolesInProduction) {
                 HBox hBox = new HBox();
                 hBox.setAlignment(Pos.TOP_CENTER);
                 hBox.setSpacing(20);
+                descriptionVBox.getChildren().add(hBox);
 
+                // Create credit name searchField
                 SearchField creditSearchField = createSearchField(1,
-                        systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getName(),
+                        creditWithRole.getCredit().getName(),
                         searchFieldLength,
                         NodeOrientation.RIGHT_TO_LEFT);
-                descriptionVBox.getChildren().add(hBox);
                 hBox.getChildren().add(creditSearchField.getStackPane());
                 styleSearchResults(creditSearchField);
 
+                // add delete-credit element
                 hBox.getChildren().add(createRemoveCreditElement());
 
+                // Create credit role searchField
                 SearchField roleSearchField = createSearchField(2,
-                        systemFacade.roleLogic.getRoleFromCredit(systemFacade.getActiveProduction().getId(), systemFacade.creditLogic.getCredits(systemFacade.getActiveProduction().getId()).get(i).getId()).getTitle(),
+                        creditWithRole.getRole().getTitle(),
                         searchFieldLength,
                         NodeOrientation.LEFT_TO_RIGHT);
                 hBox.getChildren().add(roleSearchField.getStackPane());

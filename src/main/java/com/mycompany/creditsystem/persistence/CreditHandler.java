@@ -47,6 +47,24 @@ public class CreditHandler {
         }
     }
 
+    public ArrayList<CreditWithRole> getCreditWithRole(int production_id) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT credits.credit_id, credits.name, roles.role_id, roles.role_title FROM production_credit_role_relation, credits, productions, roles  WHERE production_credit_role_relation.production_id = ? AND credits.credit_id = production_credit_role_relation.credit_id AND productions.production_id = production_credit_role_relation.production_id AND production_credit_role_relation.role_id = roles.role_id");
+            statement.setInt(1, production_id);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<CreditWithRole> returnValue = new ArrayList<>();
+            while (sqlReturnValues.next()) {
+                returnValue.add(new CreditWithRole(new Credit(sqlReturnValues.getInt(1), sqlReturnValues.getString(2)), new Role (sqlReturnValues.getInt(3), sqlReturnValues.getString(4))));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
     public boolean removeAllCreditsFromProduction(int production_id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_relation WHERE production_credit_role_relation.production_id = ?");

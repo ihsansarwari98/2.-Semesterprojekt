@@ -1,10 +1,10 @@
 package com.mycompany.creditsystem.persistence;
 
-public class CreditAndRole {
+public class CreditWithRole {
     private Credit credit;
     private Role role;
 
-    public CreditAndRole (Credit credit, Role role) {
+    public CreditWithRole(Credit credit, Role role) {
         this.credit = credit;
         this.role = role;
     }
@@ -15,5 +15,10 @@ public class CreditAndRole {
 
     public Role getRole() {
         return role;
+    }
+
+    @Override
+    public String toString() {
+        return credit.getName() + " | " + role.getTitle();
     }
 }

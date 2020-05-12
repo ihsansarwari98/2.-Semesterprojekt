@@ -2,6 +2,7 @@ package com.mycompany.creditsystem.domain.logic;
 
 import com.mycompany.creditsystem.persistence.Credit;
 import com.mycompany.creditsystem.persistence.CreditHandler;
+import com.mycompany.creditsystem.persistence.CreditWithRole;
 
 import java.util.ArrayList;
 
@@ -45,5 +46,9 @@ public class CreditLogic{
 
     public ArrayList<Credit> getCredits(String namePart) {
         return CreditHandler.getInstance().getCredits(namePart);
+    }
+
+    public ArrayList<CreditWithRole> getCreditWithRole(int production_id) {
+        return CreditHandler.getInstance().getCreditWithRole(production_id);
     }
 }
