@@ -1,17 +1,14 @@
 package com.mycompany.creditsystem.presentation;
 
+import com.mycompany.creditsystem.domain.logic.*;
+
 import java.net.URL;
 import java.util.*;
-
-import com.mycompany.creditsystem.domain.logic.*;
-import com.mycompany.creditsystem.persistence.*;
-
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,7 +16,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -245,7 +241,7 @@ public class PrimaryController implements Initializable {
         saveEditProductionRectangle.setFill(Info.accentGradient);
 
         // -- SEARCH BAR
-        // Set the color and round the corners of the search bar 
+        // Set the color and round the corners of the search bar
         searchBarBackground.setStyle("-fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + "; -fx-background-color: " + Info.forgroundColor + ";");
         searchRectangleBG.setFill(Info.accentGradient);
         textFieldSearchBar.setUserData(0);
@@ -461,15 +457,16 @@ public class PrimaryController implements Initializable {
         titleAndDescriptionVBox.getChildren().remove(vBoxHeader);
         descriptionBodyVBox.getChildren().remove(creditBorderPane);
 
-        List<CreditWithRole> creditWithRolesInProduction = systemFacade.creditLogic.getCreditWithRole(systemFacade.getActiveProduction().getId());
+        Map creditWithRolesInProduction = systemFacade.creditLogic.getCreditWithRole(systemFacade.getActiveProduction().getId());
 
         // Loops through every credit in the active production
-        for (CreditWithRole credit : creditWithRolesInProduction) {
+        for (Object creditWithRole : creditWithRolesInProduction.entrySet()) {
+            Map.Entry creditWithRoleObject = (Map.Entry) creditWithRole;
 
             // Gets the role of the credit
-            Text roleText = new Text(credit.getRole().getTitle());
+            Text roleText = new Text(creditWithRoleObject.getKey().toString());
             // Gets the name of the credit
-            Label name = new Label(credit.getCredit().getName());
+            Label name = new Label(creditWithRoleObject.getValue().toString());
 
             // Creates a vBox for storing credits with the same role
             VBox vb = new VBox();
@@ -488,7 +485,7 @@ public class PrimaryController implements Initializable {
                 Text role = (Text) vbox.getChildren().get(0);
 
                 // If the role is already in the list, add the credit's name to the vBox
-                if (credit.getRole().getTitle().equals(role.getText())) {
+                if (creditWithRoleObject.getValue().toString().equals(role.getText())) {
                     vbox.getChildren().add(name);
                     foundRole = true;
                 }
@@ -794,9 +791,11 @@ public class PrimaryController implements Initializable {
             descriptionHBoxHeader.getChildren().clear();
             descriptionHBoxHeader.getChildren().addAll(nameCaption, roleCaption);
 
-            List<CreditWithRole> creditWithRolesInProduction = systemFacade.creditLogic.getCreditWithRole(systemFacade.getActiveProduction().getId());
+            Map creditWithRolesInProduction = systemFacade.creditLogic.getCreditWithRole(systemFacade.getActiveProduction().getId());
 
-            for (CreditWithRole creditWithRole : creditWithRolesInProduction) {
+            for (Object creditWithRole : creditWithRolesInProduction.entrySet()) {
+                Map.Entry creditWithRoleObject = (Map.Entry) creditWithRole;
+
                 HBox hBox = new HBox();
                 hBox.setAlignment(Pos.TOP_CENTER);
                 hBox.setSpacing(20);
@@ -804,7 +803,7 @@ public class PrimaryController implements Initializable {
 
                 // Create credit name searchField
                 SearchField creditSearchField = createSearchField(1,
-                        creditWithRole.getCredit().getName(),
+                        creditWithRoleObject.getKey().toString(),
                         searchFieldLength,
                         NodeOrientation.RIGHT_TO_LEFT);
                 hBox.getChildren().add(creditSearchField.getStackPane());
@@ -815,11 +814,12 @@ public class PrimaryController implements Initializable {
 
                 // Create credit role searchField
                 SearchField roleSearchField = createSearchField(2,
-                        creditWithRole.getRole().getTitle(),
+                        creditWithRoleObject.getValue().toString(),
                         searchFieldLength,
                         NodeOrientation.LEFT_TO_RIGHT);
                 hBox.getChildren().add(roleSearchField.getStackPane());
                 styleSearchResults(roleSearchField);
+
             }
         }
     }
@@ -882,13 +882,13 @@ public class PrimaryController implements Initializable {
             // If the credit doesn't exist, add it to the system
             if (systemFacade.creditLogic.getCredits(creditNameTextField.getText()).size() <= 0) {
                 System.out.println("Adding " + creditNameTextField.getText() + " to the database in Credits");
-                systemFacade.creditLogic.createStringCredit(creditNameTextField.getText());
+                systemFacade.creditLogic.createCredit(new Credit(creditNameTextField.getText()));
             }
 
             // If the role doesn't exist, add it to the system
             if (systemFacade.roleLogic.getRoles(creditRoleTextField.getText()).size() <= 0) {
                 System.out.println("Adding " + creditRoleTextField.getText() + " to the database in Roles");
-                systemFacade.roleLogic.createStringRole(creditRoleTextField.getText());
+                systemFacade.roleLogic.createRole(new Role(creditRoleTextField.getText()));
             }
 
             int roleId = systemFacade.roleLogic.getRoles(creditRoleTextField.getText()).get(0).getId();
@@ -913,9 +913,9 @@ public class PrimaryController implements Initializable {
             Label title = new Label(systemFacade.currentUser.getMyProductions().get(i).getTitle());
             Label deadline = new Label(systemFacade.currentUser.getMyProductions().get(i).getDeadlineString());
 
-            if (systemFacade.currentUser.getUser().getAccessRoleInt() == 1) {
+            if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.producer) {
                 programList.getChildren().add(hb);
-            } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 2) {
+            } else if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.productionCompany) {
                 programListProductionCompany.getChildren().add(hb);
             }
 
