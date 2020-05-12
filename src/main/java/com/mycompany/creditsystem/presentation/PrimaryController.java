@@ -11,6 +11,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +19,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -33,6 +35,14 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class PrimaryController implements Initializable {
+
+    /*
+     * UserData:
+     * -1   = not a searchable textField
+     * 0    = productions
+     * 1    = credits
+     * 2    = roles
+     */
 
     @FXML
     private VBox programList;
@@ -197,6 +207,7 @@ public class PrimaryController implements Initializable {
         Info.sidePanelOn = true;
         sidePanelAction();
 
+        // makes the scrollPane in "edit production" scroll to the bottom when adding new credits
         descriptionVBox.heightProperty().addListener(observable -> {
             if (systemFacade.getState().equals("editing") && scrollableEdit) {
                 descriptionScrollPane.setVvalue(1D);
@@ -272,10 +283,9 @@ public class PrimaryController implements Initializable {
     }
 
     // Is getting called many times a second
-    private void updateEverySecond() {
 
+    private void updateEverySecond() {
         getFocusedSearchField();
-        //System.out.println(focusedTextField);
     }
 
     private void getFocusedSearchField() {
@@ -509,16 +519,9 @@ public class PrimaryController implements Initializable {
                     AnchorPane ap = new AnchorPane();
                     Label titleText = new Label();
 
-                    if (searchField.getTextField().getUserData().equals(0)) {
-                        Production searchResult = (Production) searchField.getSearchResults().get(i);
-                        titleText.setText(searchResult.getTitle());
-                    } else if (searchField.getTextField().getUserData().equals(1)) {
-                        Credit searchResult = (Credit) searchField.getSearchResults().get(i);
-                        titleText.setText(searchResult.getName());
-                    } else if (searchField.getTextField().getUserData().equals(2)) {
-                        Role searchResult = (Role) searchField.getSearchResults().get(i);
-                        titleText.setText(searchResult.getTitle());
-                    }
+                    // displays the searchResult
+                    Object searchResult = searchField.getSearchResults().get(i);
+                    titleText.setText(searchResult.toString());
 
                     searchField.getvBoxResults().getChildren().add(ap);
                     ap.getChildren().add(titleText);
@@ -840,9 +843,9 @@ public class PrimaryController implements Initializable {
         r2.setRotate(-45);
 
         // add properties to stackPane
-        stackPane.getChildren().addAll(r1,r2);
+        stackPane.getChildren().addAll(r1, r2);
         stackPane.setAlignment(Pos.TOP_CENTER);
-        stackPane.setPadding(new Insets(10,0,0,0));
+        stackPane.setPadding(new Insets(10, 0, 0, 0));
         stackPane.setCursor(Cursor.HAND);
 
         // add an onClick event to the stackPane, that removes the credit
@@ -997,7 +1000,7 @@ public class PrimaryController implements Initializable {
         updateProductionList();
     }
 
-    public void calculateSearchBarAnchors() {
+    private void calculateSearchBarAnchors() {
         if (systemFacade.getActiveProduction() == null) {
             // triggers when the problem opens
             if (backgroundAP.getHeight() == 0) {
@@ -1102,7 +1105,7 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void handleSearchMenuHoveringClicked(MouseEvent event) {
+    private void handleSearchMenuHoveringClicked(MouseEvent event) {
         AnchorPane ap = ((AnchorPane) event.getSource());
         Label titleText = (Label) ap.getChildren().get(0);
         focusedSearchField.getTextField().setText(titleText.getText());
@@ -1110,7 +1113,7 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void handleSearchMenuHoveringEnter(MouseEvent event) {
+    private void handleSearchMenuHoveringEnter(MouseEvent event) {
         AnchorPane ap = ((AnchorPane) event.getSource());
         Label titleText = (Label) ap.getChildren().get(0);
         ap.setCursor(Cursor.HAND);
@@ -1120,7 +1123,7 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void handleSearchMenuHoveringExit(MouseEvent event) {
+    private void handleSearchMenuHoveringExit(MouseEvent event) {
         AnchorPane ap = ((AnchorPane) event.getSource());
         Label titleText = (Label) ap.getChildren().get(0);
         titleText.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + ";");
@@ -1129,26 +1132,26 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void handleTopDragClicked(MouseEvent event) {
+    private void handleTopDragClicked(MouseEvent event) {
         if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
             maximizeButtonAction();
         }
     }
 
     @FXML
-    public void handleTopDragDragged(MouseEvent event) {
+    private void handleTopDragDragged(MouseEvent event) {
         App.stage.setX(event.getScreenX() + App.xOffset);
         App.stage.setY(event.getScreenY() + App.yOffset);
     }
 
     @FXML
-    public void handleTopDragPressed(MouseEvent event) {
+    private void handleTopDragPressed(MouseEvent event) {
         App.xOffset = App.stage.getX() - event.getScreenX();
         App.yOffset = App.stage.getY() - event.getScreenY();
     }
 
     @FXML
-    public void handleButtonHoveringEnter(MouseEvent event) {
+    private void handleButtonHoveringEnter(MouseEvent event) {
         StackPane hoveredObject = ((StackPane) event.getSource());
         hoveredObject.setCursor(Cursor.HAND);
         hoveredObject.setScaleX(hoveredObject.getScaleX() + Info.scaleAmount);
@@ -1156,19 +1159,19 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void handleButtonHoveringExit(MouseEvent event) {
+    private void handleButtonHoveringExit(MouseEvent event) {
         StackPane hoveredObject = ((StackPane) event.getSource());
         hoveredObject.setScaleX(hoveredObject.getScaleX() - Info.scaleAmount);
         hoveredObject.setScaleY(hoveredObject.getScaleY() - Info.scaleAmount);
     }
 
     @FXML
-    public void minimizeButtonAction() {
+    private void minimizeButtonAction() {
         App.stage.setIconified(true);
     }
 
     @FXML
-    public void maximizeButtonAction() {
+    private void maximizeButtonAction() {
         if (!App.stage.isMaximized()) {
             App.stage.setMaximized(true);
         } else {
@@ -1178,7 +1181,7 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    public void closeButtonAction() {
+    private void closeButtonAction() {
         Platform.exit();
     }
 }

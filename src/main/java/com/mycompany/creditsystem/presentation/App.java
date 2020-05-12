@@ -46,7 +46,6 @@ public class App extends Application {
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/mycompany/creditsystem/fxml/" + fxml + ".fxml"));
-        //FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(App.class.getCanonicalName().substring(18).replaceAll(fxml, "") + ".fxml"));
         return fxmlLoader.load();
     }
 
