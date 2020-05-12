@@ -448,6 +448,8 @@ public class PrimaryController implements Initializable {
         descriptionVBox.getChildren().clear();
         descriptionVBox.setAlignment(Pos.TOP_CENTER);
         systemFacade.setState("searching");
+        titleAndDescriptionVBox.getChildren().remove(vBoxHeader);
+        descriptionBodyVBox.getChildren().remove(creditBorderPane);
 
         List<CreditWithRole> creditWithRolesInProduction = systemFacade.creditLogic.getCreditWithRole(systemFacade.getActiveProduction().getId());
 
