@@ -121,4 +121,17 @@ public class RoleHandler {
             return false;
         }
     }
+
+    public boolean createStringRole(String title) {
+        try {
+            PreparedStatement insertStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO roles (role_title) VALUES (?)");
+            insertStatement.setString(1, title);
+
+            return insertStatement.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }

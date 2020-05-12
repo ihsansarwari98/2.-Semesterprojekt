@@ -23,6 +23,10 @@ public class RoleLogic {
         return RoleHandler.getInstance().createRole(role);
     }
 
+    public boolean createStringRole(String name) {
+        return RoleHandler.getInstance().createStringRole(name);
+    }
+
     public boolean deleteRole(int id) {
         return RoleHandler.getInstance().deleteRole(id);
     }

@@ -20,6 +20,9 @@ public class CreditLogic{
         return CreditHandler.getInstance().createCredit(credit);
     }
 
+    public boolean createStringCredit(String name){
+        return CreditHandler.getInstance().createStringCredit(name);
+    }
     public boolean updateCreditName(String name, int id) {
         return CreditHandler.getInstance().updateCreditName(name, id);
     }

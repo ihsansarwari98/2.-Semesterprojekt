@@ -882,13 +882,13 @@ public class PrimaryController implements Initializable {
             // If the credit doesn't exist, add it to the system
             if (systemFacade.creditLogic.getCredits(creditNameTextField.getText()).size() <= 0) {
                 System.out.println("Adding " + creditNameTextField.getText() + " to the database in Credits");
-                systemFacade.creditLogic.createCredit(new Credit(creditNameTextField.getText()));
+                systemFacade.creditLogic.createStringCredit(creditNameTextField.getText());
             }
 
             // If the role doesn't exist, add it to the system
             if (systemFacade.roleLogic.getRoles(creditRoleTextField.getText()).size() <= 0) {
                 System.out.println("Adding " + creditRoleTextField.getText() + " to the database in Roles");
-                systemFacade.roleLogic.createRole(new Role(creditRoleTextField.getText()));
+                systemFacade.roleLogic.createStringRole(creditRoleTextField.getText());
             }
 
             int roleId = systemFacade.roleLogic.getRoles(creditRoleTextField.getText()).get(0).getId();
@@ -913,9 +913,9 @@ public class PrimaryController implements Initializable {
             Label title = new Label(systemFacade.currentUser.getMyProductions().get(i).getTitle());
             Label deadline = new Label(systemFacade.currentUser.getMyProductions().get(i).getDeadlineString());
 
-            if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.producer) {
+            if (systemFacade.currentUser.getUser().getAccessRoleInt() == 1) {
                 programList.getChildren().add(hb);
-            } else if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.productionCompany) {
+            } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 2) {
                 programListProductionCompany.getChildren().add(hb);
             }
 

@@ -179,4 +179,17 @@ public class CreditHandler {
             return false;
         }
     }
+
+    public boolean createStringCredit(String name) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO credits (name) VALUES (?)");
+            statement.setString(1, name);
+
+            return statement.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }
