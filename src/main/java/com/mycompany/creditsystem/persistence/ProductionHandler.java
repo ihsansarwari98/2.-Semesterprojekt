@@ -99,7 +99,7 @@ public class ProductionHandler {
 
     public boolean deleteProduction(int id) {
         try {
-            PreparedStatement deleteStatement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_subscriptions WHERE production_id = ?");
+            PreparedStatement deleteStatement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_relation WHERE production_id = ?");
             deleteStatement1.setInt(1, id);
             PreparedStatement deleteStatement2 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM productions WHERE production_id = ?");
             deleteStatement2.setInt(1, id);
@@ -157,7 +157,7 @@ public class ProductionHandler {
 
     public boolean addCreditAndRoleToProduction(int production_id, int credit_id, int role_id) {
         try {
-            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO production_credit_role_subscriptions (production_id, credit_id, role_id) VALUES (?,?,?)");
+            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO production_credit_role_relation (production_id, credit_id, role_id) VALUES (?,?,?)");
             updateStatement.setInt(1, production_id);
             updateStatement.setInt(2, credit_id);
             updateStatement.setInt(3, role_id);
@@ -170,11 +170,11 @@ public class ProductionHandler {
         }
     }
 
-    public boolean linkProductionToProductionCompany(int production_id, int production_company_id) {
+    public boolean linkProductionToUser(int production_id, int user_id) {
         try {
-            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO company_production_subscriptions (production_id, production_company_id) VALUES (?,?)");
+            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO production_access_relation (production_id, user_id) VALUES (?,?)");
             updateStatement.setInt(1, production_id);
-            updateStatement.setInt(2, production_company_id);
+            updateStatement.setInt(2, user_id);
 
             return updateStatement.execute();
 
@@ -184,11 +184,11 @@ public class ProductionHandler {
         }
     }
 
-    public boolean linkProductionToProducer(int production_id, int producer_id) {
+    public boolean unlinkProductionFromUser(int production_id, int user_id) {
         try {
-            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO producer_production_subscriptions (production_id, producer_id) VALUES (?,?)");
+            PreparedStatement updateStatement = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_access_relation WHERE production_id = ? AND user_id = ?");
             updateStatement.setInt(1, production_id);
-            updateStatement.setInt(2, producer_id);
+            updateStatement.setInt(2, user_id);
 
             return updateStatement.execute();
 
@@ -198,46 +198,30 @@ public class ProductionHandler {
         }
     }
 
-    public ArrayList<Production> getProductionsLinkedToProducer(int producer_id) {
+    public ArrayList<Production> getProductionsLinkedToUser(int user_id) {
         try {
-            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT productions.production_id, productions.title, productions.deadline, productions.status  FROM producer_production_subscriptions,users, productions WHERE producer_production_subscriptions.producer_id = users.user_id AND producer_id = ? AND producer_production_subscriptions.production_id = productions.production_id");
-            statement.setInt(1, producer_id);
-            ResultSet sqlReturnValues = statement.executeQuery();
-            ArrayList<Production> returnValue = new ArrayList<>();
-            while (sqlReturnValues.next()) {
-                returnValue.add(new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4)));
-            }
-            return returnValue;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public ArrayList<User> getProducersLinkedToProduction(int production_id){
-        try {
-            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT  users.id, users.name  FROM users, producer_production_subscriptions, productions WHERE productions.production_id = producer_production_supscriptions.production_id AND production_id = ? AND producer_production_subscriptions.producer_id = users.user_id");
-            statement.setInt(1,production_id);
-            ResultSet sqlReturnValues = statement.executeQuery();
-            ArrayList<User> returnValue = new ArrayList<>();
-            while(sqlReturnValues.next()){
-                returnValue.add(new User(sqlReturnValues.getInt(1),sqlReturnValues.getString(2)));
-            }
-            return returnValue;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public ArrayList<Production> getProductionsLinkedToProductionCompany(int user_id) {
-        try {
-            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT productions.production_id, productions.title, productions.deadline, productions.status  FROM company_production_subscriptions, users, productions WHERE company_production_subscriptions.production_company_id = users.user_id AND production_company_id = ? AND company_production_subscriptions.production_id = productions.production_id");
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT productions.production_id, productions.title, productions.deadline, productions.status  FROM production_access_relation, users, productions WHERE users.user_id = production_access_relation.user_id AND production_access_relation.user_id = ? AND users.user_id = production_access_relation.user_id AND production_access_relation.production_id = productions.production_id");
             statement.setInt(1, user_id);
             ResultSet sqlReturnValues = statement.executeQuery();
             ArrayList<Production> returnValue = new ArrayList<>();
             while (sqlReturnValues.next()) {
                 returnValue.add(new Production(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getTimestamp(3), sqlReturnValues.getInt(4)));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<User> getUsersLinkedToProduction(int production_id){
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT  users.user_id, users.name  FROM users, production_access_relation, productions WHERE productions.production_id = production_access_relation.production_id AND production_id = ? AND production_access_relation.user_id = users.user_id");
+            statement.setInt(1,production_id);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<User> returnValue = new ArrayList<>();
+            while(sqlReturnValues.next()){
+                returnValue.add(new User(sqlReturnValues.getInt(1),sqlReturnValues.getString(2)));
             }
             return returnValue;
         } catch (SQLException e) {

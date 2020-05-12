@@ -321,12 +321,7 @@ public class PrimaryController implements Initializable {
             enableElements(systemFacade.currentUser.getUser().getAccessRoleInt());
 
             // Sets myProductions
-            if (systemFacade.currentUser.getUser().getAccessRoleInt() == 1) {
-                systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToProducer(systemFacade.currentUser.getUser().getId()));
-
-            } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 2) {
-                systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToProductionCompany(systemFacade.currentUser.getUser().getId()));
-            }
+            systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToUser(systemFacade.currentUser.getUser().getId()));
 
             setNameAndRole();
             sidePanelBackground.getChildren().remove(loginAP);
@@ -356,13 +351,9 @@ public class PrimaryController implements Initializable {
     private boolean checkCanEdit() {
         // Checks if the active production isn't the home screen and the User is logged in
         // As well as if the User has access to the active production
-        if (systemFacade.getActiveProduction() != null &
-                systemFacade.currentUser.getUser() != null &&
-                ((systemFacade.currentUser.getUser().getAccessRoleInt() == 1 &&
-                        systemFacade.productionLogic.isProductionLinkedToProducer(systemFacade.getActiveProduction().getId(), systemFacade.currentUser.getUser().getId())) ||
-                        (systemFacade.currentUser.getUser().getAccessRoleInt() == 2 &&
-                                systemFacade.productionLogic.isProductionLinkedToProductionCompany(systemFacade.getActiveProduction().getId(), systemFacade.currentUser.getUser().getId())) ||
-                        (systemFacade.currentUser.getUser().getAccessRoleInt() == 3))) {
+        if (systemFacade.getActiveProduction() != null && systemFacade.currentUser.getUser() != null &&
+                (systemFacade.productionLogic.isProductionLinkedToUser(systemFacade.getActiveProduction().getId(), systemFacade.currentUser.getUser().getId()) ||
+                        systemFacade.currentUser.getUser().getAccessRoleInt() == 3)) { // accessRole admin
             loadEditElement(true);
             return true;
         } else {

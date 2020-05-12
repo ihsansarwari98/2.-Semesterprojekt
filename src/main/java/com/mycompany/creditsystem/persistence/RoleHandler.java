@@ -67,7 +67,7 @@ public class RoleHandler {
 
     public Role getRoleFromCredit(int production_id, int credit_id) {
         try {
-            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT roles.role_id, role_title FROM production_credit_role_subscriptions, roles WHERE production_credit_role_subscriptions.role_id = roles.role_id AND production_id = ? AND credit_id = ?");
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT roles.role_id, role_title FROM production_credit_role_relation, roles WHERE production_credit_role_relation.role_id = roles.role_id AND production_id = ? AND credit_id = ?");
             statement.setInt(1, production_id);
             statement.setInt(2, credit_id);
             ResultSet sqlReturnValues = statement.executeQuery();

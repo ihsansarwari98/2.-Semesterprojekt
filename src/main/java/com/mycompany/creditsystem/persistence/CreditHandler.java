@@ -33,7 +33,7 @@ public class CreditHandler {
 
     public ArrayList<Credit> getCredits(int production_id) {
         try {
-            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT credits.credit_id, credits.name FROM production_credit_role_subscriptions, credits, productions  WHERE production_credit_role_subscriptions.production_id = ? AND credits.credit_id = production_credit_role_subscriptions.credit_id AND productions.production_id = production_credit_role_subscriptions.production_id");
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT credits.credit_id, credits.name FROM production_credit_role_relation, credits, productions  WHERE production_credit_role_relation.production_id = ? AND credits.credit_id = production_credit_role_relation.credit_id AND productions.production_id = production_credit_role_relation.production_id");
             statement.setInt(1, production_id);
             ResultSet sqlReturnValues = statement.executeQuery();
             ArrayList<Credit> returnValue = new ArrayList<>();
@@ -49,7 +49,7 @@ public class CreditHandler {
 
     public boolean removeAllCreditsFromProduction(int production_id) {
         try {
-            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_subscriptions WHERE production_credit_role_subscriptions.production_id = ?");
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_relation WHERE production_credit_role_relation.production_id = ?");
             statement.setInt(1, production_id);
             return statement.execute();
         } catch (SQLException e) {
@@ -105,7 +105,7 @@ public class CreditHandler {
 
     public boolean deleteCreditRelation(int credit_id, int production_id) {
         try {
-            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_subscriptions WHERE credit_id = ? AND production_id = ?");
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_relation WHERE credit_id = ? AND production_id = ?");
             statement.setInt(1, credit_id);
             statement.setInt(2, production_id);
 
@@ -119,7 +119,7 @@ public class CreditHandler {
 
     public boolean deleteCreditFromSystem(int id) {
         try {
-            PreparedStatement statement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_subscriptions WHERE production_credit_role_subscriptions.credit_id = ?");
+            PreparedStatement statement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_relation WHERE production_credit_role_relation.credit_id = ?");
             statement1.setInt(1, id);
             PreparedStatement statement2 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM credits WHERE credit_id = ?");
             statement2.setInt(1, id);
@@ -135,7 +135,7 @@ public class CreditHandler {
 
     public boolean addCreditRelation(int production_id, int credit_id, int role_id) {
         try {
-            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO production_credit_role_subscriptions (production_id, credit_id, role_id) VALUES (?,?,?)");
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO production_credit_role_relation (production_id, credit_id, role_id) VALUES (?,?,?)");
             statement.setInt(1, production_id);
             statement.setInt(2, credit_id);
             statement.setInt(3, role_id);

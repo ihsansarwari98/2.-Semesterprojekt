@@ -52,8 +52,8 @@ public class UserHandler {
 
     public boolean deleteUser(int user_id) {
         try {
-            PreparedStatement statement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM company_producer_subscriptions WHERE producer_id = ?");
-            PreparedStatement statement2 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM producer_production_subscriptions WHERE producer_id = ?");
+            PreparedStatement statement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM company_producer_relation WHERE producer_id = ?");
+            PreparedStatement statement2 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_access_relation WHERE user_id = ?");
             PreparedStatement statement3 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM users WHERE user_id = ?");
             statement1.setInt(1, user_id);
             statement2.setInt(1, user_id);
