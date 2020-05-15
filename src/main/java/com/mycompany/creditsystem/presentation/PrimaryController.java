@@ -38,6 +38,13 @@ public class PrimaryController implements Initializable {
      * 0    = productions
      * 1    = credits
      * 2    = roles
+     *
+     * AccessRole:
+     * 0    = publicUser
+     * 1    = producer
+     * 2    = productionCompany
+     * 3    = admin
+     *
      */
 
     @FXML
@@ -244,7 +251,7 @@ public class PrimaryController implements Initializable {
         // Set the color and round the corners of the search bar
         searchBarBackground.setStyle("-fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + "; -fx-background-color: " + Info.forgroundColor + ";");
         searchRectangleBG.setFill(Info.accentGradient);
-        textFieldSearchBar.setUserData(0);
+        textFieldSearchBar.setUserData(SearchStatus.productions);
 
         // -- BACKGROUND
         // Set the color of the shade in the background
@@ -267,8 +274,8 @@ public class PrimaryController implements Initializable {
         loginRectangleBG.setFill(Info.accentGradient);
         rectangleLogoutSplitter.setFill(Info.accentGradient);
 
-        usernameTextField.setUserData(-1);
-        passwordTextField.setUserData(-1);
+        usernameTextField.setUserData(SearchStatus.notSearchable);
+        passwordTextField.setUserData(SearchStatus.notSearchable);
 
         // -- DESCRIPTION
         descriptionScrollPane.getStyleClass().add("dark-thumb");
@@ -285,10 +292,10 @@ public class PrimaryController implements Initializable {
     }
 
     private void getFocusedSearchField() {
-        // If the focused node is a textfield and the UserData isn't = -1 (meaning that the textfield is not for searching)
+        // If the focused node is a textfield and the UserData isn't = SearchStatus.notSearchable (meaning that the textfield is not for searching)
         if ((App.scene.focusOwnerProperty().get() instanceof TextField) &&
                 (App.scene.focusOwnerProperty().get().getUserData() != null) &&
-                (!App.scene.focusOwnerProperty().get().getUserData().equals(-1))) {
+                (!App.scene.focusOwnerProperty().get().getUserData().equals(SearchStatus.notSearchable))) {
             focusedTextField = (TextField) App.scene.focusOwnerProperty().get();
             StackPane stackPane = (StackPane) focusedTextField.getParent().getParent().getParent().getParent();
             Rectangle rectangle = (Rectangle) stackPane.getChildren().get(0);
@@ -431,7 +438,7 @@ public class PrimaryController implements Initializable {
         descriptionVBox.getChildren().add(hBox);
         scrollableEdit = true;
 
-        SearchField creditSearchField = createSearchField(1,
+        SearchField creditSearchField = createSearchField(SearchStatus.credits,
                 "",
                 300,
                 NodeOrientation.RIGHT_TO_LEFT);
@@ -440,7 +447,7 @@ public class PrimaryController implements Initializable {
 
         hBox.getChildren().add(createRemoveCreditElement());
 
-        SearchField roleSearchField = createSearchField(2,
+        SearchField roleSearchField = createSearchField(SearchStatus.roles,
                 "",
                 300,
                 NodeOrientation.LEFT_TO_RIGHT);
@@ -533,7 +540,7 @@ public class PrimaryController implements Initializable {
 
             } else {
                 // triggers if the search bar becomes empty while the using is typing
-                if (searchField.getTextField().getUserData().equals(0) && systemFacade.currentUser.getSearchHistory().size() > 0) {
+                if (searchField.getTextField().getUserData().equals(SearchStatus.productions) && systemFacade.currentUser.getSearchHistory().size() > 0) {
                     displaySearchHistory();
                     styleSearchResults(searchField);
                 } else {
@@ -545,7 +552,7 @@ public class PrimaryController implements Initializable {
             // triggers if the search bar is empty and just focused
             if (selectBlank) {
                 selectBlank = false;
-                if (searchField.getTextField().getUserData().equals(0)) {
+                if (searchField.getTextField().getUserData().equals(SearchStatus.productions)) {
                     displaySearchHistory();
                     styleSearchResults(searchField);
                 }
@@ -575,12 +582,12 @@ public class PrimaryController implements Initializable {
             titleText.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
             titleText.setFocusTraversable(true);
 
-            if (searchField.getTextField().getUserData().equals(0)) {
+            if (searchField.getTextField().getUserData().equals(SearchStatus.productions)) {
                 titleText.setPadding(new Insets(0, 0, 0, mainSearchResultTextPadding));
-            } else if (searchField.getTextField().getUserData().equals(1)) {
+            } else if (searchField.getTextField().getUserData().equals(SearchStatus.credits)) {
                 AnchorPane.setRightAnchor(titleText, (double) 0);
                 titleText.setPadding(new Insets(0, searchResultTextPadding, 0, 0));
-            } else if (searchField.getTextField().getUserData().equals(2)) {
+            } else if (searchField.getTextField().getUserData().equals(SearchStatus.roles)) {
                 AnchorPane.setLeftAnchor(titleText, (double) 0);
                 titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
             }
@@ -612,14 +619,14 @@ public class PrimaryController implements Initializable {
 
     // Makes the search text white when focused and clicking ENTER searches the focused text
     private void handleSearchFocus() {
-        if (!focusedSearchField.getTextField().getUserData().equals(-1)) {
+        if (!focusedSearchField.getTextField().getUserData().equals(SearchStatus.notSearchable)) {
             ArrayList search = new ArrayList();
 
-            if (focusedSearchField.getTextField().getUserData().equals(0)) {
+            if (focusedSearchField.getTextField().getUserData().equals(SearchStatus.productions)) {
                 search = systemFacade.productionLogic.getProductions(focusedTextField.getText());
-            } else if (focusedSearchField.getTextField().getUserData().equals(1)) {
+            } else if (focusedSearchField.getTextField().getUserData().equals(SearchStatus.credits)) {
                 search = systemFacade.creditLogic.getCredits(focusedTextField.getText());
-            } else if (focusedSearchField.getTextField().getUserData().equals(2)) {
+            } else if (focusedSearchField.getTextField().getUserData().equals(SearchStatus.roles)) {
                 search = systemFacade.roleLogic.getRoles(focusedTextField.getText());
             } else {
                 System.out.println("error");
@@ -676,7 +683,7 @@ public class PrimaryController implements Initializable {
     private void handleSearch(SearchField searchField) { // TODO: REWORK EVERYTHING
 
         if (searchField != null && !searchField.getTextField().getText().isBlank()) {
-            if (searchField.getTextField().getUserData().equals(0)) {
+            if (searchField.getTextField().getUserData().equals(SearchStatus.productions)) {
                 if (!searchField.getTextField().getText().isBlank() && systemFacade.productionLogic.getProduction(searchField.getTextField().getText()) != null) {
                     // if active production is null (home screen) -> load elements
                     if (systemFacade.getActiveProduction() == null) {
@@ -703,7 +710,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
-    private SearchField createSearchField(Object userData, String textFieldText, int width, NodeOrientation orientation) {
+    private SearchField createSearchField(SearchStatus userData, String textFieldText, int width, NodeOrientation orientation) {
         SearchField searchField = new SearchField();
 
         // Setup the order of the searchField
@@ -802,7 +809,7 @@ public class PrimaryController implements Initializable {
                 descriptionVBox.getChildren().add(hBox);
 
                 // Create credit name searchField
-                SearchField creditSearchField = createSearchField(1,
+                SearchField creditSearchField = createSearchField(SearchStatus.credits,
                         creditWithRoleObject.getKey().toString(),
                         searchFieldLength,
                         NodeOrientation.RIGHT_TO_LEFT);
@@ -813,7 +820,7 @@ public class PrimaryController implements Initializable {
                 hBox.getChildren().add(createRemoveCreditElement());
 
                 // Create credit role searchField
-                SearchField roleSearchField = createSearchField(2,
+                SearchField roleSearchField = createSearchField(SearchStatus.roles,
                         creditWithRoleObject.getValue().toString(),
                         searchFieldLength,
                         NodeOrientation.LEFT_TO_RIGHT);
@@ -882,13 +889,13 @@ public class PrimaryController implements Initializable {
             // If the credit doesn't exist, add it to the system
             if (systemFacade.creditLogic.getCredits(creditNameTextField.getText()).size() <= 0) {
                 System.out.println("Adding " + creditNameTextField.getText() + " to the database in Credits");
-                systemFacade.creditLogic.createCredit(new Credit(creditNameTextField.getText()));
+                systemFacade.creditLogic.createStringCredit(creditNameTextField.getText());
             }
 
             // If the role doesn't exist, add it to the system
             if (systemFacade.roleLogic.getRoles(creditRoleTextField.getText()).size() <= 0) {
                 System.out.println("Adding " + creditRoleTextField.getText() + " to the database in Roles");
-                systemFacade.roleLogic.createRole(new Role(creditRoleTextField.getText()));
+                systemFacade.roleLogic.createStringRole(creditRoleTextField.getText());
             }
 
             int roleId = systemFacade.roleLogic.getRoles(creditRoleTextField.getText()).get(0).getId();
@@ -913,9 +920,9 @@ public class PrimaryController implements Initializable {
             Label title = new Label(systemFacade.currentUser.getMyProductions().get(i).getTitle());
             Label deadline = new Label(systemFacade.currentUser.getMyProductions().get(i).getDeadlineString());
 
-            if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.producer) {
+            if (systemFacade.currentUser.getUser().getAccessRoleInt() == 1) {
                 programList.getChildren().add(hb);
-            } else if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.productionCompany) {
+            } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 2) {
                 programListProductionCompany.getChildren().add(hb);
             }
 
@@ -923,7 +930,7 @@ public class PrimaryController implements Initializable {
             ap.getChildren().add(vb);
             vb.getChildren().addAll(title, deadline);
             title.setWrapText(true);
-            ap.setUserData(0);
+            ap.setUserData(SearchStatus.productions);
             HBox.setHgrow(ap, Priority.ALWAYS);
 
             hb.setSpacing(25);
@@ -942,7 +949,7 @@ public class PrimaryController implements Initializable {
                 AnchorPane source = (AnchorPane) e.getSource();
                 VBox vBox = (VBox) source.getChildren().get(0);
                 Label productionTitle = (Label) vBox.getChildren().get(0);
-                if (source.getUserData().equals(0)) {
+                if (source.getUserData().equals(SearchStatus.productions)) {
                     getFocusedSearchField();
                     focusedSearchField = new SearchField(searchBarStackPane, searchRectangleBG, searchBarVBox, searchBarBackground, searchBarHBox, textFieldSearchBar, searchResultScrollPane, searchResults);
                     focusedSearchField.setSearchResults(systemFacade.productionLogic.getProductions(focusedTextField.getText()));
@@ -960,7 +967,7 @@ public class PrimaryController implements Initializable {
     // Handles when the user clicks on the background to deselect what was previously focused
     private void handleDeselect(SearchField searchField) {
         if (searchField != null) {
-            if (!searchField.getTextField().getUserData().equals(-1)) {
+            if (!searchField.getTextField().getUserData().equals(SearchStatus.notSearchable)) {
                 searchField.getRectangle().setHeight(searchField.getAnchorPaneBackground().getHeight());
                 searchField.getvBoxResults().getChildren().clear();
             }
@@ -970,7 +977,7 @@ public class PrimaryController implements Initializable {
     @FXML
     private void handleDeselect() {
         if (focusedSearchField != null) {
-            if (!focusedSearchField.getTextField().getUserData().equals(-1)) {
+            if (!focusedSearchField.getTextField().getUserData().equals(SearchStatus.notSearchable)) {
                 focusedSearchField.getRectangle().setHeight(focusedSearchField.getAnchorPaneBackground().getHeight());
                 focusedSearchField.getvBoxResults().getChildren().clear();
             }
