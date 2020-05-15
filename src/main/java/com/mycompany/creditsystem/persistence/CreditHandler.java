@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CreditHandler {
 
@@ -46,6 +47,24 @@ public class CreditHandler {
             return null;
         }
     }
+
+    public HashMap<Credit, Role> getCreditWithRole(int production_id) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT credits.credit_id, credits.name, roles.role_id, roles.role_title FROM production_credit_role_relation, credits, productions, roles  WHERE production_credit_role_relation.production_id = ? AND credits.credit_id = production_credit_role_relation.credit_id AND productions.production_id = production_credit_role_relation.production_id AND production_credit_role_relation.role_id = roles.role_id");
+            statement.setInt(1, production_id);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            HashMap<Credit, Role> returnValue = new HashMap<>();
+            while (sqlReturnValues.next()) {
+                returnValue.put(new Credit(sqlReturnValues.getInt(1), sqlReturnValues.getString(2)), new Role (sqlReturnValues.getInt(3), sqlReturnValues.getString(4)));
+            }
+            return returnValue;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
     public boolean removeAllCreditsFromProduction(int production_id) {
         try {
@@ -153,6 +172,19 @@ public class CreditHandler {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("UPDATE credits SET name = ? WHERE credit_id = ?");
             statement.setString(1, name);
             statement.setInt(2, id);
+
+            return statement.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean createStringCredit(String name) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO credits (name) VALUES (?)");
+            statement.setString(1, name);
 
             return statement.execute();
 

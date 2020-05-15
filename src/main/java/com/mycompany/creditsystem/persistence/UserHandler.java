@@ -1,7 +1,7 @@
 package com.mycompany.creditsystem.persistence;
 
-import com.mycompany.creditsystem.domain.logic.MD5Encryption;
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,9 +33,27 @@ public class UserHandler {
         }
     }
 
+    public String encrypt(String password) {
+
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     public boolean createUser(User user) {
-        MD5Encryption encryption = new MD5Encryption();
-        String tempPassword = encryption.encrypt(user.getPassword());
+        String tempPassword = encrypt(user.getPassword());
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO users (name, username, password, access_role) VALUES (?,?,?,?)");
             statement.setString(1, user.getName());
@@ -71,8 +89,7 @@ public class UserHandler {
 
     public User getUserLogin(String username, String password) {
         try {
-            MD5Encryption encryption = new MD5Encryption();
-            String tempPassword = encryption.encrypt(password);
+            String tempPassword = encrypt(password);
 
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
             statement.setString(1, username);

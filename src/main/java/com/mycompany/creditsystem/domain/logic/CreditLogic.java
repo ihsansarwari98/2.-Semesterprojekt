@@ -2,8 +2,10 @@ package com.mycompany.creditsystem.domain.logic;
 
 import com.mycompany.creditsystem.persistence.Credit;
 import com.mycompany.creditsystem.persistence.CreditHandler;
+import com.mycompany.creditsystem.persistence.Role;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CreditLogic{
 
@@ -19,6 +21,9 @@ public class CreditLogic{
         return CreditHandler.getInstance().createCredit(credit);
     }
 
+    public boolean createStringCredit(String name){
+        return CreditHandler.getInstance().createStringCredit(name);
+    }
     public boolean updateCreditName(String name, int id) {
         return CreditHandler.getInstance().updateCreditName(name, id);
     }
@@ -45,5 +50,9 @@ public class CreditLogic{
 
     public ArrayList<Credit> getCredits(String namePart) {
         return CreditHandler.getInstance().getCredits(namePart);
+    }
+
+    public HashMap<Credit, Role> getCreditWithRole(int production_id) {
+        return CreditHandler.getInstance().getCreditWithRole(production_id);
     }
 }
