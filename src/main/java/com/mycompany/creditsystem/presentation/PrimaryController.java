@@ -423,7 +423,7 @@ public class PrimaryController implements Initializable {
         passwordLabel.setTextFill(Info.accentGradient);
         passwordLabel.setStyle("-fx-font-weight: bold");
         Label producerLabel = new Label();
-        producerLabel.setText("PRODUCER");
+        producerLabel.setText("RESPONSIBLE PRODUCER");
         producerLabel.setTextFill(Info.accentGradient);
         producerLabel.setStyle("-fx-font-weight: bold");
 
@@ -460,11 +460,12 @@ public class PrimaryController implements Initializable {
         HBox hBox3 = new HBox();
         producerTextField = new TextField();
         producerTextField.setPromptText("Producer");
-        hBox3.getChildren().add(producerTextField);
         VBox producerVBox = new VBox();
-        producerVBox.getChildren().addAll(producerLabel, producerTextField);
+        producerVBox.setAlignment(Pos.CENTER);
+        producerVBox.getChildren().add(producerLabel);
         hBox3.getChildren().add(producerVBox);
 
+        // Button hBox
         HBox hBox4 = new HBox();
         StackPane buttonStackPane = new StackPane();
         hBox4.getChildren().add(buttonStackPane);
@@ -538,27 +539,34 @@ public class PrimaryController implements Initializable {
         styleSearchResults(passwordField);
         usernameField.setTextField(passwordTextField1);
 
-          String addType = getAddType();
-        switch (addType) {
-                case "production":
-                    descriptionVBox.getChildren().addAll(hBox1, hBox3, hBox4);
-                    break;
-                case "company":
-                    descriptionVBox.getChildren().addAll(hBox1,hBox2, hBox4);
-                case "producer":
-                    descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox4);
-                    break;
-                default:
-                    System.out.println("Something went wrong...");
-                    break;
+        SearchField producerField = createSearchField(SearchStatus.producers,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        producerVBox.getChildren().add(producerField.getStackPane());
+        styleSearchResults(producerField);
+        producerField.setTextField(producerTextField);
 
-            }
+        //  String addType = getAddType();
+        switch (addType) {
+            case "production":
+                descriptionVBox.getChildren().addAll(hBox1, hBox3, hBox4);
+                break;
+            case "company":
+                descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox4);
+            case "producer":
+                descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox4);
+                break;
+            default:
+                System.out.println("Something went wrong...");
+                break;
+
+        }
 
 
     }
 
     void submitButtonHandler() {
-        String addType = getAddType();
         switch (addType) {
             case "production":
 

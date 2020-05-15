@@ -142,43 +142,6 @@
                                                 <Font name="System Bold" size="20.0" />
                                              </font>
                                           </Label>
-                                          <StackPane onMouseClicked="#addProductionHandler" prefHeight="26.0" prefWidth="19.0">
-                                             <children>
-                                                <Rectangle fx:id="addProductionRectangle" arcHeight="5.0" arcWidth="5.0" height="2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="10.0">
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor>
-                                                   <StackPane.margin>
-                                                      <Insets />
-                                                   </StackPane.margin>
-                                                   <fill>
-                                                      <LinearGradient endX="1.0" endY="1.0" startY="1.0">
-                                                         <stops>
-                                                            <Stop color="#0a0a0a" />
-                                                            <Stop color="#0a0a0a" offset="0.007434944237918215" />
-                                                            <Stop color="#57ffcd" offset="0.007434944237918215" />
-                                                            <Stop color="#74c5ff" offset="1.0" />
-                                                         </stops>
-                                                      </LinearGradient>
-                                                   </fill>
-                                                </Rectangle>
-                                                <Rectangle fx:id="addProductionRectangle1" arcHeight="5.0" arcWidth="5.0" height="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0">
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor>
-                                                   <fill>
-                                                      <LinearGradient endX="1.0" endY="1.0" startY="1.0">
-                                                         <stops>
-                                                            <Stop color="#0a0a0a" />
-                                                            <Stop color="#0a0a0a" offset="0.007434944237918215" />
-                                                            <Stop color="#57ffcd" offset="0.007434944237918215" />
-                                                            <Stop color="#74c5ff" offset="1.0" />
-                                                         </stops>
-                                                      </LinearGradient>
-                                                   </fill>
-                                                </Rectangle>
-                                             </children>
-                                          </StackPane>
                                        </children>
                                     </HBox>
                                     <ScrollPane fx:id="productionScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
@@ -198,18 +161,65 @@
                         </AnchorPane>
                         <AnchorPane fx:id="mineProduktionerProductionCompany" VBox.vgrow="ALWAYS">
                            <children>
-                              <TitledPane text="Mine produktioner" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                                 <content>
-                                    <ScrollPane fx:id="productionScrollPaneProductionCompany" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                              <HBox layoutX="28.0" prefHeight="100.0" prefWidth="279.0">
+                                 <children>
+                                    <TitledPane contentDisplay="RIGHT" prefHeight="77.0" prefWidth="211.0" text="Mine produktioner" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
                                        <content>
-                                          <VBox fx:id="programListProductionCompany" spacing="20.0" />
+                                          <ScrollPane fx:id="productionScrollPaneProductionCompany" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                                             <content>
+                                                <VBox fx:id="programListProductionCompany" spacing="20.0" />
+                                             </content>
+                                          </ScrollPane>
                                        </content>
-                                    </ScrollPane>
-                                 </content>
-                              </TitledPane>
+                                    </TitledPane>
+                                    <StackPane alignment="TOP_CENTER" onMouseClicked="#addProductionHandler" prefHeight="100.0" prefWidth="4.0">
+                                       <children>
+                                          <Rectangle fx:id="addProductionRectangle1" arcHeight="5.0" arcWidth="5.0" height="2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="10.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <StackPane.margin>
+                                                <Insets top="9.0" />
+                                             </StackPane.margin>
+                                             <fill>
+                                                <LinearGradient endX="1.0" endY="1.0" startY="1.0">
+                                                   <stops>
+                                                      <Stop color="#0a0a0a" />
+                                                      <Stop color="#0a0a0a" offset="0.007434944237918215" />
+                                                      <Stop color="#57ffcd" offset="0.007434944237918215" />
+                                                      <Stop color="#74c5ff" offset="1.0" />
+                                                   </stops>
+                                                </LinearGradient>
+                                             </fill>
+                                          </Rectangle>
+                                          <Rectangle fx:id="addProductionRectangle" arcHeight="5.0" arcWidth="5.0" height="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="2.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <fill>
+                                                <LinearGradient endX="1.0" endY="1.0" startY="1.0">
+                                                   <stops>
+                                                      <Stop color="#0a0a0a" />
+                                                      <Stop color="#0a0a0a" offset="0.007434944237918215" />
+                                                      <Stop color="#57ffcd" offset="0.007434944237918215" />
+                                                      <Stop color="#74c5ff" offset="1.0" />
+                                                   </stops>
+                                                </LinearGradient>
+                                             </fill>
+                                             <StackPane.margin>
+                                                <Insets top="5.0" />
+                                             </StackPane.margin>
+                                          </Rectangle>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets top="10.0" />
+                                       </HBox.margin>
+                                    </StackPane>
+                                 </children>
+                              </HBox>
                            </children>
                            <VBox.margin>
                               <Insets bottom="30.0" />
