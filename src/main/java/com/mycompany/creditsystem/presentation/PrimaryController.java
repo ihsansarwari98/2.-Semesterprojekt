@@ -5,6 +5,8 @@ import com.mycompany.creditsystem.domain.logic.*;
 import java.net.URL;
 import java.sql.BatchUpdateException;
 import java.util.*;
+
+import com.mycompany.creditsystem.persistence.User;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -288,6 +290,9 @@ public class PrimaryController implements Initializable {
 
         usernameTextField.setUserData(SearchStatus.notSearchable);
         passwordTextField.setUserData(SearchStatus.notSearchable);
+        // Set the color of side bar buttons
+        addProductionRectangle.setFill(Info.accentGradient);
+        addProductionRectangle1.setFill(Info.accentGradient);
 
         // -- DESCRIPTION
         descriptionScrollPane.getStyleClass().add("dark-thumb");
@@ -355,7 +360,7 @@ public class PrimaryController implements Initializable {
         if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.admin) {
             companyTextField.setPromptText("Associated Production company");
         } else {
-            companyTextField.setText("Your company");
+            companyTextField.setText(systemFacade.currentUser.getUser().getName());
             companyTextField.setEditable(false);
             companyTextField.setCursor(Cursor.DEFAULT);
 
@@ -386,6 +391,7 @@ public class PrimaryController implements Initializable {
         backgroundAP.getChildren().remove(logoVBox);
         backgroundAP.getChildren().add(titleAndDescriptionBP);
 
+        // Setting up layout for formula
         int searchFieldLength = 300;
         descriptionVBox.getChildren().clear();
         descriptionVBox.setSpacing(10);
@@ -398,38 +404,55 @@ public class PrimaryController implements Initializable {
 
 
         Label nameLabel = new Label();
-        nameLabel.setText("Name:");
+        nameLabel.setText("NAME");
+        nameLabel.setTextFill(Info.accentGradient);
+        nameLabel.setStyle("-fx-font-weight: bold");
         Label companyLabel = new Label();
-        companyLabel.setText("Company:");
+        companyLabel.setText("COMPANY");
+        companyLabel.setTextFill(Info.accentGradient);
+        companyLabel.setStyle("-fx-font-weight: bold");
         Label usernameLabel = new Label();
-        usernameLabel.setText("Username:");
+        usernameLabel.setText("USERNAME");
+        usernameLabel.setTextFill(Info.accentGradient);
+        usernameLabel.setStyle("-fx-font-weight: bold");
         Label passwordLabel = new Label();
-        passwordLabel.setText("Password:");
+        passwordLabel.setText("PASSWORD");
+        passwordLabel.setTextFill(Info.accentGradient);
+        passwordLabel.setStyle("-fx-font-weight: bold");
         Label producerLabel = new Label();
-        producerLabel.setText("Producer:");
+        producerLabel.setText("PRODUCER");
+        producerLabel.setTextFill(Info.accentGradient);
+        producerLabel.setStyle("-fx-font-weight: bold");
 
+
+        // Setting up HBOXes to create form.
         HBox hBox1 = new HBox();
+        hBox1.setSpacing(15);
         nameTextField = new TextField();
         nameTextField.setPromptText("Name");
         companyTextField = new TextField();
         companyTextField.setPromptText("Company Name");
         VBox nameVBox = new VBox();
+        nameVBox.setAlignment(Pos.CENTER);
         VBox companyVBox = new VBox();
-        nameVBox.getChildren().addAll(nameLabel, nameTextField);
-        companyVBox.getChildren().addAll(companyLabel, companyTextField);
+        companyVBox.setAlignment(Pos.CENTER);
+        nameVBox.getChildren().add(nameLabel);
+        companyVBox.getChildren().add(companyLabel);
         hBox1.getChildren().addAll(nameVBox, companyVBox);
 
         HBox hBox2 = new HBox();
+        hBox2.setSpacing(15);
         usernameTextField1 = new TextField();
         usernameTextField1.setPromptText("Username");
         passwordTextField1 = new TextField();
         passwordTextField1.setPromptText("Password");
         VBox usernameVBox = new VBox();
+        usernameVBox.setAlignment(Pos.CENTER);
         VBox passwordVBox = new VBox();
-        usernameVBox.getChildren().addAll(usernameLabel, usernameTextField1);
-        passwordVBox.getChildren().addAll(passwordLabel, passwordTextField1);
+        passwordVBox.setAlignment(Pos.CENTER);
+        usernameVBox.getChildren().add(usernameLabel);
+        passwordVBox.getChildren().add(passwordLabel);
         hBox2.getChildren().addAll(usernameVBox, passwordVBox);
-
 
         HBox hBox3 = new HBox();
         producerTextField = new TextField();
@@ -439,7 +462,46 @@ public class PrimaryController implements Initializable {
         producerVBox.getChildren().addAll(producerLabel, producerTextField);
         hBox3.getChildren().add(producerVBox);
 
+        // Adding SearchField to function as text field, with proper styling.
+        SearchField nameField = createSearchField(SearchStatus.notSearchable,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        nameVBox.getChildren().add(nameField.getStackPane());
+        styleSearchResults(nameField);
+        nameField.setTextField(nameTextField);
+        nameField.getTextField().setPromptText("Test");
+
+        // TODO USERDATA skal ændres så den kan søge igennem virksomheder.
+        SearchField companyField = createSearchField(SearchStatus.productionCompanies,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        companyVBox.getChildren().add(companyField.getStackPane());
+        styleSearchResults(companyField);
+        companyField.setTextField(companyTextField);
+        companyTextField.setText(systemFacade.currentUser.getUser().getName());
+
+        SearchField usernameField = createSearchField(SearchStatus.notSearchable,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        usernameVBox.getChildren().add(usernameField.getStackPane());
+        styleSearchResults(usernameField);
+        usernameField.setTextField(usernameTextField1);
+
+        SearchField passwordField = createSearchField(SearchStatus.notSearchable,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        passwordVBox.getChildren().add(passwordField.getStackPane());
+        styleSearchResults(passwordField);
+        usernameField.setTextField(passwordTextField1);
+
+
+
         descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox3);
+
 
     }
 
@@ -450,8 +512,7 @@ public class PrimaryController implements Initializable {
 
         switch (addType) {
             case "production":
-                Production p = new Production(nameTextField.getText());
-                systemFacade.productionLogic.createProduction(p);
+
 
 
                 setAddType(null);
