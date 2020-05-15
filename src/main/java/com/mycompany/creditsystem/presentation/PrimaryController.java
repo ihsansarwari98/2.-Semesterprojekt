@@ -478,7 +478,7 @@ public class PrimaryController implements Initializable {
         Label buttonLabel = new Label("SUBMIT");
         buttonLabel.setTextFill(Color.WHITE);
         buttonStackPane.getChildren().addAll(buttonRectangle, buttonLabel);
-
+        // Action method for submit button
         buttonStackPane.setCursor(Cursor.HAND);
         buttonStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -547,7 +547,7 @@ public class PrimaryController implements Initializable {
         styleSearchResults(producerField);
         producerField.setTextField(producerTextField);
 
-        //  String addType = getAddType();
+        // Switch statement to add proper HBoxes depending on addType.
         switch (addType) {
             case "production":
                 descriptionVBox.getChildren().addAll(hBox1, hBox3, hBox4);
@@ -564,26 +564,6 @@ public class PrimaryController implements Initializable {
         }
 
 
-    }
-
-    void submitButtonHandler() {
-        switch (addType) {
-            case "production":
-
-                systemFacade.productionLogic.createProduction(nameTextField.getText());
-                System.out.println("Test Complete");
-
-                break;
-            case "company":
-
-                break;
-            case "producer":
-
-                break;
-            default:
-                System.out.println("Something went wrong...");
-                break;
-        }
     }
 
     @FXML
