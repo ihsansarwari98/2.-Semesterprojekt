@@ -13,6 +13,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -26,6 +27,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -352,8 +354,9 @@ public class PrimaryController implements Initializable {
     // Method is used for adding new Productions
     @FXML
     void addProductionHandler(MouseEvent event) {
-        addNewHandler();
         setAddType("production");
+        addNewHandler();
+
         descriptionTitleText.setText("ADD PRODUCTION");
 
         nameTextField.setPromptText("Name");
@@ -371,8 +374,9 @@ public class PrimaryController implements Initializable {
     }
 
     void addProductionCompanyHandler() {
-        addNewHandler();
         setAddType("company");
+        addNewHandler();
+
         descriptionTitleText.setText("ADD COMPANY");
 
         companyTextField.setPromptText("Production company name");
@@ -400,7 +404,6 @@ public class PrimaryController implements Initializable {
 
         descriptionHBoxHeader.setFillHeight(false);
         descriptionHBoxHeader.setPrefWidth(searchFieldLength);
-
 
 
         Label nameLabel = new Label();
@@ -462,6 +465,43 @@ public class PrimaryController implements Initializable {
         producerVBox.getChildren().addAll(producerLabel, producerTextField);
         hBox3.getChildren().add(producerVBox);
 
+        HBox hBox4 = new HBox();
+        StackPane buttonStackPane = new StackPane();
+        hBox4.getChildren().add(buttonStackPane);
+        Rectangle buttonRectangle = new Rectangle();
+        buttonRectangle.setArcHeight(40);
+        buttonRectangle.setArcWidth(40);
+        buttonRectangle.setHeight(35);
+        buttonRectangle.setWidth(100);
+        buttonRectangle.setFill(Info.accentGradient);
+        Label buttonLabel = new Label("SUBMIT");
+        buttonLabel.setTextFill(Color.WHITE);
+        buttonStackPane.getChildren().addAll(buttonRectangle, buttonLabel);
+
+        buttonStackPane.setCursor(Cursor.HAND);
+        buttonStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                String addType = getAddType();
+                switch (addType) {
+                    case "production":
+                        systemFacade.productionLogic.createProduction(nameTextField.getText());
+                        System.out.println("Test Complete");
+
+                        break;
+                    case "company":
+
+                        break;
+                    case "producer":
+
+                        break;
+                    default:
+                        System.out.println("Something went wrong...");
+                        break;
+                }
+            }
+        });
+
         // Adding SearchField to function as text field, with proper styling.
         SearchField nameField = createSearchField(SearchStatus.notSearchable,
                 "",
@@ -498,40 +538,44 @@ public class PrimaryController implements Initializable {
         styleSearchResults(passwordField);
         usernameField.setTextField(passwordTextField1);
 
+          String addType = getAddType();
+        switch (addType) {
+                case "production":
+                    descriptionVBox.getChildren().addAll(hBox1, hBox3, hBox4);
+                    break;
+                case "company":
+                    descriptionVBox.getChildren().addAll(hBox1,hBox2, hBox4);
+                case "producer":
+                    descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox4);
+                    break;
+                default:
+                    System.out.println("Something went wrong...");
+                    break;
 
-
-        descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox3);
+            }
 
 
     }
 
-    // Handler for Submit button in window.
-    @FXML
-    void submitButtonHandler(MouseEvent event) {
+    void submitButtonHandler() {
         String addType = getAddType();
-
         switch (addType) {
             case "production":
 
+                systemFacade.productionLogic.createProduction(nameTextField.getText());
+                System.out.println("Test Complete");
 
-
-                setAddType(null);
                 break;
             case "company":
-                setAddType(null);
+
                 break;
             case "producer":
-                setAddType(null);
+
                 break;
             default:
-                setAddType(null);
                 System.out.println("Something went wrong...");
                 break;
-
-
         }
-
-
     }
 
     @FXML

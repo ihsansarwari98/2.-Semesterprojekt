@@ -25,6 +25,11 @@ public class ProductionLogic {
         return ProductionHandler.getInstance().createProduction(production);
     }
 
+    public boolean createProduction(String production) {
+        Production p = new Production(production);
+        return ProductionHandler.getInstance().createProduction(p);
+    }
+
     public boolean deleteProduction(int id) {
         return ProductionHandler.getInstance().deleteProduction(id);
     }
