@@ -24,6 +24,10 @@ public class UserLogic {
         return UserHandler.getInstance().createUser(user);
     }
 
+    public int getIDFromName(String name) {
+        return UserHandler.getInstance().getUser(name).getId();
+    }
+
     public boolean deleteUser(int user_id) {
         return UserHandler.getInstance().deleteUser(user_id);
     }

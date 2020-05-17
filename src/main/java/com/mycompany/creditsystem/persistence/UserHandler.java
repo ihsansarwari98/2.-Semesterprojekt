@@ -33,6 +33,21 @@ public class UserHandler {
         }
     }
 
+    public User getUser(String name) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM users WHERE name = ?");
+            statement.setString(1, name);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            if (!sqlReturnValues.next()) {
+                return null;
+            }
+            return new User(sqlReturnValues.getInt(1), sqlReturnValues.getString(2));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     public String encrypt(String password) {
 
         MessageDigest md = null;

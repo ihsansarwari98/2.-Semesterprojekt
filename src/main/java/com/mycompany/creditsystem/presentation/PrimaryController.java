@@ -356,33 +356,26 @@ public class PrimaryController implements Initializable {
     void addProductionHandler(MouseEvent event) {
         setAddType("production");
         addNewHandler();
-
         descriptionTitleText.setText("ADD PRODUCTION");
-
-        nameTextField.setPromptText("Name");
-        if (systemFacade.currentUser.getUser().getAccessRole() == User.AccessRole.admin) {
-            companyTextField.setPromptText("Associated Production company");
-        } else {
-            companyTextField.setText(systemFacade.currentUser.getUser().getName());
-            companyTextField.setEditable(false);
-            companyTextField.setCursor(Cursor.DEFAULT);
-
-            // TODO Need a method for getting production company for current user.
-        }
-
-
     }
+
 
     void addProductionCompanyHandler() {
         setAddType("company");
         addNewHandler();
-
         descriptionTitleText.setText("ADD COMPANY");
+    }
 
-        companyTextField.setPromptText("Production company name");
-        usernameTextField.setPromptText("Username");
-        passwordTextField.setPromptText("Temporary password");
+    void addProducerHandler() {
+        setAddType("producer");
+        addNewHandler();
+        descriptionTitleText.setText("ADD PRODUCER");
+    }
 
+    void addAdministratorHandler() {
+        setAddType("administrator");
+        addNewHandler();
+        descriptionTitleText.setText("ADD ADMINISTRATOR");
     }
 
 
@@ -480,14 +473,80 @@ public class PrimaryController implements Initializable {
         buttonStackPane.getChildren().addAll(buttonRectangle, buttonLabel);
         // Action method for submit button
         buttonStackPane.setCursor(Cursor.HAND);
+
+        // Adding SearchField to function as text field, with proper styling.
+        SearchField nameField = createSearchField(SearchStatus.notSearchable,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        nameVBox.getChildren().add(nameField.getStackPane());
+        styleSearchResults(nameField);
+        nameField.getTextField().setPromptText("Name");
+
+        SearchField companyField = createSearchField(SearchStatus.productionCompanies,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        companyVBox.getChildren().add(companyField.getStackPane());
+        styleSearchResults(companyField);
+        companyField.getTextField().setPromptText("Associated company name");
+        if (systemFacade.currentUser.getUser().getAccessRole() != User.AccessRole.admin) {
+            companyField.getTextField().setText(systemFacade.currentUser.getUser().getName());
+            companyField.getTextField().setEditable(false);
+            companyField.getTextField().setCursor(Cursor.DEFAULT);
+            companyLabel.setText("YOUR COMPANY");
+        }
+
+        SearchField usernameField = createSearchField(SearchStatus.notSearchable,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        usernameVBox.getChildren().add(usernameField.getStackPane());
+        styleSearchResults(usernameField);
+        usernameField.getTextField().setPromptText("Username");
+
+        SearchField passwordField = createSearchField(SearchStatus.notSearchable,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        passwordVBox.getChildren().add(passwordField.getStackPane());
+        styleSearchResults(passwordField);
+        passwordField.getTextField().setPromptText("Password");
+
+        SearchField producerField = createSearchField(SearchStatus.producers,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        producerVBox.getChildren().add(producerField.getStackPane());
+        styleSearchResults(producerField);
+        producerField.getTextField().setPromptText("Associated producer ID");
+
+        // Creating method for getting TextField and submitting to Database
         buttonStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 String addType = getAddType();
+                int userID = 0;
                 switch (addType) {
+                    // TODO KODE BODY FOR METODER
                     case "production":
-                        systemFacade.productionLogic.createProduction(nameTextField.getText());
-                        System.out.println("Test Complete");
+                        String currentName = nameField.getTextField().getText();
+                        systemFacade.productionLogic.createProduction(currentName);
+
+                        if (!producerField.getTextField().getText().isBlank()) {
+                            userID = systemFacade.userLogic.getIDFromName(producerField.getTextField().getText());
+                            systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(currentName).getId(), userID);
+                            System.out.println(userID + " has been linked to production: " + currentName);
+                        }
+
+                        if (!companyField.getTextField().getText().isBlank()) {
+                            userID = systemFacade.userLogic.getIDFromName(companyField.getTextField().getText());
+                            systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(currentName).getId(), userID);
+                            System.out.println(userID + " has been linked to production: " + currentName);
+                        }
+
+                        System.out.println(userID + " is the ID of Responsible Producer");
+                        System.out.println(nameField.getTextField().getText() + " has been added to the system!");
 
                         break;
                     case "company":
@@ -503,57 +562,13 @@ public class PrimaryController implements Initializable {
             }
         });
 
-        // Adding SearchField to function as text field, with proper styling.
-        SearchField nameField = createSearchField(SearchStatus.notSearchable,
-                "",
-                300,
-                NodeOrientation.LEFT_TO_RIGHT);
-        nameVBox.getChildren().add(nameField.getStackPane());
-        styleSearchResults(nameField);
-        nameField.setTextField(nameTextField);
-        nameField.getTextField().setPromptText("Test");
-
-        // TODO USERDATA skal ændres så den kan søge igennem virksomheder.
-        SearchField companyField = createSearchField(SearchStatus.productionCompanies,
-                "",
-                300,
-                NodeOrientation.LEFT_TO_RIGHT);
-        companyVBox.getChildren().add(companyField.getStackPane());
-        styleSearchResults(companyField);
-        companyField.setTextField(companyTextField);
-        companyTextField.setText(systemFacade.currentUser.getUser().getName());
-
-        SearchField usernameField = createSearchField(SearchStatus.notSearchable,
-                "",
-                300,
-                NodeOrientation.LEFT_TO_RIGHT);
-        usernameVBox.getChildren().add(usernameField.getStackPane());
-        styleSearchResults(usernameField);
-        usernameField.setTextField(usernameTextField1);
-
-        SearchField passwordField = createSearchField(SearchStatus.notSearchable,
-                "",
-                300,
-                NodeOrientation.LEFT_TO_RIGHT);
-        passwordVBox.getChildren().add(passwordField.getStackPane());
-        styleSearchResults(passwordField);
-        usernameField.setTextField(passwordTextField1);
-
-        SearchField producerField = createSearchField(SearchStatus.producers,
-                "",
-                300,
-                NodeOrientation.LEFT_TO_RIGHT);
-        producerVBox.getChildren().add(producerField.getStackPane());
-        styleSearchResults(producerField);
-        producerField.setTextField(producerTextField);
-
         // Switch statement to add proper HBoxes depending on addType.
         switch (addType) {
             case "production":
                 descriptionVBox.getChildren().addAll(hBox1, hBox3, hBox4);
                 break;
+            case "administrator":
             case "company":
-                descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox4);
             case "producer":
                 descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox4);
                 break;
@@ -562,8 +577,6 @@ public class PrimaryController implements Initializable {
                 break;
 
         }
-
-
     }
 
     @FXML
@@ -873,8 +886,12 @@ public class PrimaryController implements Initializable {
                 search = systemFacade.creditLogic.getCredits(focusedTextField.getText());
             } else if (focusedSearchField.getTextField().getUserData().equals(SearchStatus.roles)) {
                 search = systemFacade.roleLogic.getRoles(focusedTextField.getText());
+            } else if (focusedSearchField.getTextField().getUserData().equals(SearchStatus.producers)) {
+                search = systemFacade.userLogic.getUsersFromAccessRole(1);
+            } else if (focusedSearchField.getTextField().getUserData().equals(SearchStatus.productionCompanies)) {
+                search = systemFacade.userLogic.getUsersFromAccessRole(2);
             } else {
-                System.out.println("error");
+                System.out.println("SearchStatus error.");
             }
 
             focusedSearchField.setSearchResults(search);
@@ -974,6 +991,7 @@ public class PrimaryController implements Initializable {
         // Set other properties
         HBox.setHgrow(searchField.getTextField(), Priority.ALWAYS);
         searchField.getTextField().setStyle("-fx-font-size: " + Info.fontSizeDefault + "; -fx-text-fill: " + Info.backgroundColor + ";");
+        searchField.getTextField().applyCss();
         searchField.getTextField().applyCss();
         searchField.getAnchorPaneBackground().applyCss();
         searchField.getRectangle().setHeight(searchField.getAnchorPaneBackground().prefHeight(-1));

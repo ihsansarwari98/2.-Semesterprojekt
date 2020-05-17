@@ -3,6 +3,7 @@ package com.mycompany.creditsystem.domain.logic;
 import com.mycompany.creditsystem.persistence.Production;
 import com.mycompany.creditsystem.persistence.ProductionHandler;
 import com.mycompany.creditsystem.persistence.User;
+import com.mycompany.creditsystem.presentation.PrimaryController;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,9 +26,9 @@ public class ProductionLogic {
         return ProductionHandler.getInstance().createProduction(production);
     }
 
-    public boolean createProduction(String production) {
-        Production p = new Production(production);
-        return ProductionHandler.getInstance().createProduction(p);
+    public boolean createProduction(String prodname) {
+        Production production = new Production(prodname);
+        return ProductionHandler.getInstance().createProduction(production);
     }
 
     public boolean deleteProduction(int id) {
