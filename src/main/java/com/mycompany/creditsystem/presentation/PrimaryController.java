@@ -471,7 +471,7 @@ public class PrimaryController implements Initializable {
         Label buttonLabel = new Label("SUBMIT");
         buttonLabel.setTextFill(Color.WHITE);
         buttonStackPane.getChildren().addAll(buttonRectangle, buttonLabel);
-        // Action method for submit button
+
         buttonStackPane.setCursor(Cursor.HAND);
 
         // Adding SearchField to function as text field, with proper styling.
@@ -520,7 +520,7 @@ public class PrimaryController implements Initializable {
         producerVBox.getChildren().add(producerField.getStackPane());
         styleSearchResults(producerField);
         producerField.getTextField().setPromptText("Associated producer ID");
-
+        // Action method for submit button
         // Creating method for getting TextField and submitting to Database
         buttonStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

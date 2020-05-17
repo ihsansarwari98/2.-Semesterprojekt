@@ -88,7 +88,7 @@ public class User {
 
     @Override
     public String toString() {
-        return name + ";" + id; // + " " + username + " " + password + " " + creationDate + " " + accessRole;
+        return name; // + ";" + id + " " + username + " " + password + " " + creationDate + " " + accessRole;
     }
 
     public int getId() {
