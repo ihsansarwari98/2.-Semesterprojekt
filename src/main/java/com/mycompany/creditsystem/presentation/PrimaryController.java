@@ -729,9 +729,10 @@ public class PrimaryController implements Initializable {
             Map.Entry creditWithRoleObject = (Map.Entry) creditWithRole;
 
             // Gets the role of the credit
-            Text roleText = new Text(creditWithRoleObject.getKey().toString());
+            Text roleText = new Text(creditWithRoleObject.getValue().toString());
+
             // Gets the name of the credit
-            Label name = new Label(creditWithRoleObject.getValue().toString());
+            Label name = new Label(creditWithRoleObject.getKey().toString());
 
             // Creates a vBox for storing credits with the same role
             VBox vb = new VBox();
