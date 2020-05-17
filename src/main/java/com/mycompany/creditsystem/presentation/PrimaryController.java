@@ -534,12 +534,12 @@ public class PrimaryController implements Initializable {
                         systemFacade.productionLogic.createProduction(currentName);
 
                         if (!producerField.getTextField().getText().isBlank()) {
+                            //Links production to responsible producer
                             userID = systemFacade.userLogic.getIDFromName(producerField.getTextField().getText());
                             systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(currentName).getId(), userID);
                             System.out.println(userID + " has been linked to production: " + currentName);
-                        }
 
-                        if (!companyField.getTextField().getText().isBlank()) {
+                            //Links production-Company to responsible producer
                             userID = systemFacade.userLogic.getIDFromName(companyField.getTextField().getText());
                             systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(currentName).getId(), userID);
                             System.out.println(userID + " has been linked to production: " + currentName);
