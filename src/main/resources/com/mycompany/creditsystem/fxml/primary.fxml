@@ -161,9 +161,9 @@
                         </AnchorPane>
                         <AnchorPane fx:id="mineProduktionerProductionCompany" VBox.vgrow="ALWAYS">
                            <children>
-                              <HBox layoutX="28.0" prefHeight="100.0" prefWidth="279.0">
+                              <HBox layoutX="28.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <TitledPane contentDisplay="RIGHT" prefHeight="77.0" prefWidth="211.0" text="Mine produktioner" textFill="WHITE">
+                                    <TitledPane contentDisplay="RIGHT" text="Mine produktioner" textFill="WHITE" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -175,7 +175,7 @@
                                           </ScrollPane>
                                        </content>
                                     </TitledPane>
-                                    <StackPane alignment="TOP_CENTER" onMouseClicked="#addProductionHandler" prefHeight="100.0" prefWidth="4.0">
+                                    <StackPane alignment="TOP_CENTER" HBox.hgrow="NEVER">
                                        <children>
                                           <Rectangle fx:id="addProductionRectangle1" arcHeight="5.0" arcWidth="5.0" height="2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="10.0">
                                              <cursor>
@@ -213,9 +213,17 @@
                                                 <Insets top="5.0" />
                                              </StackPane.margin>
                                           </Rectangle>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="14.0" onMouseClicked="#addProductionHandler" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="14.0" StackPane.alignment="TOP_CENTER">
+                                             <StackPane.margin>
+                                                <Insets top="3.0" />
+                                             </StackPane.margin>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
                                        </children>
                                        <HBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="13.0" />
                                        </HBox.margin>
                                     </StackPane>
                                  </children>
@@ -643,7 +651,7 @@
                         </VBox>
                      </top>
                   </BorderPane>
-                  <HBox layoutY="40.0" spacing="16.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+                  <HBox fx:id="titlebarButtonsHBox" layoutY="40.0" spacing="16.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
                      <children>
                         <StackPane onMouseClicked="#minimizeButtonAction" onMouseEntered="#handleButtonHoveringEnter" onMouseExited="#handleButtonHoveringExit">
                            <children>

@@ -47,6 +47,7 @@ public class CurrentUser {
 
     public void setMyProductions(ArrayList<Production> myProductions) {
         CurrentUser.myProductions = myProductions;
+
     }
 
     private boolean nameComparatorShift = true;
