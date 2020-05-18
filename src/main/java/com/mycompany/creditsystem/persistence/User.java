@@ -88,7 +88,11 @@ public class User {
 
     @Override
     public String toString() {
+<<<<<<< Updated upstream
         return name; // + ";" + id + " " + username + " " + password + " " + creationDate + " " + accessRole;
+=======
+        return name + " " + id; // + username + " " + password + " " + creationDate + " " + accessRole;
+>>>>>>> Stashed changes
     }
 
     public int getId() {

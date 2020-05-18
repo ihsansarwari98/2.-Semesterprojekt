@@ -181,6 +181,8 @@ public class PrimaryController implements Initializable {
     @FXML
     private StackPane saveEditProductionButton;
     @FXML
+    private StackPane deleteProductionButton;
+    @FXML
     private VBox descriptionBodyVBox;
     @FXML
     private StackPane searchBarStackPane;
@@ -202,6 +204,14 @@ public class PrimaryController implements Initializable {
     private Rectangle addProductionRectangle;
     @FXML
     private Rectangle addProductionRectangle1;
+    @FXML
+    private BorderPane confirmDeletePane;
+    @FXML
+    private AnchorPane confirmPopUpBackground;
+    @FXML
+    private Rectangle cancelDeleteRectangle;
+    @FXML
+    private Rectangle deleteRectangle;
 
     TextField nameTextField;
     TextField usernameTextField1;
@@ -302,6 +312,10 @@ public class PrimaryController implements Initializable {
 
         logoText.setFill(Info.accentGradient);
         rectangleLogoSplitter.setFill(Info.accentGradient);
+
+        // Sets confirmation pop-up
+        confirmPopUpBackground.setStyle("-fx-border-radius: 16 ; -fx-background-radius: 16 ; -fx-background-color:" + Info.backgroundColor + ";");
+        backgroundAP.getChildren().remove(confirmDeletePane);
     }
 
     // Is getting called many times a second
@@ -631,7 +645,7 @@ public class PrimaryController implements Initializable {
         if (toggle) {
             descriptionTitleVBox.getChildren().remove(editOptionsHBox);
             descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
-            editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton, editProductionButton);
+            editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton, editProductionButton, deleteProductionButton);
             editOptionsHBox.getChildren().add(editProductionButton);
 
         } else {
@@ -1344,7 +1358,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleVBox.getChildren().remove(editOptionsHBox);
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
         editOptionsHBox.getChildren().remove(editProductionButton);
-        editOptionsHBox.getChildren().addAll(cancelEditProductionButton, saveEditProductionButton);
+        editOptionsHBox.getChildren().addAll(cancelEditProductionButton, saveEditProductionButton, deleteProductionButton);
         titleAndDescriptionVBox.getChildren().add(1, vBoxHeader);
         descriptionBodyVBox.getChildren().add(creditBorderPane);
         editProduction();
@@ -1355,7 +1369,7 @@ public class PrimaryController implements Initializable {
         System.out.println("canceled edit");
         descriptionTitleVBox.getChildren().remove(editOptionsHBox);
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
-        editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
+        editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton, deleteProductionButton);
         editOptionsHBox.getChildren().add(editProductionButton);
         titleAndDescriptionVBox.getChildren().remove(vBoxHeader); //Hey_ HO
         descriptionBodyVBox.getChildren().remove(creditBorderPane);
@@ -1368,11 +1382,15 @@ public class PrimaryController implements Initializable {
         System.out.println("saving");
         descriptionTitleVBox.getChildren().remove(editOptionsHBox);
         descriptionTitleVBox.getChildren().add(0, editOptionsHBox);
-        editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton);
+        editOptionsHBox.getChildren().removeAll(cancelEditProductionButton, saveEditProductionButton, deleteProductionButton);
         editOptionsHBox.getChildren().add(editProductionButton);
         titleAndDescriptionVBox.getChildren().remove(vBoxHeader); //Hey_ho
         descriptionBodyVBox.getChildren().remove(creditBorderPane);
         showCreditList();
+    }
+
+    @FXML
+    private void handleDeleteProductionClick(MouseEvent event) {
     }
 
     @FXML
@@ -1395,11 +1413,46 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void handleSearchMenuHoveringExit(MouseEvent event) {
+
         AnchorPane ap = ((AnchorPane) event.getSource());
         Label titleText = (Label) ap.getChildren().get(0);
         titleText.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + ";");
         //ap.setStyle("-fx-background-color: transparent;");
 
+    }
+
+    @FXML
+    private void deleteButtonHoverHandler (MouseEvent event){
+
+        StackPane chStck = (StackPane) event.getSource();
+        StackPane prStck = (StackPane) chStck.getParent();
+        Rectangle rec = (Rectangle) prStck.getChildren().get(0);
+        rec.setFill(Paint.valueOf(Info.backgroundShadeColor));
+        /*
+        temp.setFill(Paint.valueOf(Info.backgroundShadeColor));{
+            Label temp = (Label) event.getSource();
+            StackPane stck = (StackPane)temp.getParent();
+            Rectangle rec = (Rectangle)stck.getChildren().get(0);
+        */
+    }
+
+    @FXML
+    private void deleteButtonHoverExitHandler (MouseEvent event) {
+
+        StackPane chStck = (StackPane) event.getSource();
+        StackPane prStck = (StackPane) chStck.getParent();
+        Rectangle rec = (Rectangle) prStck.getChildren().get(0);
+        rec.setFill(Paint.valueOf(Info.backgroundColor));
+
+        /*
+        if (event.getSource() instanceof Rectangle) {
+            Rectangle temp = (Rectangle) event.getSource();
+            temp.setFill(Paint.valueOf(Info.backgroundColor));
+        } else if (event.getSource() instanceof Label) {
+            Label temp = (Label) event.getSource();
+            StackPane stck = (StackPane) temp.getParent();
+            Rectangle rec = (Rectangle) stck.getChildren().get(0);
+        }*/
     }
 
     @FXML

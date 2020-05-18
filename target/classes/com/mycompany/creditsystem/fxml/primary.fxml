@@ -453,6 +453,28 @@
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                           </StackPane>
+                                          <StackPane fx:id="deleteProductionButton" layoutX="556.0" layoutY="10.0" onMouseClicked="#handleDeleteProductionClick">
+                                             <children>
+                                                <Rectangle fx:id="deleteProductionRectangle" arcHeight="16.0" arcWidth="16.0" height="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="160.0">
+                                                   <fill>
+                                                      <LinearGradient endX="1.0" endY="0.13809523809523805" startY="1.0">
+                                                         <stops>
+                                                            <Stop color="#dd2929" />
+                                                            <Stop color="#b96649" offset="1.0" />
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </fill>
+                                                </Rectangle>
+                                                <Label fx:id="deleteProductionLabel" text="Delete Production" textFill="WHITE" StackPane.alignment="CENTER">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </StackPane>
                                        </children>
                                     </HBox>
                                     <Label fx:id="descriptionTitleText" text="Title">
@@ -758,6 +780,105 @@
                         </HBox>
                      </children>
                   </VBox>
+                  <BorderPane fx:id="confirmDeletePane" prefHeight="720.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <center>
+                        <StackPane fx:id="confirmPopUpBackground99" maxHeight="-Infinity" maxWidth="343.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="347.0">
+                           <children>
+                              <AnchorPane fx:id="confirmPopUpBackground">
+                                 <children>
+                                    <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="110.0" prefWidth="343.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <StackPane alignment="BOTTOM_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="55.0" prefWidth="200.0">
+                                             <children>
+                                                <Label fx:id="saveEditProductionText1" alignment="TOP_CENTER" text="Sure you want to delete this element?" textFill="#5b5656">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <StackPane.margin>
+                                                      <Insets bottom="12.0" />
+                                                   </StackPane.margin>
+                                                </Label>
+                                             </children>
+                                          </StackPane>
+                                          <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="330.0">
+                                             <children>
+                                                <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="330.0">
+                                                   <children>
+                                                      <StackPane fx:id="noProceedButton" prefHeight="45.0" prefWidth="165.0">
+                                                         <children>
+                                                            <Rectangle fx:id="cancelDeleteRectangle" arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="45.0" stroke="WHITE" strokeType="INSIDE" width="165.0">
+                                                               <StackPane.margin>
+                                                                  <Insets right="2.0" />
+                                                               </StackPane.margin>
+                                                            </Rectangle>
+                                                            <Label alignment="TOP_CENTER" text="CANCEL" textFill="#5b5656">
+                                                               <font>
+                                                                  <Font name="System Bold" size="16.0" />
+                                                               </font>
+                                                               <opaqueInsets>
+                                                                  <Insets />
+                                                               </opaqueInsets>
+                                                            </Label>
+                                                            <StackPane onMouseEntered="#deleteButtonHoverHandler" onMouseExited="#deleteButtonHoverExitHandler" prefHeight="150.0" prefWidth="200.0" />
+                                                         </children>
+                                                         <opaqueInsets>
+                                                            <Insets />
+                                                         </opaqueInsets>
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets right="2.0" />
+                                                         </HBox.margin>
+                                                      </StackPane>
+                                                      <StackPane fx:id="yesProceedButton" prefHeight="45.0">
+                                                         <children>
+                                                            <Rectangle fx:id="deleteRectangle" arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="45.0" stroke="WHITE" strokeType="INSIDE" width="165.0">
+                                                               <StackPane.margin>
+                                                                  <Insets />
+                                                               </StackPane.margin>
+                                                            </Rectangle>
+                                                            <Label alignment="TOP_CENTER" onMouseEntered="#deleteButtonHoverHandler" onMouseExited="#deleteButtonHoverExitHandler" text="DELETE">
+                                                               <font>
+                                                                  <Font name="System Bold" size="16.0" />
+                                                               </font>
+                                                               <opaqueInsets>
+                                                                  <Insets />
+                                                               </opaqueInsets>
+                                                               <textFill>
+                                                                  <LinearGradient endX="0.1619047619047619" endY="0.2904761904761905" startX="1.0">
+                                                                     <stops>
+                                                                        <Stop color="#fcfcfc" />
+                                                                        <Stop color="#9a0101" offset="0.007662835249042145" />
+                                                                        <Stop color="RED" offset="1.0" />
+                                                                     </stops>
+                                                                  </LinearGradient>
+                                                               </textFill>
+                                                            </Label>
+                                                            <StackPane onMouseEntered="#deleteButtonHoverHandler" onMouseExited="#deleteButtonHoverExitHandler" prefHeight="150.0" prefWidth="200.0" />
+                                                         </children>
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="2.0" />
+                                                         </HBox.margin>
+                                                      </StackPane>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </StackPane>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </StackPane>
+                     </center>
+                  </BorderPane>
                </children>
             </AnchorPane>
          </children>
