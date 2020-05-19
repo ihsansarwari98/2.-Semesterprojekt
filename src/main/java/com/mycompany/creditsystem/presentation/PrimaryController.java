@@ -206,7 +206,6 @@ public class PrimaryController implements Initializable {
     @FXML
     private Rectangle addProductionRectangle1;
     @FXML
-<<<<<<< HEAD
     private BorderPane confirmDeletePane;
     @FXML
     private AnchorPane confirmPopUpBackground;
@@ -214,6 +213,8 @@ public class PrimaryController implements Initializable {
     private Rectangle cancelDeleteRectangle;
     @FXML
     private Rectangle deleteRectangle;
+    @FXML
+    private HBox titlebarButtonsHBox;
 
     TextField nameTextField;
     TextField usernameTextField1;
@@ -221,9 +222,6 @@ public class PrimaryController implements Initializable {
     TextField companyTextField;
     TextField producerTextField;
 
-=======
-    private HBox titlebarButtonsHBox;
->>>>>>> Dev
 
     private boolean scrollableEdit = false;
     private SystemFacade systemFacade = new SystemFacade();
