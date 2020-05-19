@@ -30,6 +30,10 @@ public class SystemFacade {
         return activeProduction;
     }
 
+    public void updateMyProductions() {
+        currentUser.setMyProductions(productionLogic.getProductionsLinkedToUser(currentUser.getUser().getId()));
+    }
+
     public String getState() {
         return state;
     }
