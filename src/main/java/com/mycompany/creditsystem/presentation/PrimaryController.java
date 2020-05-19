@@ -20,6 +20,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -205,6 +206,7 @@ public class PrimaryController implements Initializable {
     @FXML
     private Rectangle addProductionRectangle1;
     @FXML
+<<<<<<< HEAD
     private BorderPane confirmDeletePane;
     @FXML
     private AnchorPane confirmPopUpBackground;
@@ -219,6 +221,9 @@ public class PrimaryController implements Initializable {
     TextField companyTextField;
     TextField producerTextField;
 
+=======
+    private HBox titlebarButtonsHBox;
+>>>>>>> Dev
 
     private boolean scrollableEdit = false;
     private SystemFacade systemFacade = new SystemFacade();
@@ -339,6 +344,11 @@ public class PrimaryController implements Initializable {
             VBox vboxResults = (VBox) scrollPane.getContent();
             focusedSearchField = new SearchField(stackPane, rectangle, vbox, anchorPaneBackground, hbox, focusedTextField, scrollPane, vboxResults);
 
+            // if the focusedTextField is the textFieldSearchBar then set the correct userData for the searchBar
+            if (focusedTextField.equals(textFieldSearchBar)) {
+                stackPane.setUserData(NodeOrientation.LEFT_TO_RIGHT);
+            }
+
             if (lastSearchField == null) {
                 lastSearchField = focusedSearchField;
             }
@@ -354,56 +364,48 @@ public class PrimaryController implements Initializable {
         }
     }
 
-
-    String addType = null;
-
-    public String getAddType() {
-        return addType;
-    }
-
-    public void setAddType(String addType) {
-        this.addType = addType;
-    }
-
     // Method is used for adding new Productions
     @FXML
-    void addProductionHandler(MouseEvent event) {
-        setAddType("production");
-        addNewHandler();
-        descriptionTitleText.setText("ADD PRODUCTION");
+    private void addProductionHandler(MouseEvent event) {
+        addNewHandler("production");
+        descriptionTitleText.setText("Add Production");
     }
 
 
-    void addProductionCompanyHandler() {
-        setAddType("company");
-        addNewHandler();
-        descriptionTitleText.setText("ADD COMPANY");
+    private void addProductionCompanyHandler(MouseEvent event) {
+        addNewHandler("company");
+        descriptionTitleText.setText("Add Company");
     }
 
-    void addProducerHandler() {
-        setAddType("producer");
-        addNewHandler();
-        descriptionTitleText.setText("ADD PRODUCER");
+    private void addProducerHandler(MouseEvent event) {
+        addNewHandler("producer");
+        descriptionTitleText.setText("Add Producer");
     }
 
-    void addAdministratorHandler() {
-        setAddType("administrator");
-        addNewHandler();
-        descriptionTitleText.setText("ADD ADMINISTRATOR");
+    private void addAdministratorHandler(MouseEvent event) {
+        addNewHandler("administrator");
+        descriptionTitleText.setText("Add Administrator");
     }
 
 
     // Sets up UI for adding a new entity.
-    void addNewHandler() {
+    private void addNewHandler(String addType) {
 
         // TODO Lav Labels over TextFields
         // Removes unnecessary elements
+        descriptionTitleVBox.getChildren().remove(editOptionsHBox);
+        titleAndDescriptionVBox.getChildren().remove(vBoxHeader);
+        descriptionBodyVBox.getChildren().remove(creditBorderPane);
         backgroundAP.getChildren().remove(searchBarBP);
         backgroundAP.getChildren().remove(logoVBox);
+        backgroundAP.getChildren().remove(titleAndDescriptionBP);
         backgroundAP.getChildren().add(titleAndDescriptionBP);
+
 
         // Setting up layout for formula
         int searchFieldLength = 300;
+        int labelAndSearchFieldVBoxSpacing = 6;
+        int labelAndSearchFieldHBoxSpacing = 15;
         descriptionVBox.getChildren().clear();
         descriptionVBox.setSpacing(10);
         descriptionVBox.setFillWidth(false);
@@ -412,105 +414,125 @@ public class PrimaryController implements Initializable {
         descriptionHBoxHeader.setFillHeight(false);
         descriptionHBoxHeader.setPrefWidth(searchFieldLength);
 
-
-        Label nameLabel = new Label();
-        nameLabel.setText("NAME");
-        nameLabel.setTextFill(Info.accentGradient);
-        nameLabel.setStyle("-fx-font-weight: bold");
-        Label companyLabel = new Label();
-        companyLabel.setText("COMPANY");
+        // setting up the labels
+        Label titleLabel = new Label("Title");
+        titleLabel.setTextFill(Info.accentGradient);
+        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+        Label companyLabel = new Label("Company");
         companyLabel.setTextFill(Info.accentGradient);
-        companyLabel.setStyle("-fx-font-weight: bold");
-        Label usernameLabel = new Label();
-        usernameLabel.setText("USERNAME");
+        companyLabel.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+        Label usernameLabel = new Label("Username");
         usernameLabel.setTextFill(Info.accentGradient);
-        usernameLabel.setStyle("-fx-font-weight: bold");
-        Label passwordLabel = new Label();
-        passwordLabel.setText("PASSWORD");
+        usernameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+        Label passwordLabel = new Label("Password");
         passwordLabel.setTextFill(Info.accentGradient);
-        passwordLabel.setStyle("-fx-font-weight: bold");
-        Label producerLabel = new Label();
-        producerLabel.setText("RESPONSIBLE PRODUCER");
+        passwordLabel.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+        Label producerLabel = new Label("Responsible Producer");
         producerLabel.setTextFill(Info.accentGradient);
-        producerLabel.setStyle("-fx-font-weight: bold");
-
+        producerLabel.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
 
         // Setting up HBOXes to create form.
-        HBox hBox1 = new HBox();
-        hBox1.setSpacing(15);
-        nameTextField = new TextField();
-        nameTextField.setPromptText("Name");
-        companyTextField = new TextField();
-        companyTextField.setPromptText("Company Name");
-        VBox nameVBox = new VBox();
-        nameVBox.setAlignment(Pos.CENTER);
+        // Title and company name
+        HBox titleAndCompanyHBox = new HBox();
+        titleAndCompanyHBox.setSpacing(labelAndSearchFieldHBoxSpacing);
+        VBox titleVBox = new VBox();
+        titleVBox.setAlignment(Pos.TOP_CENTER);
+        titleVBox.setSpacing(labelAndSearchFieldVBoxSpacing);
         VBox companyVBox = new VBox();
-        companyVBox.setAlignment(Pos.CENTER);
-        nameVBox.getChildren().add(nameLabel);
-        companyVBox.getChildren().add(companyLabel);
-        hBox1.getChildren().addAll(nameVBox, companyVBox);
+        companyVBox.setAlignment(Pos.TOP_CENTER);
+        companyVBox.setSpacing(labelAndSearchFieldVBoxSpacing);
 
-        HBox hBox2 = new HBox();
-        hBox2.setSpacing(15);
-        usernameTextField1 = new TextField();
-        usernameTextField1.setPromptText("Username");
-        passwordTextField1 = new TextField();
-        passwordTextField1.setPromptText("Password");
+        titleVBox.getChildren().add(titleLabel);
+        companyVBox.getChildren().add(companyLabel);
+        titleAndCompanyHBox.getChildren().addAll(titleVBox, companyVBox);
+
+        // username and password
+        HBox usernameAndPasswordHBox = new HBox();
+        usernameAndPasswordHBox.setSpacing(labelAndSearchFieldHBoxSpacing);
         VBox usernameVBox = new VBox();
-        usernameVBox.setAlignment(Pos.CENTER);
+        usernameVBox.setAlignment(Pos.TOP_CENTER);
+        usernameVBox.setSpacing(labelAndSearchFieldVBoxSpacing);
         VBox passwordVBox = new VBox();
-        passwordVBox.setAlignment(Pos.CENTER);
+        passwordVBox.setAlignment(Pos.TOP_CENTER);
+        passwordVBox.setSpacing(labelAndSearchFieldVBoxSpacing);
         usernameVBox.getChildren().add(usernameLabel);
         passwordVBox.getChildren().add(passwordLabel);
-        hBox2.getChildren().addAll(usernameVBox, passwordVBox);
+        usernameAndPasswordHBox.getChildren().addAll(usernameVBox, passwordVBox);
 
-        HBox hBox3 = new HBox();
-        producerTextField = new TextField();
-        producerTextField.setPromptText("Producer");
+        // associated producer
+        HBox associatedProducerHBox = new HBox();
         VBox producerVBox = new VBox();
-        producerVBox.setAlignment(Pos.CENTER);
+        producerVBox.setAlignment(Pos.TOP_CENTER);
+        producerVBox.setSpacing(labelAndSearchFieldVBoxSpacing);
         producerVBox.getChildren().add(producerLabel);
-        hBox3.getChildren().add(producerVBox);
+        associatedProducerHBox.getChildren().add(producerVBox);
 
-        // Button hBox
-        HBox hBox4 = new HBox();
-        StackPane buttonStackPane = new StackPane();
-        hBox4.getChildren().add(buttonStackPane);
-        Rectangle buttonRectangle = new Rectangle();
-        buttonRectangle.setArcHeight(40);
-        buttonRectangle.setArcWidth(40);
-        buttonRectangle.setHeight(35);
-        buttonRectangle.setWidth(100);
-        buttonRectangle.setFill(Info.accentGradient);
-        Label buttonLabel = new Label("SUBMIT");
-        buttonLabel.setTextFill(Color.WHITE);
-        buttonStackPane.getChildren().addAll(buttonRectangle, buttonLabel);
+        HBox submitAndCancelButtonHBox = new HBox();
 
-        buttonStackPane.setCursor(Cursor.HAND);
+        // submit button
+        StackPane submitButtonStackPane = new StackPane();
+        Rectangle submitRectangle = new Rectangle();
+        submitRectangle.setArcHeight(40);
+        submitRectangle.setArcWidth(40);
+        submitRectangle.setHeight(35);
+        submitRectangle.setWidth(110);
+        submitRectangle.setFill(Info.accentGradient);
+        Label submitLabel = new Label("Submit");
+        submitLabel.setStyle("-fx-text-fill: " + Info.backgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + "; -fx-font-weight: bold;");
+        submitButtonStackPane.getChildren().addAll(submitRectangle, submitLabel);
+        submitButtonStackPane.setCursor(Cursor.HAND);
+
+        // Cancel button
+        StackPane cancelButtonStackPane = new StackPane();
+        Rectangle cancelRectangle = new Rectangle();
+        cancelRectangle.setArcHeight(40);
+        cancelRectangle.setArcWidth(40);
+        cancelRectangle.setHeight(35);
+        cancelRectangle.setWidth(110);
+        cancelRectangle.setFill(Paint.valueOf(Info.fontColor3));
+        Label cancelLabel = new Label("Cancel");
+        cancelLabel.setStyle("-fx-text-fill: " + Info.backgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + "; -fx-font-weight: bold;");
+        cancelButtonStackPane.getChildren().addAll(cancelRectangle, cancelLabel);
+        cancelButtonStackPane.setCursor(Cursor.HAND);
+
+        // add cancel and submit to hbox
+        submitAndCancelButtonHBox.setSpacing(labelAndSearchFieldHBoxSpacing);
+        submitAndCancelButtonHBox.getChildren().addAll(cancelButtonStackPane, submitButtonStackPane);
 
         // Adding SearchField to function as text field, with proper styling.
-        SearchField nameField = createSearchField(SearchStatus.notSearchable,
+        SearchField titleField = createSearchField(SearchStatus.notSearchable,
                 "",
                 300,
                 NodeOrientation.LEFT_TO_RIGHT);
-        nameVBox.getChildren().add(nameField.getStackPane());
-        styleSearchResults(nameField);
-        nameField.getTextField().setPromptText("Name");
+        titleVBox.getChildren().add(titleField.getStackPane());
+        styleSearchResults(titleField);
+        titleField.getTextField().setPromptText("Title");
 
-        SearchField companyField = createSearchField(SearchStatus.productionCompanies,
+        // set the companyFieldSearchStatus so only the admin can search
+        SearchStatus companyFieldSearchStatus;
+        if (systemFacade.currentUser.getUser().getAccessRoleInt() == 3) {
+            companyFieldSearchStatus = SearchStatus.productionCompanies;
+        } else {
+            companyFieldSearchStatus = SearchStatus.notSearchable;
+        }
+
+        // set the productionCompany SearchField
+        SearchField companyField = createSearchField(companyFieldSearchStatus,
                 "",
                 300,
                 NodeOrientation.LEFT_TO_RIGHT);
         companyVBox.getChildren().add(companyField.getStackPane());
         styleSearchResults(companyField);
         companyField.getTextField().setPromptText("Associated company name");
-        if (systemFacade.currentUser.getUser().getAccessRole() != User.AccessRole.admin) {
+
+        // if the user isn't admin
+        if (systemFacade.currentUser.getUser().getAccessRoleInt() != 3) {
             companyField.getTextField().setText(systemFacade.currentUser.getUser().getName());
             companyField.getTextField().setEditable(false);
             companyField.getTextField().setCursor(Cursor.DEFAULT);
-            companyLabel.setText("YOUR COMPANY");
         }
 
+        // sets the usernameSearchField
         SearchField usernameField = createSearchField(SearchStatus.notSearchable,
                 "",
                 300,
@@ -519,6 +541,7 @@ public class PrimaryController implements Initializable {
         styleSearchResults(usernameField);
         usernameField.getTextField().setPromptText("Username");
 
+        // sets the passwordSearchField
         SearchField passwordField = createSearchField(SearchStatus.notSearchable,
                 "",
                 300,
@@ -527,64 +550,97 @@ public class PrimaryController implements Initializable {
         styleSearchResults(passwordField);
         passwordField.getTextField().setPromptText("Password");
 
+        // sets the Associated producer
         SearchField producerField = createSearchField(SearchStatus.producers,
                 "",
                 300,
                 NodeOrientation.LEFT_TO_RIGHT);
         producerVBox.getChildren().add(producerField.getStackPane());
         styleSearchResults(producerField);
-        producerField.getTextField().setPromptText("Associated producer ID");
+        producerField.getTextField().setPromptText("Associated producer");
+
+        // Action method for cancel button
+        cancelButtonStackPane.setOnMouseClicked(e -> {
+
+            if (systemFacade.getActiveProduction() == null) {
+                homeButtonAction();
+            } else {
+                getFocusedSearchField();
+                focusedSearchField = new SearchField(searchBarStackPane, searchRectangleBG, searchBarVBox, searchBarBackground, searchBarHBox, textFieldSearchBar, searchResultScrollPane, searchResults);
+                focusedSearchField.getTextField().setText(systemFacade.productionLogic.getProduction(systemFacade.getActiveProduction().getId()).getTitle());
+                handleSearch(focusedSearchField);
+            }
+        });
+
         // Action method for submit button
         // Creating method for getting TextField and submitting to Database
-        buttonStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                String addType = getAddType();
-                int userID = 0;
-                switch (addType) {
-                    // TODO KODE BODY FOR METODER
-                    case "production":
-                        String currentName = nameField.getTextField().getText();
-                        systemFacade.productionLogic.createProduction(currentName);
+        submitButtonStackPane.setOnMouseClicked(e -> {
+            int userID = 0;
+            switch (addType) {
+                // TODO KODE BODY FOR METODER
+                case "production":
+                    String productionTitle = titleField.getTextField().getText();
 
-                        if (!producerField.getTextField().getText().isBlank()) {
+                    if (!producerField.getTextField().getText().isBlank() && !productionTitle.isBlank()) {
+
+                        // if the production doesn't exists
+                        if (systemFacade.productionLogic.getProductions(productionTitle).size() <= 0) {
+                            systemFacade.productionLogic.createProduction(productionTitle);
+
                             //Links production to responsible producer
                             userID = systemFacade.userLogic.getIDFromName(producerField.getTextField().getText());
-                            systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(currentName).getId(), userID);
-                            System.out.println(userID + " has been linked to production: " + currentName);
+                            systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(productionTitle).getId(), userID);
+                            System.out.println(userID + " has been linked to production: " + productionTitle);
 
                             //Links production-Company to responsible producer
                             userID = systemFacade.userLogic.getIDFromName(companyField.getTextField().getText());
-                            systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(currentName).getId(), userID);
-                            System.out.println(userID + " has been linked to production: " + currentName);
+                            systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(productionTitle).getId(), userID);
+                            System.out.println(userID + " has been linked to production: " + productionTitle);
+
+                            System.out.println(userID + " is the ID of Responsible Producer");
+                            System.out.println(titleField.getTextField().getText() + " has been added to the system!");
+
+                            systemFacade.updateMyProductions();
+                            updateProductionList();
+
+                        } else {
+                            System.out.println("production already exists");
+                            actionDeniedColorChange(titleField);
                         }
+                    } else if (producerField.getTextField().getText().isBlank() && !titleField.getTextField().getText().isBlank()) {
+                        System.out.println("Link a producer to the production");
+                        actionDeniedColorChange(producerField);
+                    } else if (titleField.getTextField().getText().isBlank() && !producerField.getTextField().getText().isBlank()) {
+                        System.out.println("Fill out the title of the production");
+                        actionDeniedColorChange(titleField);
+                    } else {
+                        System.out.println("Fill out the form");
+                        actionDeniedColorChange(producerField);
+                        actionDeniedColorChange(titleField);
+                    }
 
-                        System.out.println(userID + " is the ID of Responsible Producer");
-                        System.out.println(nameField.getTextField().getText() + " has been added to the system!");
+                    break;
+                case "company":
 
-                        break;
-                    case "company":
+                    break;
+                case "producer":
 
-                        break;
-                    case "producer":
-
-                        break;
-                    default:
-                        System.out.println("Something went wrong...");
-                        break;
-                }
+                    break;
+                default:
+                    System.out.println("Something went wrong...");
+                    break;
             }
         });
 
         // Switch statement to add proper HBoxes depending on addType.
         switch (addType) {
             case "production":
-                descriptionVBox.getChildren().addAll(hBox1, hBox3, hBox4);
+                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, associatedProducerHBox, submitAndCancelButtonHBox);
                 break;
             case "administrator":
             case "company":
             case "producer":
-                descriptionVBox.getChildren().addAll(hBox1, hBox2, hBox4);
+                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, usernameAndPasswordHBox, submitAndCancelButtonHBox);
                 break;
             default:
                 System.out.println("Something went wrong...");
@@ -593,13 +649,28 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    private void actionDeniedColorChange (SearchField searchField) {
+        // Make the textField red for 1.5 seconds
+        searchField.getAnchorPaneBackground().setStyle("-fx-background-color: " + Info.statusRed + "; -fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + ";");
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                searchField.getAnchorPaneBackground().setStyle("-fx-background-color: " + Info.forgroundColor + "; -fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + ";");
+            }
+        };
+        timer.schedule(timerTask, 1500L);
+    }
+
+
+
     @FXML
     private void handleLogin() {
         if (systemFacade.userLogic.userLogin(usernameTextField.getText(), passwordTextField.getText())) {
             enableElements(systemFacade.currentUser.getUser().getAccessRoleInt());
 
             // Sets myProductions
-            systemFacade.currentUser.setMyProductions(systemFacade.productionLogic.getProductionsLinkedToUser(systemFacade.currentUser.getUser().getId()));
+            systemFacade.updateMyProductions();
 
             setNameAndRole();
             sidePanelBackground.getChildren().remove(loginAP);
@@ -855,14 +926,15 @@ public class PrimaryController implements Initializable {
             titleText.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
             titleText.setFocusTraversable(true);
 
-            if (searchField.getTextField().getUserData().equals(SearchStatus.productions)) {
-                titleText.setPadding(new Insets(0, 0, 0, mainSearchResultTextPadding));
-            } else if (searchField.getTextField().getUserData().equals(SearchStatus.credits)) {
+            if (searchField.getStackPane().getUserData().equals(NodeOrientation.LEFT_TO_RIGHT)) {
+                if (searchField.getTextField().equals(textFieldSearchBar)) {
+                    titleText.setPadding(new Insets(0, 0, 0, mainSearchResultTextPadding));
+                } else {
+                    titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
+                }
+            } else {
                 AnchorPane.setRightAnchor(titleText, (double) 0);
                 titleText.setPadding(new Insets(0, searchResultTextPadding, 0, 0));
-            } else if (searchField.getTextField().getUserData().equals(SearchStatus.roles)) {
-                AnchorPane.setLeftAnchor(titleText, (double) 0);
-                titleText.setPadding(new Insets(0, 0, 0, searchResultTextPadding));
             }
 
             ap.setOnMouseEntered(this::handleSearchMenuHoveringEnter);
@@ -965,7 +1037,11 @@ public class PrimaryController implements Initializable {
                     // if active production is null (home screen) -> load elements
                     if (systemFacade.getActiveProduction() == null) {
                         loadTitleAndDescriptionElements();
+                    } else {
+                        homeButtonAction();
+                        loadTitleAndDescriptionElements();
                     }
+
                     // set the active production to be the current production
                     systemFacade.setActiveProduction(systemFacade.productionLogic.getProduction(searchField.getTextField().getText()));
                     // add title to title text element
@@ -1001,7 +1077,7 @@ public class PrimaryController implements Initializable {
         searchField.getTextField().setUserData(userData);
         searchField.getTextField().setText(textFieldText);
         searchField.getRectangle().setWidth(width);
-        //searchField.getAnchorPaneBackground().setNodeOrientation(orientation);
+        searchField.getStackPane().setUserData(orientation);
 
         // Set other properties
         HBox.setHgrow(searchField.getTextField(), Priority.ALWAYS);
@@ -1301,10 +1377,11 @@ public class PrimaryController implements Initializable {
     }
 
     private void loadTitleAndDescriptionElements() {
-        backgroundAP.getChildren().remove(searchBarBP);
+        backgroundAP.getChildren().remove(titleAndDescriptionBP);
         backgroundAP.getChildren().add(2, titleAndDescriptionBP);
         descriptionVBox.setAlignment(Pos.TOP_CENTER);
         descriptionTitleText.applyCss();
+        backgroundAP.getChildren().remove(searchBarBP);
         backgroundAP.getChildren().add(3, searchBarBP);
         searchBarBP.getChildren().remove(logoVBox);
     }
@@ -1313,6 +1390,8 @@ public class PrimaryController implements Initializable {
     private void homeButtonAction() {
         systemFacade.setActiveProduction(null);
         backgroundAP.getChildren().remove(titleAndDescriptionBP);
+        backgroundAP.getChildren().remove(searchBarBP);
+        backgroundAP.getChildren().add(3, searchBarBP);
         searchBarBP.getChildren().remove(logoVBox);
         searchBarBP.setTop(logoVBox);
         BorderPane.setAlignment(logoVBox, Pos.TOP_CENTER);
