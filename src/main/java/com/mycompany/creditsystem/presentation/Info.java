@@ -6,7 +6,7 @@ public class Info {
 
     public static String statusGreen = "#50C878";
     public static String statusYellow = "#ffe746";
-    public static String statusRed = "#d21e1e";
+    public static String statusRed = "#FF2F4B";
 
     public static String fontColor1 = "#FFFFFF";
     public static String fontColor2 = "#242424";

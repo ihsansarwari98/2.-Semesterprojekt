@@ -3,17 +3,17 @@ package com.mycompany.creditsystem.presentation;
 import com.mycompany.creditsystem.domain.logic.*;
 
 import java.net.URL;
+import java.sql.Array;
 import java.sql.BatchUpdateException;
 import java.util.*;
+import java.util.spi.AbstractResourceBundleProvider;
 
 import com.mycompany.creditsystem.persistence.Credit;
 import com.mycompany.creditsystem.persistence.Production;
 import com.mycompany.creditsystem.persistence.User;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -56,7 +56,7 @@ public class PrimaryController implements Initializable {
      */
 
     @FXML
-    private VBox programList;
+    private VBox productionList;
     @FXML
     private TextField textFieldSearchBar;
     @FXML
@@ -69,8 +69,6 @@ public class PrimaryController implements Initializable {
     private AnchorPane backgroundAP;
     @FXML
     private VBox sidePanelBackground;
-    @FXML
-    private ScrollPane productionScrollPane;
     @FXML
     private Label nameText;
     @FXML
@@ -124,7 +122,7 @@ public class PrimaryController implements Initializable {
     @FXML
     private Label bottomSortingLabel;
     @FXML
-    private AnchorPane mineProduktioner;
+    private AnchorPane myProductions;
     @FXML
     private AnchorPane nameAndRoleAP;
     @FXML
@@ -162,7 +160,17 @@ public class PrimaryController implements Initializable {
     @FXML
     private AnchorPane mineProduktionerProductionCompany;
     @FXML
+    private AnchorPane mineProducereProductionCompany;
+    @FXML
     private VBox programListProductionCompany;
+    @FXML
+    private VBox producerListProductionCompany;
+    @FXML
+    private Rectangle addProducerRectangle1;
+    @FXML
+    private Rectangle addProducerRectangle2;
+    @FXML
+    private ScrollPane producerScrollPaneProductionCompany;
     @FXML
     private Label editProductionText;
     @FXML
@@ -204,9 +212,13 @@ public class PrimaryController implements Initializable {
     @FXML
     private VBox titleAndDescriptionVBox;
     @FXML
-    private Rectangle addProductionRectangle;
-    @FXML
     private Rectangle addProductionRectangle1;
+    @FXML
+    private Rectangle addProductionRectangle2;
+    @FXML
+    private Rectangle addCompanyRectangle1;
+    @FXML
+    private Rectangle addCompanyRectangle2;
     @FXML
     private BorderPane confirmDeletePane;
     @FXML
@@ -223,12 +235,24 @@ public class PrimaryController implements Initializable {
     private StackPane yesConfirmationPane;
     @FXML
     private Label messageConfirmationLabel;
-
-    TextField nameTextField;
-    TextField usernameTextField1;
-    TextField passwordTextField1;
-    TextField companyTextField;
-    TextField producerTextField;
+    @FXML
+    private VBox producerList;
+    @FXML
+    private AnchorPane myProducers;
+    @FXML
+    private VBox myLists;
+    @FXML
+    private VBox companyList;
+    @FXML
+    private AnchorPane myCompanies;
+    @FXML
+    private StackPane addProductionStackPane;
+    @FXML
+    private HBox myProductionsHeaderHBox;
+    @FXML
+    private StackPane addProducerStackPane;
+    @FXML
+    private HBox myProducersHeaderHBox;
 
     private boolean scrollableEdit = false;
     private SystemFacade systemFacade = new SystemFacade();
@@ -313,8 +337,12 @@ public class PrimaryController implements Initializable {
         usernameTextField.setUserData(SearchStatus.notSearchable);
         passwordTextField.setUserData(SearchStatus.notSearchable);
         // Set the color of side bar buttons
-        addProductionRectangle.setFill(Info.accentGradient);
         addProductionRectangle1.setFill(Info.accentGradient);
+        addProductionRectangle2.setFill(Info.accentGradient);
+        addProducerRectangle1.setFill(Info.accentGradient);
+        addProducerRectangle2.setFill(Info.accentGradient);
+        addCompanyRectangle1.setFill(Info.accentGradient);
+        addCompanyRectangle2.setFill(Info.accentGradient);
 
         // -- DESCRIPTION
         descriptionScrollPane.getStyleClass().add("dark-thumb");
@@ -329,7 +357,6 @@ public class PrimaryController implements Initializable {
     }
 
     // Is getting called many times a second
-
     private void updateEverySecond() {
         getFocusedSearchField();
     }
@@ -382,6 +409,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleText.setText("Add Company");
     }
 
+    @FXML
     private void addProducerHandler(MouseEvent event) {
         addNewHandler("producer");
         descriptionTitleText.setText("Add Producer");
@@ -606,22 +634,22 @@ public class PrimaryController implements Initializable {
                             System.out.println(titleField.getTextField().getText() + " has been added to the system!");
 
                             systemFacade.updateMyProductions();
-                            updateProductionList();
+                            updateSidePanel();
 
                         } else {
                             System.out.println("production already exists");
                             actionDeniedColorChange(titleField);
                         }
-                    } else if (producerField.getTextField().getText().isBlank() && !titleField.getTextField().getText().isBlank()) {
-                        System.out.println("Link a producer to the production");
-                        actionDeniedColorChange(producerField);
-                    } else if (titleField.getTextField().getText().isBlank() && !producerField.getTextField().getText().isBlank()) {
-                        System.out.println("Fill out the title of the production");
-                        actionDeniedColorChange(titleField);
                     } else {
-                        System.out.println("Fill out the form");
-                        actionDeniedColorChange(producerField);
-                        actionDeniedColorChange(titleField);
+                        if (titleField.getTextField().getText().isBlank()) {
+                            actionDeniedColorChange(titleField);
+                        }
+                        if (producerField.getTextField().getText().isBlank()) {
+                            actionDeniedColorChange(producerField);
+                        }
+                        if (companyField.getTextField().getText().isBlank()) {
+                            actionDeniedColorChange(companyField);
+                        }
                     }
 
                     break;
@@ -629,6 +657,56 @@ public class PrimaryController implements Initializable {
 
                     break;
                 case "producer":
+                    String name = titleField.getTextField().getText();
+                    String username = usernameField.getTextField().getText();
+                    String password = passwordField.getTextField().getText();
+                    String company = companyField.getTextField().getText();
+
+                    if (!name.isBlank() && !username.isBlank() && !password.isBlank()) {
+                        boolean usernameAvailable = false;
+                        boolean nameAvailable = false;
+
+                        // if the name already exists
+                        if (systemFacade.userLogic.getUser(name) == null) {
+                            nameAvailable = true;
+                        } else {
+                            System.out.println("Producer already exists");
+                            actionDeniedColorChange(titleField);
+                        }
+
+                        // if username already exists
+                        if (!systemFacade.userLogic.isUsernameTaken(username)) {
+                            usernameAvailable = true;
+                        } else {
+                            System.out.println("username already in use, find another");
+                            actionDeniedColorChange(usernameField);
+                        }
+
+                        if (usernameAvailable && nameAvailable) {
+                            systemFacade.userLogic.createUser(name, username, password, 1);
+                            System.out.println("User " + name + " has been added to the database");
+
+                            userID = systemFacade.userLogic.getIDFromName(name);
+                            int companyID = systemFacade.userLogic.getIDFromName(companyField.getTextField().getText());
+
+                            systemFacade.userLogic.linkProducerToCompany(userID, companyID);
+                            System.out.println(name + " has been linked to " + company);
+                            updateSidePanel();
+                        }
+                    } else {
+                        if (name.isBlank()) {
+                            actionDeniedColorChange(titleField);
+                        }
+                        if (username.isBlank()) {
+                            actionDeniedColorChange(usernameField);
+                        }
+                        if (password.isBlank()) {
+                            actionDeniedColorChange(passwordField);
+                        }
+                        if (company.isBlank()) {
+                            actionDeniedColorChange(companyField);
+                        }
+                    }
 
                     break;
                 default:
@@ -646,6 +724,8 @@ public class PrimaryController implements Initializable {
             case "company":
             case "producer":
                 descriptionVBox.getChildren().addAll(titleAndCompanyHBox, usernameAndPasswordHBox, submitAndCancelButtonHBox);
+                titleLabel.setText("Name");
+                titleField.getTextField().setPromptText("Name");
                 break;
             default:
                 System.out.println("Something went wrong...");
@@ -654,34 +734,33 @@ public class PrimaryController implements Initializable {
         }
     }
 
-    private void actionDeniedColorChange (SearchField searchField) {
-        // Make the textField red for 1.5 seconds
-        searchField.getAnchorPaneBackground().setStyle("-fx-background-color: " + Info.statusRed + "; -fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + ";");
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                searchField.getAnchorPaneBackground().setStyle("-fx-background-color: " + Info.forgroundColor + "; -fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + ";");
-            }
-        };
-        timer.schedule(timerTask, 1500L);
+    private void actionDeniedColorChange(SearchField searchField) {
+        // Make the textField red
+        if (!searchField.getAnchorPaneBackground().getStyle().contains("-fx-background-color: " + Info.statusRed)) {
+            searchField.getAnchorPaneBackground().setStyle("-fx-background-color: " + Info.statusRed + "; -fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + ";");
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    searchField.getAnchorPaneBackground().setStyle("-fx-background-color: " + Info.forgroundColor + "; -fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + ";");
+                }
+            };
+            timer.schedule(timerTask, 750L);
+        }
     }
-
-
 
     @FXML
     private void handleLogin() {
         if (systemFacade.userLogic.userLogin(usernameTextField.getText(), passwordTextField.getText())) {
+            sidePanelBackground.getChildren().remove(loginAP);
             enableElements(systemFacade.currentUser.getUser().getAccessRoleInt());
 
             // Sets myProductions
             systemFacade.updateMyProductions();
-
             setNameAndRole();
-            sidePanelBackground.getChildren().remove(loginAP);
             sidePanelBackground.getChildren().add(logoutAP);
             handleDeselect();
-            updateProductionList();
+            updateSidePanel();
             textFieldSearchBar.requestFocus();
 
         } else {
@@ -737,6 +816,12 @@ public class PrimaryController implements Initializable {
                 descriptionBodyVBox.getChildren().remove(creditBorderPane);
 
                 sidePanelBackground.getChildren().clear();
+                myLists.getChildren().remove(myProductions);
+                myLists.getChildren().remove(myProducers);
+                myLists.getChildren().remove(myCompanies);
+                myProductionsHeaderHBox.getChildren().remove(addProductionStackPane);
+                myProducersHeaderHBox.getChildren().remove(addProducerStackPane);
+
                 sidePanelBackground.getChildren().add(nameAndRoleAP);
                 sidePanelBackground.getChildren().add(loginAP);
 
@@ -751,18 +836,26 @@ public class PrimaryController implements Initializable {
             case 1:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
-                sidePanelBackground.getChildren().add(mineProduktioner);
+                sidePanelBackground.getChildren().add(myLists);
+                myLists.getChildren().add(myProductions);
+
                 checkCanEdit();
                 break;
             case 2:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
-                sidePanelBackground.getChildren().add(mineProduktionerProductionCompany);
+                sidePanelBackground.getChildren().add(myLists);
+                myLists.getChildren().add(myProductions);
+                myLists.getChildren().add(myProducers);
+                myProductionsHeaderHBox.getChildren().add(addProductionStackPane);
+                myProducersHeaderHBox.getChildren().add(addProducerStackPane);
                 checkCanEdit();
                 break;
             case 3:
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
+                sidePanelBackground.getChildren().add(myLists);
+                myLists.getChildren().add(myCompanies);
                 checkCanEdit();
                 break;
             default:
@@ -1218,6 +1311,7 @@ public class PrimaryController implements Initializable {
         stackPane.setOnMouseClicked(e -> {
             HBox hBox = (HBox) stackPane.getParent();
             descriptionVBox.getChildren().remove(hBox);
+
         });
 
         return stackPane;
@@ -1267,9 +1361,54 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    private void updateProducerList() {
+        producerList.getChildren().clear();
+        List producers = systemFacade.userLogic.getProducersLinkedToProductionCompany(systemFacade.currentUser.getUser().getId());
+        for (Object producer : producers) {
+            HBox hb = new HBox();
+            Circle circle = new Circle(4);
+            AnchorPane ap = new AnchorPane();
+            VBox vb = new VBox();
+            Label name = new Label(producer.toString());
+            producerList.getChildren().add(hb);
+
+            hb.getChildren().addAll(circle, ap);
+            ap.getChildren().add(vb);
+            vb.getChildren().add(name);
+
+            name.setWrapText(true);
+            ap.setUserData(SearchStatus.producers);
+            hb.setSpacing(25);
+            hb.setAlignment(Pos.CENTER_LEFT);
+            ap.setCursor(Cursor.HAND);
+            HBox.setHgrow(ap, Priority.ALWAYS);
+
+            circle.setFill(Info.accentGradient);
+            name.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+        }
+    }
+
+    private void updateProductionCompanyList() {
+        companyList.getChildren().clear();
+
+    }
+
+    private void updateSidePanel() {
+        if (systemFacade.currentUser.getUser().getAccessRoleInt() == 1) {
+            updateProductionList();
+        } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 2) {
+            updateProductionList();
+            updateProducerList();
+        } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 3) {
+            updateProductionList();
+            updateProductionCompanyList();
+        }
+        calculateMyListHeight();
+    }
+
     private void updateProductionList() {
-        programList.getChildren().clear();
-        programListProductionCompany.getChildren().clear();
+        productionList.getChildren().clear();
+
         for (int i = 0; i < systemFacade.currentUser.getMyProductions().size(); i++) {
 
             HBox hb = new HBox();
@@ -1279,11 +1418,7 @@ public class PrimaryController implements Initializable {
             Label title = new Label(systemFacade.currentUser.getMyProductions().get(i).getTitle());
             Label deadline = new Label(systemFacade.currentUser.getMyProductions().get(i).getDeadlineString());
 
-            if (systemFacade.currentUser.getUser().getAccessRoleInt() == 1) {
-                programList.getChildren().add(hb);
-            } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 2) {
-                programListProductionCompany.getChildren().add(hb);
-            }
+            productionList.getChildren().add(hb);
 
             hb.getChildren().addAll(circle, ap);
             ap.getChildren().add(vb);
@@ -1357,13 +1492,13 @@ public class PrimaryController implements Initializable {
             topSortingLabel.setText("Z");
             bottomSortingLabel.setText("A");
         }
-        updateProductionList();
+        updateSidePanel();
     }
 
     @FXML
     private void sortByDeadline() {
         systemFacade.currentUser.sortMyProductionsByDeadline();
-        updateProductionList();
+        updateSidePanel();
     }
 
     private void calculateSearchBarAnchors() {
@@ -1378,6 +1513,26 @@ public class PrimaryController implements Initializable {
             }
         } else {
             AnchorPane.setTopAnchor(searchBarBP, (double) 30);
+        }
+    }
+
+    private void calculateMyListHeight() {
+        // had to hardcode the default list height because "myLists.getHeight()" returns 0
+        double myListHeight = 445;
+        // sets the height to the correct size when maximizing
+        if (App.stage.isMaximized()) {
+            myListHeight = myLists.getHeight();
+        }
+        if (myLists.getChildren().size() >= 1) {
+            // get the spacing between the elements in the list
+            double spacing = (myLists.getChildren().size() - 1) * myLists.getSpacing();
+            // subtract it from the full height
+            double heightWithoutSpacing = myListHeight - spacing;
+            // loop through the list and give each element the height divided by the amount of elements
+            for (int i = 0; i < myLists.getChildren().size(); i++) {
+                AnchorPane anchorPane = (AnchorPane) myLists.getChildren().get(i);
+                anchorPane.setPrefHeight((heightWithoutSpacing) / (myLists.getChildren().size()));
+            }
         }
     }
 
@@ -1519,7 +1674,7 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    private void deleteButtonHoverHandler (MouseEvent event){
+    private void deleteButtonHoverHandler(MouseEvent event) {
 
         StackPane chStck = (StackPane) event.getSource();
         StackPane prStck = (StackPane) chStck.getParent();
@@ -1529,7 +1684,7 @@ public class PrimaryController implements Initializable {
     }
 
     @FXML
-    private void deleteButtonHoverExitHandler (MouseEvent event) {
+    private void deleteButtonHoverExitHandler(MouseEvent event) {
 
         StackPane chStck = (StackPane) event.getSource();
         StackPane prStck = (StackPane) chStck.getParent();
@@ -1585,6 +1740,7 @@ public class PrimaryController implements Initializable {
             App.stage.setMaximized(false);
         }
         calculateSearchBarAnchors();
+        calculateMyListHeight();
     }
 
     @FXML

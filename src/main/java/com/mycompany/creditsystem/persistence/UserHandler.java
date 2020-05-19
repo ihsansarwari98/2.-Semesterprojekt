@@ -138,4 +138,33 @@ public class UserHandler {
             return null;
         }
     }
+
+    public ArrayList<User> getProducersLinkedToProductionCompany(int production_company_id) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT users.user_id, users.name, users.username, users.password, users.date_created, users.access_role FROM users, company_producer_relation WHERE users.access_role = 1 AND company_producer_relation.production_company_id = ? AND users.user_id = company_producer_relation.producer_id");
+            statement.setInt(1, production_company_id);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<User> returnValue = new ArrayList<>();
+            while (sqlReturnValues.next()) {
+                returnValue.add(new User(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getString(3), sqlReturnValues.getString(4), sqlReturnValues.getDate(5), sqlReturnValues.getInt(6)));
+            }
+            return returnValue;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean linkProducerToCompany(int producer_id, int company_id) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("INSERT INTO company_producer_relation (producer_id, production_company_id) VALUES (?, ?)");
+            statement.setInt(1, producer_id);
+            statement.setInt(2, company_id);
+            statement.execute();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }
