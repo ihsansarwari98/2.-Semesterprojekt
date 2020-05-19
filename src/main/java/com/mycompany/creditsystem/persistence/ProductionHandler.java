@@ -99,13 +99,16 @@ public class ProductionHandler {
 
     public boolean deleteProduction(int id) {
         try {
-            PreparedStatement deleteStatement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_relation WHERE production_id = ?");
+            PreparedStatement deleteStatement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_access_relation WHERE production_id = ?");
             deleteStatement1.setInt(1, id);
-            PreparedStatement deleteStatement2 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM productions WHERE production_id = ?");
+            PreparedStatement deleteStatement2 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_credit_role_relation WHERE production_id = ?");
             deleteStatement2.setInt(1, id);
+            PreparedStatement deleteStatement3 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM productions WHERE production_id = ?");
+            deleteStatement3.setInt(1, id);
 
             deleteStatement1.execute();
             deleteStatement2.execute();
+            deleteStatement3.execute();
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();

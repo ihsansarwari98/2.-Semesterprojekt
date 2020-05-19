@@ -6,6 +6,8 @@ import java.net.URL;
 import java.sql.BatchUpdateException;
 import java.util.*;
 
+import com.mycompany.creditsystem.persistence.Credit;
+import com.mycompany.creditsystem.persistence.Production;
 import com.mycompany.creditsystem.persistence.User;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -215,13 +217,18 @@ public class PrimaryController implements Initializable {
     private Rectangle deleteRectangle;
     @FXML
     private HBox titlebarButtonsHBox;
+    @FXML
+    private StackPane noConfirmationPane;
+    @FXML
+    private StackPane yesConfirmationPane;
+    @FXML
+    private Label messageConfirmationLabel;
 
     TextField nameTextField;
     TextField usernameTextField1;
     TextField passwordTextField1;
     TextField companyTextField;
     TextField producerTextField;
-
 
     private boolean scrollableEdit = false;
     private SystemFacade systemFacade = new SystemFacade();
@@ -1468,6 +1475,19 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void handleDeleteProductionClick(MouseEvent event) {
+        backgroundAP.getChildren().add(confirmDeletePane);
+    }
+
+    @FXML
+    private void cancelDelete(MouseEvent event) {
+        backgroundAP.getChildren().remove(confirmDeletePane);
+    }
+
+    @FXML
+    private void proceedDelete(MouseEvent event) {
+            backgroundAP.getChildren().remove(confirmDeletePane);
+            backgroundAP.getChildren().remove(titleAndDescriptionBP);
+            systemFacade.productionLogic.deleteProduction(((Production) systemFacade.getActiveProduction()).getId());
     }
 
     @FXML
@@ -1505,12 +1525,7 @@ public class PrimaryController implements Initializable {
         StackPane prStck = (StackPane) chStck.getParent();
         Rectangle rec = (Rectangle) prStck.getChildren().get(0);
         rec.setFill(Paint.valueOf(Info.backgroundShadeColor));
-        /*
-        temp.setFill(Paint.valueOf(Info.backgroundShadeColor));{
-            Label temp = (Label) event.getSource();
-            StackPane stck = (StackPane)temp.getParent();
-            Rectangle rec = (Rectangle)stck.getChildren().get(0);
-        */
+
     }
 
     @FXML
@@ -1521,15 +1536,6 @@ public class PrimaryController implements Initializable {
         Rectangle rec = (Rectangle) prStck.getChildren().get(0);
         rec.setFill(Paint.valueOf(Info.backgroundColor));
 
-        /*
-        if (event.getSource() instanceof Rectangle) {
-            Rectangle temp = (Rectangle) event.getSource();
-            temp.setFill(Paint.valueOf(Info.backgroundColor));
-        } else if (event.getSource() instanceof Label) {
-            Label temp = (Label) event.getSource();
-            StackPane stck = (StackPane) temp.getParent();
-            Rectangle rec = (Rectangle) stck.getChildren().get(0);
-        }*/
     }
 
     @FXML

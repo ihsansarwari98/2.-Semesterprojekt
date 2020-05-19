@@ -798,7 +798,7 @@
                                        <children>
                                           <StackPane alignment="BOTTOM_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="55.0" prefWidth="200.0">
                                              <children>
-                                                <Label fx:id="saveEditProductionText1" alignment="TOP_CENTER" text="Sure you want to delete this element?" textFill="#5b5656">
+                                                <Label fx:id="messageConfirmLabel" alignment="TOP_CENTER" text="Sure you want to delete this element?" textFill="#5b5656">
                                                    <font>
                                                       <Font name="System Bold" size="16.0" />
                                                    </font>
@@ -815,7 +815,7 @@
                                              <children>
                                                 <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="330.0">
                                                    <children>
-                                                      <StackPane fx:id="noProceedButton" prefHeight="45.0" prefWidth="165.0">
+                                                      <StackPane fx:id="noProceedButton" onMouseClicked="#cancelDelete" prefHeight="45.0" prefWidth="165.0">
                                                          <children>
                                                             <Rectangle fx:id="cancelDeleteRectangle" arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="45.0" stroke="WHITE" strokeType="INSIDE" width="165.0">
                                                                <StackPane.margin>
@@ -830,7 +830,7 @@
                                                                   <Insets />
                                                                </opaqueInsets>
                                                             </Label>
-                                                            <StackPane onMouseEntered="#deleteButtonHoverHandler" onMouseExited="#deleteButtonHoverExitHandler" prefHeight="150.0" prefWidth="200.0" />
+                                                            <StackPane fx:id="noConfirmationPane" onMouseEntered="#deleteButtonHoverHandler" onMouseExited="#deleteButtonHoverExitHandler" prefHeight="150.0" prefWidth="200.0" />
                                                          </children>
                                                          <opaqueInsets>
                                                             <Insets />
@@ -842,7 +842,7 @@
                                                             <Insets right="2.0" />
                                                          </HBox.margin>
                                                       </StackPane>
-                                                      <StackPane fx:id="yesProceedButton" prefHeight="45.0">
+                                                      <StackPane fx:id="yesProceedButton" onMouseClicked="#proceedDelete" prefHeight="45.0">
                                                          <children>
                                                             <Rectangle fx:id="deleteRectangle" arcHeight="30.0" arcWidth="30.0" fill="WHITE" height="45.0" stroke="WHITE" strokeType="INSIDE" width="165.0">
                                                                <StackPane.margin>
@@ -866,7 +866,7 @@
                                                                   </LinearGradient>
                                                                </textFill>
                                                             </Label>
-                                                            <StackPane onMouseEntered="#deleteButtonHoverHandler" onMouseExited="#deleteButtonHoverExitHandler" prefHeight="150.0" prefWidth="200.0" />
+                                                            <StackPane fx:id="yesConfirmationPane" onMouseEntered="#deleteButtonHoverHandler" onMouseExited="#deleteButtonHoverExitHandler" prefHeight="150.0" prefWidth="200.0" />
                                                          </children>
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
