@@ -324,7 +324,7 @@ public class PrimaryController implements Initializable {
         rectangleLogoSplitter.setFill(Info.accentGradient);
 
         // Sets confirmation pop-up
-        confirmPopUpBackground.setStyle("-fx-border-radius: 16 ; -fx-background-radius: 16 ; -fx-background-color:" + Info.backgroundColor + ";");
+        confirmPopUpBackground.setStyle("-fx-border-radius: 16 ; -fx-background-radius: 16 ; -fx-background-color:" + Info.backgroundColor + "; -fx-border-color: DFDFDF;");
         backgroundAP.getChildren().remove(confirmDeletePane);
     }
 
