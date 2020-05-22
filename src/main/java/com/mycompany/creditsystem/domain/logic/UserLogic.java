@@ -3,6 +3,7 @@ package com.mycompany.creditsystem.domain.logic;
 import com.mycompany.creditsystem.persistence.User;
 import com.mycompany.creditsystem.persistence.UserHandler;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class UserLogic {
@@ -37,12 +38,40 @@ public class UserLogic {
         return UserHandler.getInstance().deleteUser(user_id);
     }
 
-    public ArrayList<User> getUsersFromAccessRole(int accessRole) {
-        return UserHandler.getInstance().getUsersFromAccessRole(accessRole);
-    }
-
     public ArrayList<User> getProducersLinkedToProductionCompany(int production_company_id) {
         return UserHandler.getInstance().getProducersLinkedToProductionCompany(production_company_id);
+    }
+
+    public ArrayList<User> getPublicUsers() {
+        return UserHandler.getInstance().getUsersFromAccessRole(0);
+    }
+
+    public ArrayList<User> getPublicUsers(String namePart) {
+        return UserHandler.getInstance().getUsersFromAccessRole(0, namePart);
+    }
+
+    public ArrayList<User> getProducers() {
+        return UserHandler.getInstance().getUsersFromAccessRole(1);
+    }
+
+    public ArrayList<User> getProducers(String namePart) {
+        return UserHandler.getInstance().getUsersFromAccessRole(1, namePart);
+    }
+
+    public ArrayList<User> getProductionCompanies() {
+        return UserHandler.getInstance().getUsersFromAccessRole(2);
+    }
+
+    public ArrayList<User> getProductionCompanies(String namePart) {
+        return UserHandler.getInstance().getUsersFromAccessRole(2, namePart);
+    }
+
+    public ArrayList<User> getAdministrators() {
+        return UserHandler.getInstance().getUsersFromAccessRole(3);
+    }
+
+    public ArrayList<User> getAdministrators(String namePart) {
+        return UserHandler.getInstance().getUsersFromAccessRole(3, namePart);
     }
 
     public boolean linkProducerToCompany(int producer_id, int company_id) {

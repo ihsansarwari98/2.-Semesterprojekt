@@ -7,5 +7,6 @@ public enum SearchStatus {
     roles,
     producers,
     productionCompanies,
+    administrators,
     user
 }

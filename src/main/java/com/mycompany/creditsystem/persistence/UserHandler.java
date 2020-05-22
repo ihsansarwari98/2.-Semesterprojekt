@@ -139,6 +139,23 @@ public class UserHandler {
         }
     }
 
+    public ArrayList<User> getUsersFromAccessRole(int accessRole, String name) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM users WHERE access_role = ? AND name ~* ?");
+            statement.setInt(1, accessRole);
+            statement.setString(2, name);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            ArrayList<User> returnValue = new ArrayList<>();
+            while (sqlReturnValues.next()) {
+                returnValue.add(new User(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getString(3), sqlReturnValues.getString(4), sqlReturnValues.getDate(5), sqlReturnValues.getInt(6)));
+            }
+            return returnValue;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     public ArrayList<User> getProducersLinkedToProductionCompany(int production_company_id) {
         try {
             PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT users.user_id, users.name, users.username, users.password, users.date_created, users.access_role FROM users, company_producer_relation WHERE users.access_role = 1 AND company_producer_relation.production_company_id = ? AND users.user_id = company_producer_relation.producer_id");
