@@ -41,7 +41,7 @@ public class UserHandler {
             if (!sqlReturnValues.next()) {
                 return null;
             }
-            return new User(sqlReturnValues.getInt(1), sqlReturnValues.getString(2));
+            return new User(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getString(3), sqlReturnValues.getString(4), sqlReturnValues.getDate(5), sqlReturnValues.getInt(6));
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;
