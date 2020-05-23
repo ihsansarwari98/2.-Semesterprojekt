@@ -3,6 +3,7 @@ package com.mycompany.creditsystem.presentation;
 import com.mycompany.creditsystem.domain.logic.*;
 
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.*;
 
 import com.mycompany.creditsystem.persistence.Production;
@@ -624,8 +625,8 @@ public class PrimaryController implements Initializable {
                             System.out.println(titleField.getTextField().getText() + " has been added to the system!");
 
                             updateSidePanel();
-
-
+                            loadSearchElements(systemFacade.productionLogic.getProduction(productionTitle));
+                            
                         } else {
                             System.out.println("production already exists");
                             actionDeniedColorChange(titleField);
@@ -682,6 +683,12 @@ public class PrimaryController implements Initializable {
                             systemFacade.userLogic.linkProducerToCompany(userID, companyID);
                             System.out.println(name + " has been linked to " + company);
                             updateSidePanel();
+
+                            titleField.getTextField().appendText("");
+                            usernameField.getTextField().appendText("");
+                            passwordField.getTextField().appendText("");
+                            companyField.getTextField().appendText("");
+
                         }
                     } else {
                         if (name.isBlank()) {
@@ -1167,37 +1174,17 @@ public class PrimaryController implements Initializable {
                 calculateSearchBarAnchors();
                 checkCanEdit();
                 loadUserDescription((User) object);
-
-                //Creating delete producer Button, GUI
-                StackPane deleteProducerButtonPane = new StackPane();
-                Text deleteProducerTxt = new Text("Delete Producer");
-                deleteProducerTxt.setStyle("-fx-text-fill:" + Info.backgroundColor + "; -fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
-                deleteProducerButtonPane.setStyle("-fx-background-color: #c0392b; -fx-background-radius: 16 16 16 16; -fx-padding: 5px 10px 7px 10px;");
-                deleteProducerButtonPane.applyCss();
-                deleteProducerTxt.applyCss();
-                deleteProducerButtonPane.getChildren().add(deleteProducerTxt);
-
-                descriptionVBox.getChildren().add(deleteProducerButtonPane);
-                descriptionVBox.setMargin(deleteProducerButtonPane, new Insets(20,0,0,0));
-                //Setting up functionality
-                deleteProducerButtonPane.setCursor(Cursor.HAND);
-                deleteProducerButtonPane.setOnMouseClicked( e -> {
-                    systemFacade.userLogic.deleteUser(systemFacade.userLogic.getIDFromName(object.toString()));
-                    System.out.println(object.toString() + " has now been deleted");
-
-                    updateProducerList();
-
-                    homeButtonAction();
-                });
+                }
             }
 
             textFieldSearchBar.clear();
             handleDeselect();
             updateProperties();
         }
-    }
+
 
     private void loadUserDescription(User user) {
+        //Sets up the subtext, of the title
         Label subtitle = new Label(user.getAccessRole().toString() + " | Created : " + user.getCreationDate());
         Label relatedProdstitle = new Label("Related Productions");
 
@@ -1214,12 +1201,11 @@ public class PrimaryController implements Initializable {
             VBox vBox = new VBox();
             descriptionVBox.getChildren().add(vBox);
              int x = i;
-             Rectangle split = new Rectangle(30,2, Info.accentGradient);
+             Rectangle split = new Rectangle(30,1, Info.accentGradient);
 
             Label label = new Label(productionsLinkedToUser.get(i).toString());
             label.setCursor(Cursor.HAND);
-            label.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeBig + "; -fx-padding: 8px 0px 16px 0px");
-
+            label.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + "; -fx-padding: 8px 0px 16px 0px");
             vBox.getChildren().addAll(label, split);
             vBox.setAlignment(Pos.CENTER);
 
@@ -1230,7 +1216,34 @@ public class PrimaryController implements Initializable {
                 loadSearchElements(systemFacade.productionLogic.getProduction(productionsLinkedToUser.get(x).toString()));
             });
         }
+        //Creating delete producer Button, GUI
+        StackPane deleteProducerButtonPane = new StackPane();
+        Text deleteProducerTxt = new Text("Delete Producer");
+        Rectangle backgroundColor = new Rectangle();
 
+        backgroundColor.setArcHeight(16);
+        backgroundColor.setArcWidth(16);
+        backgroundColor.setHeight(35);
+        backgroundColor.setWidth(150);
+
+        deleteProducerTxt.setFill(Paint.valueOf(Info.fontColor1));
+
+        backgroundColor.setFill(Info.accentGradient);
+
+        deleteProducerTxt.setStyle("-fx-text-fill:" + Info.backgroundColor + "; -fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+        deleteProducerButtonPane.getChildren().addAll(backgroundColor, deleteProducerTxt);
+
+        descriptionVBox.getChildren().add(deleteProducerButtonPane);
+        descriptionVBox.setMargin(deleteProducerButtonPane, new Insets(20,0,0,0));
+
+        //Setting up functionality
+        deleteProducerButtonPane.setCursor(Cursor.HAND);
+        deleteProducerButtonPane.setOnMouseClicked( e -> {
+            systemFacade.userLogic.deleteUser(systemFacade.userLogic.getIDFromName(user.toString()));
+            System.out.println(user.toString() + " has now been deleted");
+            homeButtonAction();
+            updateSidePanel();
+        });
     }
 
     private void editProduction() {
