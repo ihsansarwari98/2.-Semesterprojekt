@@ -4,6 +4,8 @@ import com.mycompany.creditsystem.persistence.Production;
 import com.mycompany.creditsystem.persistence.User;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.jar.Attributes;
 
 public class CurrentUser {
 
@@ -19,6 +21,10 @@ public class CurrentUser {
     public static User user;
     public static ArrayList<Production> searchHistory = new ArrayList<>();
     public static ArrayList<Production> myProductions = new ArrayList<>();
+    public static ArrayList<User> myProducers = new ArrayList<>();
+    public static ArrayList<User> myProductionCompanies = new ArrayList<>();
+    public static String sortedByStatus = "name";
+
 
     public User getUser() {
         return CurrentUser.user;
@@ -45,35 +51,86 @@ public class CurrentUser {
         return myProductions;
     }
 
+    public ArrayList<User> getMyProducers() {
+        return myProducers;
+    }
+
+    public ArrayList<User> getMyProductionCompanies() {
+        return myProductionCompanies;
+    }
+
+    public void setMyProducers(ArrayList<User> myProducers) {
+        CurrentUser.myProducers = myProducers;
+    }
+
+    public void setMyProductionCompanies(ArrayList<User> myProductionCompanies) {
+        CurrentUser.myProductionCompanies = myProductionCompanies;
+    }
+
     public void setMyProductions(ArrayList<Production> myProductions) {
         CurrentUser.myProductions = myProductions;
     }
 
+    public String getSortedByStatus() {
+        return sortedByStatus;
+    }
+
+    public void setSortedByStatus(String sortedByStatus) {
+        CurrentUser.sortedByStatus = sortedByStatus;
+    }
+
     private boolean nameComparatorShift = true;
-    public boolean sortMyProductionsByName() {
-        ProductionNameComparator nameComparator = new ProductionNameComparator();
+    private boolean deadlineComparatorShift = true;
+
+    public boolean sortByName() {
         if (nameComparatorShift) {
-            CurrentUser.myProductions.sort(nameComparator);
-            nameComparatorShift = false;
-            return true;
+            return sortListsByName();
         } else {
-            CurrentUser.myProductions.sort(nameComparator.reversed());
-            nameComparatorShift = true;
-            return false;
+            return sortListsByNameReversed();
         }
     }
 
-    private boolean deadlineComparatorShift = true;
-    public boolean sortMyProductionsByDeadline() {
-        ProductionDeadlineComparator deadlineComparator = new ProductionDeadlineComparator();
+    public boolean sortByDeadline() {
         if (deadlineComparatorShift) {
-            CurrentUser.myProductions.sort(deadlineComparator);
-            deadlineComparatorShift = false;
-            return true;
+            return sortListsByDeadline();
         } else {
-            CurrentUser.myProductions.sort(deadlineComparator.reversed());
-            deadlineComparatorShift = true;
-            return false;
+            return sortListsByDeadlineReversed();
         }
+    }
+
+    public boolean sortListsByName() {
+        NameComparator nameComparator = new NameComparator();
+        CurrentUser.myProductions.sort(nameComparator);
+        CurrentUser.myProducers.sort(nameComparator);
+        CurrentUser.myProductionCompanies.sort(nameComparator);
+        nameComparatorShift = false;
+        sortedByStatus = "name";
+        return true;
+    }
+
+    public boolean sortListsByNameReversed() {
+        NameComparator nameComparator = new NameComparator();
+        CurrentUser.myProductions.sort(nameComparator.reversed());
+        CurrentUser.myProducers.sort(nameComparator.reversed());
+        CurrentUser.myProductionCompanies.sort(nameComparator.reversed());
+        nameComparatorShift = true;
+        sortedByStatus = "nameReversed";
+        return false;
+    }
+
+    public boolean sortListsByDeadline() {
+        ProductionDeadlineComparator deadlineComparator = new ProductionDeadlineComparator();
+        CurrentUser.myProductions.sort(deadlineComparator);
+        deadlineComparatorShift = false;
+        sortedByStatus = "deadline";
+        return true;
+    }
+
+    public boolean sortListsByDeadlineReversed() {
+        ProductionDeadlineComparator deadlineComparator = new ProductionDeadlineComparator();
+        CurrentUser.myProductions.sort(deadlineComparator.reversed());
+        deadlineComparatorShift = true;
+        sortedByStatus = "deadlineReversed";
+        return false;
     }
 }

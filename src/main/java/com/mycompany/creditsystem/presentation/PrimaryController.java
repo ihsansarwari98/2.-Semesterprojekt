@@ -19,6 +19,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -626,7 +627,7 @@ public class PrimaryController implements Initializable {
 
                             updateSidePanel();
                             loadSearchElements(systemFacade.productionLogic.getProduction(productionTitle));
-                            
+
                         } else {
                             System.out.println("production already exists");
                             actionDeniedColorChange(titleField);
@@ -752,7 +753,7 @@ public class PrimaryController implements Initializable {
             sidePanelBackground.getChildren().remove(loginAP);
             enableElements(systemFacade.currentUser.getUser().getAccessRoleInt());
 
-            // Sets myProductions
+            systemFacade.updateMyLists();
             setNameAndRole();
             sidePanelBackground.getChildren().add(logoutAP);
             handleDeselect();
@@ -891,6 +892,7 @@ public class PrimaryController implements Initializable {
         hBox.getChildren().add(roleSearchField.getStackPane());
         styleSearchResults(roleSearchField);
     }
+
     // Shows the list of credits connected to a production
     private void showCreditList() {
         // Sets properties for the parent VBox
@@ -1060,18 +1062,20 @@ public class PrimaryController implements Initializable {
                         // makes the focus travel a lot smoother
                         for (int j = 0; j < descriptionVBox.getChildren().size(); j++) {
                             HBox hbox = (HBox) descriptionVBox.getChildren().get(j);
-                            StackPane stackPane1 = (StackPane) hbox.getChildren().get(0);
-                            SearchField searchField1 = new SearchField(stackPane1);
-                            StackPane stackPane2 = (StackPane) hbox.getChildren().get(2);
-                            SearchField searchField2 = new SearchField(stackPane2);
-                            if (searchField1.getTextField().equals(focusedSearchField.getTextField())) {
-                                searchField2.getTextField().requestFocus();
-                            } else if (searchField2.getTextField().equals(focusedSearchField.getTextField()) && !(j + 1 >= descriptionVBox.getChildren().size())) {
-                                HBox hboxNext = (HBox) descriptionVBox.getChildren().get(j + 1);
-                                StackPane nextStackPane = (StackPane) hboxNext.getChildren().get(0);
-                                SearchField nextSearchField = new SearchField(nextStackPane);
-                                System.out.println(nextSearchField);
-                                nextSearchField.getTextField().requestFocus();
+                            if (j + 1 > descriptionVBox.getChildren().size()) {
+                                StackPane stackPane1 = (StackPane) hbox.getChildren().get(0);
+                                SearchField searchField1 = new SearchField(stackPane1);
+                                StackPane stackPane2 = (StackPane) hbox.getChildren().get(2);
+                                SearchField searchField2 = new SearchField(stackPane2);
+                                if (searchField1.getTextField().equals(focusedSearchField.getTextField())) {
+                                    searchField2.getTextField().requestFocus();
+                                } else if (searchField2.getTextField().equals(focusedSearchField.getTextField()) && !(j + 1 >= descriptionVBox.getChildren().size())) {
+                                    HBox hboxNext = (HBox) descriptionVBox.getChildren().get(j + 1);
+                                    StackPane nextStackPane = (StackPane) hboxNext.getChildren().get(0);
+                                    SearchField nextSearchField = new SearchField(nextStackPane);
+                                    System.out.println(nextSearchField);
+                                    nextSearchField.getTextField().requestFocus();
+                                }
                             }
                         }
                         // sets the text as the TextField's text or searches for a production
@@ -1174,13 +1178,13 @@ public class PrimaryController implements Initializable {
                 calculateSearchBarAnchors();
                 checkCanEdit();
                 loadUserDescription((User) object);
-                }
             }
-
-            textFieldSearchBar.clear();
-            handleDeselect();
-            updateProperties();
         }
+
+        textFieldSearchBar.clear();
+        handleDeselect();
+        updateProperties();
+    }
 
 
     private void loadUserDescription(User user) {
@@ -1193,15 +1197,17 @@ public class PrimaryController implements Initializable {
 
         //Sets up for "related productions" section
         descriptionVBox.getChildren().addAll(subtitle);
-        if (systemFacade.productionLogic.getProductionsLinkedToUser(user.getId()).size() >= 1) { descriptionVBox.getChildren().addAll(relatedProdstitle); }
+        if (systemFacade.productionLogic.getProductionsLinkedToUser(user.getId()).size() >= 1) {
+            descriptionVBox.getChildren().addAll(relatedProdstitle);
+        }
 
         //Sets up every Production
         ArrayList productionsLinkedToUser = systemFacade.productionLogic.getProductionsLinkedToUser(user.getId());
         for (int i = 0; i < productionsLinkedToUser.size(); i++) {
             VBox vBox = new VBox();
             descriptionVBox.getChildren().add(vBox);
-             int x = i;
-             Rectangle split = new Rectangle(30,1, Info.accentGradient);
+            int x = i;
+            Rectangle split = new Rectangle(30, 1, Info.accentGradient);
 
             Label label = new Label(productionsLinkedToUser.get(i).toString());
             label.setCursor(Cursor.HAND);
@@ -1209,10 +1215,14 @@ public class PrimaryController implements Initializable {
             vBox.getChildren().addAll(label, split);
             vBox.setAlignment(Pos.CENTER);
 
-            label.setOnMouseEntered( event -> { label.setTextFill(Info.accentGradient); });
-            label.setOnMouseExited( event -> { label.setTextFill(Paint.valueOf(Info.forgroundColor)); });
+            label.setOnMouseEntered(event -> {
+                label.setTextFill(Info.accentGradient);
+            });
+            label.setOnMouseExited(event -> {
+                label.setTextFill(Paint.valueOf(Info.forgroundColor));
+            });
 
-            label.setOnMouseClicked( e -> {
+            label.setOnMouseClicked(e -> {
                 loadSearchElements(systemFacade.productionLogic.getProduction(productionsLinkedToUser.get(x).toString()));
             });
         }
@@ -1234,11 +1244,11 @@ public class PrimaryController implements Initializable {
         deleteProducerButtonPane.getChildren().addAll(backgroundColor, deleteProducerTxt);
 
         descriptionVBox.getChildren().add(deleteProducerButtonPane);
-        descriptionVBox.setMargin(deleteProducerButtonPane, new Insets(20,0,0,0));
+        descriptionVBox.setMargin(deleteProducerButtonPane, new Insets(20, 0, 0, 0));
 
         //Setting up functionality
         deleteProducerButtonPane.setCursor(Cursor.HAND);
-        deleteProducerButtonPane.setOnMouseClicked( e -> {
+        deleteProducerButtonPane.setOnMouseClicked(e -> {
             systemFacade.userLogic.deleteUser(systemFacade.userLogic.getIDFromName(user.toString()));
             System.out.println(user.toString() + " has now been deleted");
             homeButtonAction();
@@ -1385,7 +1395,8 @@ public class PrimaryController implements Initializable {
 
     private void updateProducerList() {
         producerList.getChildren().clear();
-        ArrayList producers = systemFacade.userLogic.getProducersLinkedToProductionCompany(systemFacade.currentUser.getUser().getId());
+        ArrayList producers = systemFacade.currentUser.getMyProducers();
+
         for (Object producer : producers) {
             HBox hb = new HBox();
             Circle circle = new Circle(4);
@@ -1421,6 +1432,7 @@ public class PrimaryController implements Initializable {
     }
 
     private void updateSidePanel() {
+        systemFacade.updateMyLists();
         if (systemFacade.currentUser.getUser().getAccessRoleInt() == 1) {
             updateProductionList();
         } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 2) {
@@ -1435,7 +1447,6 @@ public class PrimaryController implements Initializable {
 
     private void updateProductionList() {
         productionList.getChildren().clear();
-        systemFacade.updateMyProductions();
 
         for (int i = 0; i < systemFacade.currentUser.getMyProductions().size(); i++) {
 
@@ -1504,7 +1515,7 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void sortByName() {
-        if (systemFacade.currentUser.sortMyProductionsByName()) {
+        if (systemFacade.currentUser.sortByName()) {
             topSortingLabel.setText("A");
             bottomSortingLabel.setText("Z");
         } else {
@@ -1516,7 +1527,7 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void sortByDeadline() {
-        systemFacade.currentUser.sortMyProductionsByDeadline();
+        systemFacade.currentUser.sortByDeadline();
         updateSidePanel();
     }
 

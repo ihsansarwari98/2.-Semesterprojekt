@@ -30,8 +30,21 @@ public class SystemFacade {
         return activeProduction;
     }
 
-    public void updateMyProductions() {
+    public void updateMyLists() {
         currentUser.setMyProductions(productionLogic.getProductionsLinkedToUser(currentUser.getUser().getId()));
+        currentUser.setMyProducers(userLogic.getProducersLinkedToProductionCompany(currentUser.getUser().getId()));
+        currentUser.setMyProductionCompanies(userLogic.getProductionCompanies());
+        if (currentUser.getSortedByStatus().equals("name")) {
+            currentUser.sortListsByName();
+        } else if (currentUser.getSortedByStatus().equals("nameReversed")) {
+            currentUser.sortListsByNameReversed();
+        } else if (currentUser.getSortedByStatus().equals("deadline")) {
+            currentUser.sortListsByName();
+            currentUser.sortListsByDeadline();
+        } else if (currentUser.getSortedByStatus().equals("deadlineReversed")) {
+            currentUser.sortListsByName();
+            currentUser.sortListsByDeadlineReversed();
+        }
     }
 
     public String getState() {
