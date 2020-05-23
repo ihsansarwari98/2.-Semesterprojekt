@@ -685,11 +685,7 @@ public class PrimaryController implements Initializable {
                             System.out.println(name + " has been linked to " + company);
                             updateSidePanel();
 
-                            titleField.getTextField().appendText("");
-                            usernameField.getTextField().appendText("");
-                            passwordField.getTextField().appendText("");
-                            companyField.getTextField().appendText("");
-
+                            loadSearchElements(systemFacade.userLogic.getUser(name));
                         }
                     } else {
                         if (name.isBlank()) {
@@ -1189,6 +1185,7 @@ public class PrimaryController implements Initializable {
 
     private void loadUserDescription(User user) {
         //Sets up the subtext, of the title
+        System.out.println(user.getAccessRole() + " | " + user.getCreationDate());
         Label subtitle = new Label(user.getAccessRole().toString() + " | Created : " + user.getCreationDate());
         Label relatedProdstitle = new Label("Related Productions");
 
