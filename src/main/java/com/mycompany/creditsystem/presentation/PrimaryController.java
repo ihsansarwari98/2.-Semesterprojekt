@@ -1033,13 +1033,9 @@ public class PrimaryController implements Initializable {
             }
             // Controlling search results and blank search field
         } else if (focusedSearchField.getTextField().getText().isBlank()) {
-            if (focusedSearchField.getTextField().getUserData().equals(SearchStatus.productions) && systemFacade.currentUser.getSearchHistory().size() > 0) {
-                displaySearchHistory();
-                styleSearchResults(focusedSearchField);
-            } else {
-                focusedSearchField.getvBoxResults().getChildren().clear();
-                focusedSearchField.getRectangle().setHeight(focusedSearchField.getAnchorPaneBackground().getHeight());
-            }
+            focusedSearchField.getvBoxResults().getChildren().clear();
+            focusedSearchField.getRectangle().setHeight(focusedSearchField.getAnchorPaneBackground().getHeight());
+            tempUserSearch = "";
         }
         handleSearchFocus();
     }
@@ -1054,26 +1050,29 @@ public class PrimaryController implements Initializable {
                 titleText.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
                 titleText.setOnKeyPressed(e -> {
                     if (e.getCode() == KeyCode.ENTER) {
-
+                        Label label = (Label) e.getSource();
                         // makes the focus travel a lot smoother
-                        for (int j = 0; j < descriptionVBox.getChildren().size(); j++) {
-                            HBox hbox = (HBox) descriptionVBox.getChildren().get(j);
-                            if (j + 1 > descriptionVBox.getChildren().size()) {
-                                StackPane stackPane1 = (StackPane) hbox.getChildren().get(0);
-                                SearchField searchField1 = new SearchField(stackPane1);
-                                StackPane stackPane2 = (StackPane) hbox.getChildren().get(2);
-                                SearchField searchField2 = new SearchField(stackPane2);
-                                if (searchField1.getTextField().equals(focusedSearchField.getTextField())) {
-                                    searchField2.getTextField().requestFocus();
-                                } else if (searchField2.getTextField().equals(focusedSearchField.getTextField()) && !(j + 1 >= descriptionVBox.getChildren().size())) {
-                                    HBox hboxNext = (HBox) descriptionVBox.getChildren().get(j + 1);
-                                    StackPane nextStackPane = (StackPane) hboxNext.getChildren().get(0);
-                                    SearchField nextSearchField = new SearchField(nextStackPane);
-                                    System.out.println(nextSearchField);
-                                    nextSearchField.getTextField().requestFocus();
+                        if (label.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().equals(descriptionVBox)) {
+                            for (int j = 0; j < descriptionVBox.getChildren().size(); j++) {
+                                HBox hbox = (HBox) descriptionVBox.getChildren().get(j);
+                                if (j < descriptionVBox.getChildren().size()) {
+                                    StackPane stackPane1 = (StackPane) hbox.getChildren().get(0);
+                                    SearchField searchField1 = new SearchField(stackPane1);
+                                    StackPane stackPane2 = (StackPane) hbox.getChildren().get(2);
+                                    SearchField searchField2 = new SearchField(stackPane2);
+                                    if (searchField1.getTextField().equals(focusedSearchField.getTextField())) {
+                                        searchField2.getTextField().requestFocus();
+                                    } else if (searchField2.getTextField().equals(focusedSearchField.getTextField()) && !(j + 1 >= descriptionVBox.getChildren().size())) {
+                                        HBox hboxNext = (HBox) descriptionVBox.getChildren().get(j + 1);
+                                        StackPane nextStackPane = (StackPane) hboxNext.getChildren().get(0);
+                                        SearchField nextSearchField = new SearchField(nextStackPane);
+                                        System.out.println(nextSearchField);
+                                        nextSearchField.getTextField().requestFocus();
+                                    }
                                 }
                             }
                         }
+
                         // sets the text as the TextField's text or searches for a production
                         focusedSearchField.getTextField().setText(titleText.getText());
                         if (focusedSearchField.getTextField().getUserData().equals(SearchStatus.productions)) {
@@ -1083,21 +1082,6 @@ public class PrimaryController implements Initializable {
                 });
             } else {
                 titleText.setStyle("-fx-text-fill: " + Info.fontColor2 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
-            }
-        }
-    }
-
-    // Search history
-    private void displaySearchHistory() {
-        searchResults.getChildren().clear();
-        if (systemFacade.currentUser.getSearchHistory() != null) {
-            for (int i = 0; i < systemFacade.currentUser.getSearchHistory().size(); i++) {
-                String title = systemFacade.currentUser.getSearchHistory().get(i).getTitle();
-                AnchorPane ap = new AnchorPane();
-                Label titleText = new Label(title);
-
-                searchResults.getChildren().add(ap);
-                ap.getChildren().addAll(titleText);
             }
         }
     }
@@ -1187,10 +1171,10 @@ public class PrimaryController implements Initializable {
         //Sets up the subtext, of the title
         System.out.println(user.getAccessRole() + " | " + user.getCreationDate());
         Label subtitle = new Label(user.getAccessRole().toString() + " | Created : " + user.getCreationDate());
-        Label relatedProdstitle = new Label("Related Productions");
+        Label relatedProdstitle = new Label("Productions");
 
         subtitle.setStyle("-fx-text-fill: grey; -fx-padding: 20px 0 10px 0;");
-        relatedProdstitle.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+        relatedProdstitle.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeBig + ";");
 
         //Sets up for "related productions" section
         descriptionVBox.getChildren().addAll(subtitle);
@@ -1203,26 +1187,40 @@ public class PrimaryController implements Initializable {
         for (int i = 0; i < productionsLinkedToUser.size(); i++) {
             VBox vBox = new VBox();
             descriptionVBox.getChildren().add(vBox);
-            int x = i;
-            Rectangle split = new Rectangle(30, 1, Info.accentGradient);
+            int production = i;
 
-            Label label = new Label(productionsLinkedToUser.get(i).toString());
-            label.setCursor(Cursor.HAND);
-            label.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + "; -fx-padding: 8px 0px 16px 0px");
-            vBox.getChildren().addAll(label, split);
+            Label productionName = new Label(productionsLinkedToUser.get(i).toString());
+            productionName.setCursor(Cursor.HAND);
+            productionName.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+            vBox.setSpacing(6);
+
+            productionName.applyCss();
+            productionName.layout();
+
+            System.out.println(productionName.prefWidth(-1));
+            System.out.println(productionName.getWidth());
+            Rectangle split = new Rectangle(10, 1, Info.accentGradient);
+
+            if (i + 1 < productionsLinkedToUser.size()) {
+                vBox.getChildren().addAll(productionName, split);
+            } else {
+                vBox.getChildren().addAll(productionName);
+            }
+
             vBox.setAlignment(Pos.CENTER);
 
-            label.setOnMouseEntered(event -> {
-                label.setTextFill(Info.accentGradient);
+            productionName.setOnMouseEntered(event -> {
+                productionName.setTextFill(Info.accentGradient);
             });
-            label.setOnMouseExited(event -> {
-                label.setTextFill(Paint.valueOf(Info.forgroundColor));
+            productionName.setOnMouseExited(event -> {
+                productionName.setTextFill(Paint.valueOf(Info.forgroundColor));
             });
 
-            label.setOnMouseClicked(e -> {
-                loadSearchElements(systemFacade.productionLogic.getProduction(productionsLinkedToUser.get(x).toString()));
+            productionName.setOnMouseClicked(e -> {
+                loadSearchElements(systemFacade.productionLogic.getProduction(productionsLinkedToUser.get(production).toString()));
             });
         }
+
         //Creating delete producer Button, GUI
         StackPane deleteProducerButtonPane = new StackPane();
         Text deleteProducerTxt = new Text("Delete Producer");
