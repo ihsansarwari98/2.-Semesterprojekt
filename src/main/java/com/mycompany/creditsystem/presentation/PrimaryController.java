@@ -10,6 +10,8 @@ import com.mycompany.creditsystem.persistence.User;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -277,7 +279,6 @@ public class PrimaryController implements Initializable {
 
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
-
     }
 
     // Updates the graphical style and fill of the application
@@ -346,6 +347,7 @@ public class PrimaryController implements Initializable {
         // Sets confirmation pop-up
         confirmPopUpBackground.setStyle("-fx-border-radius: 16 ; -fx-background-radius: 16 ; -fx-background-color:" + Info.backgroundColor + "; -fx-border-color: DFDFDF;");
         backgroundAP.getChildren().remove(confirmDeletePane);
+
     }
 
     // Is getting called many times a second
@@ -623,6 +625,7 @@ public class PrimaryController implements Initializable {
 
                             updateSidePanel();
 
+
                         } else {
                             System.out.println("production already exists");
                             actionDeniedColorChange(titleField);
@@ -881,7 +884,6 @@ public class PrimaryController implements Initializable {
         hBox.getChildren().add(roleSearchField.getStackPane());
         styleSearchResults(roleSearchField);
     }
-
     // Shows the list of credits connected to a production
     private void showCreditList() {
         // Sets properties for the parent VBox
@@ -1165,6 +1167,28 @@ public class PrimaryController implements Initializable {
                 calculateSearchBarAnchors();
                 checkCanEdit();
                 loadUserDescription((User) object);
+
+                //Creating delete producer Button, GUI
+                StackPane deleteProducerButtonPane = new StackPane();
+                Text deleteProducerTxt = new Text("Delete Producer");
+                deleteProducerTxt.setStyle("-fx-text-fill:" + Info.backgroundColor + "; -fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+                deleteProducerButtonPane.setStyle("-fx-background-color: #c0392b; -fx-background-radius: 16 16 16 16; -fx-padding: 5px 10px 7px 10px;");
+                deleteProducerButtonPane.applyCss();
+                deleteProducerTxt.applyCss();
+                deleteProducerButtonPane.getChildren().add(deleteProducerTxt);
+
+                descriptionVBox.getChildren().add(deleteProducerButtonPane);
+                descriptionVBox.setMargin(deleteProducerButtonPane, new Insets(20,0,0,0));
+                //Setting up functionality
+                deleteProducerButtonPane.setCursor(Cursor.HAND);
+                deleteProducerButtonPane.setOnMouseClicked( e -> {
+                    systemFacade.userLogic.deleteUser(systemFacade.userLogic.getIDFromName(object.toString()));
+                    System.out.println(object.toString() + " has now been deleted");
+
+                    updateProducerList();
+
+                    homeButtonAction();
+                });
             }
 
             textFieldSearchBar.clear();
@@ -1174,19 +1198,37 @@ public class PrimaryController implements Initializable {
     }
 
     private void loadUserDescription(User user) {
-        Label testLabel1 = new Label("Name: " + user.getName());
-        Label testLabel2 = new Label("Username: " + user.getUsername());
-        Label testLabel4 = new Label("Creation Date: " + user.getCreationDate().toString());
-        Label testLabel5 = new Label("Access Role: " + user.getAccessRole().toString());
-        descriptionVBox.getChildren().addAll(testLabel1, testLabel2, testLabel4, testLabel5);
+        Label subtitle = new Label(user.getAccessRole().toString() + " | Created : " + user.getCreationDate());
+        Label relatedProdstitle = new Label("Related Productions");
 
+        subtitle.setStyle("-fx-text-fill: grey; -fx-padding: 20px 0 10px 0;");
+        relatedProdstitle.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+
+        //Sets up for "related productions" section
+        descriptionVBox.getChildren().addAll(subtitle);
+        if (systemFacade.productionLogic.getProductionsLinkedToUser(user.getId()).size() >= 1) { descriptionVBox.getChildren().addAll(relatedProdstitle); }
+
+        //Sets up every Production
         ArrayList productionsLinkedToUser = systemFacade.productionLogic.getProductionsLinkedToUser(user.getId());
         for (int i = 0; i < productionsLinkedToUser.size(); i++) {
             VBox vBox = new VBox();
             descriptionVBox.getChildren().add(vBox);
+             int x = i;
+             Rectangle split = new Rectangle(30,2, Info.accentGradient);
 
-            Label label = new Label("Production " + (i + 1) + " : " + productionsLinkedToUser.get(i).toString());
-            vBox.getChildren().add(label);
+            Label label = new Label(productionsLinkedToUser.get(i).toString());
+            label.setCursor(Cursor.HAND);
+            label.setStyle("-fx-text-fill: " + Info.forgroundColor + "; -fx-font-size: " + Info.fontSizeBig + "; -fx-padding: 8px 0px 16px 0px");
+
+            vBox.getChildren().addAll(label, split);
+            vBox.setAlignment(Pos.CENTER);
+
+            label.setOnMouseEntered( event -> { label.setTextFill(Info.accentGradient); });
+            label.setOnMouseExited( event -> { label.setTextFill(Paint.valueOf(Info.forgroundColor)); });
+
+            label.setOnMouseClicked( e -> {
+                loadSearchElements(systemFacade.productionLogic.getProduction(productionsLinkedToUser.get(x).toString()));
+            });
         }
 
     }
@@ -1594,7 +1636,9 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void handleDeleteProductionClick(MouseEvent event) {
-        backgroundAP.getChildren().add(confirmDeletePane);
+        if (systemFacade.getActiveProduction() != null) {
+            backgroundAP.getChildren().add(confirmDeletePane);
+        }
     }
 
     @FXML
