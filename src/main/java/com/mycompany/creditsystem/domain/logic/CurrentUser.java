@@ -3,6 +3,7 @@ package com.mycompany.creditsystem.domain.logic;
 import com.mycompany.creditsystem.persistence.Production;
 import com.mycompany.creditsystem.persistence.User;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.jar.Attributes;
@@ -23,6 +24,7 @@ public class CurrentUser {
     public static ArrayList<Production> myProductions = new ArrayList<>();
     public static ArrayList<User> myProducers = new ArrayList<>();
     public static ArrayList<User> myProductionCompanies = new ArrayList<>();
+    public static ArrayList<User> allAdmins = new ArrayList<>();
     public static String sortedByStatus = "name";
 
 
@@ -59,12 +61,20 @@ public class CurrentUser {
         return myProductionCompanies;
     }
 
+    public ArrayList<User> getAllAdmins() {
+        return allAdmins;
+    }
+
     public void setMyProducers(ArrayList<User> myProducers) {
         CurrentUser.myProducers = myProducers;
     }
 
     public void setMyProductionCompanies(ArrayList<User> myProductionCompanies) {
         CurrentUser.myProductionCompanies = myProductionCompanies;
+    }
+
+    public void setAllAdmins(ArrayList<User> allAdmins) {
+        CurrentUser.allAdmins = allAdmins;
     }
 
     public void setMyProductions(ArrayList<Production> myProductions) {
@@ -103,6 +113,7 @@ public class CurrentUser {
         CurrentUser.myProductions.sort(nameComparator);
         CurrentUser.myProducers.sort(nameComparator);
         CurrentUser.myProductionCompanies.sort(nameComparator);
+        CurrentUser.allAdmins.sort(nameComparator);
         nameComparatorShift = false;
         sortedByStatus = "name";
         return true;
@@ -113,6 +124,7 @@ public class CurrentUser {
         CurrentUser.myProductions.sort(nameComparator.reversed());
         CurrentUser.myProducers.sort(nameComparator.reversed());
         CurrentUser.myProductionCompanies.sort(nameComparator.reversed());
+        CurrentUser.allAdmins.sort(nameComparator.reversed());
         nameComparatorShift = true;
         sortedByStatus = "nameReversed";
         return false;

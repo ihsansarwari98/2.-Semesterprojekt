@@ -164,6 +164,10 @@ public class PrimaryController implements Initializable {
     @FXML
     private Rectangle addProducerRectangle2;
     @FXML
+    private Rectangle addAdminRectangle1;
+    @FXML
+    private Rectangle addAdminRectangle2;
+    @FXML
     private ScrollPane producerScrollPaneProductionCompany;
     @FXML
     private Label editProductionText;
@@ -238,7 +242,11 @@ public class PrimaryController implements Initializable {
     @FXML
     private VBox companyList;
     @FXML
+    private VBox adminList;
+    @FXML
     private AnchorPane myCompanies;
+    @FXML
+    private AnchorPane allAdmins;
     @FXML
     private StackPane addProductionStackPane;
     @FXML
@@ -338,6 +346,8 @@ public class PrimaryController implements Initializable {
         addProducerRectangle2.setFill(Info.accentGradient);
         addCompanyRectangle1.setFill(Info.accentGradient);
         addCompanyRectangle2.setFill(Info.accentGradient);
+        addAdminRectangle1.setFill(Info.accentGradient);
+        addAdminRectangle2.setFill(Info.accentGradient);
 
         // -- DESCRIPTION
         descriptionScrollPane.getStyleClass().add("dark-thumb");
@@ -398,7 +408,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleText.setText("Add Production");
     }
 
-
+    @FXML
     private void addProductionCompanyHandler(MouseEvent event) {
         addNewHandler("company");
         descriptionTitleText.setText("Add Company");
@@ -410,6 +420,7 @@ public class PrimaryController implements Initializable {
         descriptionTitleText.setText("Add Producer");
     }
 
+    @FXML
     private void addAdministratorHandler(MouseEvent event) {
         addNewHandler("administrator");
         descriptionTitleText.setText("Add Administrator");
@@ -606,7 +617,7 @@ public class PrimaryController implements Initializable {
                 case "production":
                     String productionTitle = titleField.getTextField().getText();
 
-                    if (!producerField.getTextField().getText().isBlank() && !productionTitle.isBlank()) {
+                    if (!productionTitle.isBlank()) {
 
                         // if the production doesn't exists
                         if (systemFacade.productionLogic.getProductions(productionTitle).size() <= 0) {
@@ -646,6 +657,49 @@ public class PrimaryController implements Initializable {
 
                     break;
                 case "company":
+                    String companyName = titleField.getTextField().getText();
+                    String companyUsername = usernameField.getTextField().getText();
+                    String companyPassword = passwordField.getTextField().getText();
+
+                    if (!companyName.isBlank() && !companyUsername.isBlank() && !companyPassword.isBlank()) {
+                        boolean usernameAvailable = false;
+                        boolean nameAvailable = false;
+
+                        // if the name already exists
+                        if (systemFacade.userLogic.getUser(companyName) == null) {
+                            nameAvailable = true;
+                        } else {
+                            System.out.println("User already exists");
+                            actionDeniedColorChange(titleField);
+                        }
+
+                        // if username already exists
+                        if (!systemFacade.userLogic.isUsernameTaken(companyUsername)) {
+                            usernameAvailable = true;
+                        } else {
+                            System.out.println("username already in use, find another");
+                            actionDeniedColorChange(usernameField);
+                        }
+
+                        if (usernameAvailable && nameAvailable) {
+                            systemFacade.userLogic.createUser(companyName, companyUsername, companyPassword, 2);
+                            System.out.println("User " + companyName + " has been added to the database");
+
+                            updateSidePanel();
+
+                            loadSearchElements(systemFacade.userLogic.getUser(companyName));
+                        }
+                    } else {
+                        if (companyName.isBlank()) {
+                            actionDeniedColorChange(titleField);
+                        }
+                        if (companyUsername.isBlank()) {
+                            actionDeniedColorChange(usernameField);
+                        }
+                        if (companyPassword.isBlank()) {
+                            actionDeniedColorChange(passwordField);
+                        }
+                    }
 
                     break;
                 case "producer":
@@ -662,7 +716,7 @@ public class PrimaryController implements Initializable {
                         if (systemFacade.userLogic.getUser(name) == null) {
                             nameAvailable = true;
                         } else {
-                            System.out.println("Producer already exists");
+                            System.out.println("User already exists");
                             actionDeniedColorChange(titleField);
                         }
 
@@ -703,6 +757,51 @@ public class PrimaryController implements Initializable {
                     }
 
                     break;
+                case "administrator":
+                    String adminName = titleField.getTextField().getText();
+                    String adminUsername = usernameField.getTextField().getText();
+                    String adminPassword = passwordField.getTextField().getText();
+
+                    if (!adminName.isBlank() && !adminUsername.isBlank() && !adminPassword.isBlank()) {
+                        boolean usernameAvailable = false;
+                        boolean nameAvailable = false;
+
+                        // if the name already exists
+                        if (systemFacade.userLogic.getUser(adminName) == null) {
+                            nameAvailable = true;
+                        } else {
+                            System.out.println("User already exists");
+                            actionDeniedColorChange(titleField);
+                        }
+
+                        // if username already exists
+                        if (!systemFacade.userLogic.isUsernameTaken(adminName)) {
+                            usernameAvailable = true;
+                        } else {
+                            System.out.println("username already in use, find another");
+                            actionDeniedColorChange(usernameField);
+                        }
+
+                        if (usernameAvailable && nameAvailable) {
+                            systemFacade.userLogic.createUser(adminName, adminUsername, adminPassword, 3);
+                            System.out.println("User " + adminName + " has been added to the database");
+
+                            updateSidePanel();
+
+                            loadSearchElements(systemFacade.userLogic.getUser(adminName));
+                        }
+                    } else {
+                        if (adminName.isBlank()) {
+                            actionDeniedColorChange(titleField);
+                        }
+                        if (adminUsername.isBlank()) {
+                            actionDeniedColorChange(usernameField);
+                        }
+                        if (adminPassword.isBlank()) {
+                            actionDeniedColorChange(passwordField);
+                        }
+                    }
+                    break;
                 default:
                     System.out.println("Something went wrong...");
                     break;
@@ -715,7 +814,17 @@ public class PrimaryController implements Initializable {
                 descriptionVBox.getChildren().addAll(titleAndCompanyHBox, associatedProducerHBox, submitAndCancelButtonHBox);
                 break;
             case "administrator":
+                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, usernameAndPasswordHBox, submitAndCancelButtonHBox);
+                titleAndCompanyHBox.getChildren().remove(companyVBox);
+                titleLabel.setText("Name");
+                titleField.getTextField().setPromptText("Name");
+                break;
             case "company":
+                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, usernameAndPasswordHBox, submitAndCancelButtonHBox);
+                titleAndCompanyHBox.getChildren().remove(companyVBox);
+                titleLabel.setText("Name");
+                titleField.getTextField().setPromptText("Name");
+                break;
             case "producer":
                 descriptionVBox.getChildren().addAll(titleAndCompanyHBox, usernameAndPasswordHBox, submitAndCancelButtonHBox);
                 titleLabel.setText("Name");
@@ -724,7 +833,6 @@ public class PrimaryController implements Initializable {
             default:
                 System.out.println("Something went wrong...");
                 break;
-
         }
     }
 
@@ -812,6 +920,7 @@ public class PrimaryController implements Initializable {
                 myLists.getChildren().remove(myProductions);
                 myLists.getChildren().remove(myProducers);
                 myLists.getChildren().remove(myCompanies);
+                myLists.getChildren().remove(allAdmins);
                 myProductionsHeaderHBox.getChildren().remove(addProductionStackPane);
                 myProducersHeaderHBox.getChildren().remove(addProducerStackPane);
 
@@ -848,7 +957,10 @@ public class PrimaryController implements Initializable {
                 nameAndRoleAP.getChildren().add(nameAndRole);
                 nameAndRoleAP.getChildren().add(sortingBorderPane);
                 sidePanelBackground.getChildren().add(myLists);
+                myProductionsHeaderHBox.getChildren().add(addProductionStackPane);
+                myProducersHeaderHBox.getChildren().add(addProducerStackPane);
                 myLists.getChildren().add(myCompanies);
+                myLists.getChildren().add(allAdmins);
                 checkCanEdit();
                 break;
             default:
@@ -1169,7 +1281,6 @@ public class PrimaryController implements Initializable {
 
     private void loadUserDescription(User user) {
         //Sets up the subtext, of the title
-        System.out.println(user.getAccessRole() + " | " + user.getCreationDate());
         Label subtitle = new Label(user.getAccessRole().toString() + " | Created : " + user.getCreationDate());
         Label relatedProdstitle = new Label("Productions");
 
@@ -1197,10 +1308,9 @@ public class PrimaryController implements Initializable {
             productionName.applyCss();
             productionName.layout();
 
-            System.out.println(productionName.prefWidth(-1));
-            System.out.println(productionName.getWidth());
             Rectangle split = new Rectangle(10, 1, Info.accentGradient);
 
+            // applies the splitter to every row, besides the last
             if (i + 1 < productionsLinkedToUser.size()) {
                 vBox.getChildren().addAll(productionName, split);
             } else {
@@ -1223,8 +1333,16 @@ public class PrimaryController implements Initializable {
 
         //Creating delete producer Button, GUI
         StackPane deleteProducerButtonPane = new StackPane();
-        Text deleteProducerTxt = new Text("Delete Producer");
         Rectangle backgroundColor = new Rectangle();
+        Text deleteProducerTxt = new Text("Delete User");
+
+        if (user.getAccessRoleInt() == 1) {
+            deleteProducerTxt.setText("Delete Producer");
+        } else if (user.getAccessRoleInt() == 2) {
+            deleteProducerTxt.setText("Delete Company");
+        } else if (user.getAccessRoleInt() == 3) {
+            deleteProducerTxt.setText("Delete Admin");
+        }
 
         backgroundColor.setArcHeight(16);
         backgroundColor.setArcWidth(16);
@@ -1421,9 +1539,70 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    private void updateAdministatorList() {
+        adminList.getChildren().clear();
+        ArrayList admins = systemFacade.currentUser.getAllAdmins();
+
+        for (Object admin : admins) {
+            HBox hb = new HBox();
+            Circle circle = new Circle(4);
+            AnchorPane ap = new AnchorPane();
+            VBox vb = new VBox();
+            Label name = new Label(admin.toString());
+            adminList.getChildren().add(hb);
+
+            hb.getChildren().addAll(circle, ap);
+            ap.getChildren().add(vb);
+            vb.getChildren().add(name);
+
+            name.setWrapText(true);
+            ap.setUserData(admin);
+            hb.setSpacing(25);
+            hb.setAlignment(Pos.CENTER_LEFT);
+            ap.setCursor(Cursor.HAND);
+            HBox.setHgrow(ap, Priority.ALWAYS);
+
+            ap.setOnMouseClicked(e -> {
+                AnchorPane source = (AnchorPane) e.getSource();
+                loadSearchElements(source.getUserData());
+            });
+
+            circle.setFill(Info.accentGradient);
+            name.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+        }
+    }
+
     private void updateProductionCompanyList() {
         companyList.getChildren().clear();
+        ArrayList productionCompanies = systemFacade.currentUser.getMyProductionCompanies();
 
+        for (Object company : productionCompanies) {
+            HBox hb = new HBox();
+            Circle circle = new Circle(4);
+            AnchorPane ap = new AnchorPane();
+            VBox vb = new VBox();
+            Label name = new Label(company.toString());
+            companyList.getChildren().add(hb);
+
+            hb.getChildren().addAll(circle, ap);
+            ap.getChildren().add(vb);
+            vb.getChildren().add(name);
+
+            name.setWrapText(true);
+            ap.setUserData(company);
+            hb.setSpacing(25);
+            hb.setAlignment(Pos.CENTER_LEFT);
+            ap.setCursor(Cursor.HAND);
+            HBox.setHgrow(ap, Priority.ALWAYS);
+
+            ap.setOnMouseClicked(e -> {
+                AnchorPane source = (AnchorPane) e.getSource();
+                loadSearchElements(source.getUserData());
+            });
+
+            circle.setFill(Info.accentGradient);
+            name.setStyle("-fx-text-fill: " + Info.fontColor1 + "; -fx-font-size: " + Info.fontSizeDefault + ";");
+        }
     }
 
     private void updateSidePanel() {
@@ -1434,8 +1613,8 @@ public class PrimaryController implements Initializable {
             updateProductionList();
             updateProducerList();
         } else if (systemFacade.currentUser.getUser().getAccessRoleInt() == 3) {
-            updateProductionList();
             updateProductionCompanyList();
+            updateAdministatorList();
         }
         calculateMyListHeight();
     }

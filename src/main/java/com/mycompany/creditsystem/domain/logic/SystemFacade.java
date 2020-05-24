@@ -33,7 +33,9 @@ public class SystemFacade {
     public void updateMyLists() {
         currentUser.setMyProductions(productionLogic.getProductionsLinkedToUser(currentUser.getUser().getId()));
         currentUser.setMyProducers(userLogic.getProducersLinkedToProductionCompany(currentUser.getUser().getId()));
-        currentUser.setMyProductionCompanies(userLogic.getProductionCompanies());
+        currentUser.setMyProductionCompanies(userLogic.getProductionCompanies()); // admin gets to see all companies
+        currentUser.setAllAdmins(userLogic.getAdministrators());
+
         if (currentUser.getSortedByStatus().equals("name")) {
             currentUser.sortListsByName();
         } else if (currentUser.getSortedByStatus().equals("nameReversed")) {

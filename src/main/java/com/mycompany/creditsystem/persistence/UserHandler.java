@@ -48,6 +48,22 @@ public class UserHandler {
         }
     }
 
+    public User getUser(int user_id) {
+        try {
+            PreparedStatement statement = ConnectionHandler.getInstance().getConnection().prepareStatement("SELECT * FROM users WHERE user_id = ?");
+            statement.setInt(1, user_id);
+            ResultSet sqlReturnValues = statement.executeQuery();
+            if (!sqlReturnValues.next()) {
+                return null;
+            }
+            return new User(sqlReturnValues.getInt(1), sqlReturnValues.getString(2), sqlReturnValues.getString(3), sqlReturnValues.getString(4), sqlReturnValues.getDate(5), sqlReturnValues.getInt(6));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+
     public String encrypt(String password) {
 
         MessageDigest md = null;
@@ -85,7 +101,16 @@ public class UserHandler {
 
     public boolean deleteUser(int user_id) {
         try {
+            User userToDelete = getUser(user_id);
             PreparedStatement statement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM company_producer_relation WHERE producer_id = ?");
+
+            if (userToDelete.getAccessRoleInt() == 2) {
+                statement1 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM company_producer_relation WHERE production_company_id = ?");
+                for (int i = 0; i < getProducersLinkedToProductionCompany(userToDelete.getId()).size(); i++) {
+                    deleteUser(getProducersLinkedToProductionCompany(userToDelete.getId()).get(i).getId());
+                }
+            }
+
             PreparedStatement statement2 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM production_access_relation WHERE user_id = ?");
             PreparedStatement statement3 = ConnectionHandler.getInstance().getConnection().prepareStatement("DELETE FROM users WHERE user_id = ?");
             statement1.setInt(1, user_id);
