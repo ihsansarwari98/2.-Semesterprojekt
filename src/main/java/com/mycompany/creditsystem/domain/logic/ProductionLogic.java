@@ -31,6 +31,19 @@ public class ProductionLogic {
         return ProductionHandler.getInstance().createProduction(production);
     }
 
+    public boolean isDeadlineValid(String deadline) {
+        Production dummyProduction = new Production("Test", deadline);
+        return dummyProduction.setDeadline(deadline) != null;
+    }
+
+    public boolean createProduction(String prodname, String deadline) {
+        Production production = new Production(prodname, deadline);
+        if (production.setDeadline(deadline) == null) {
+            return false;
+        }
+        return ProductionHandler.getInstance().createProduction(production);
+    }
+
     public boolean deleteProduction(int id) {
         return ProductionHandler.getInstance().deleteProduction(id);
     }

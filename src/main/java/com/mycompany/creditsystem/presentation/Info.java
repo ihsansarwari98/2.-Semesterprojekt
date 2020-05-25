@@ -19,6 +19,7 @@ public class Info {
     public static String backgroundColor = "#FFFFFF"; // #FFFFFF
     public static String backgroundShadeColor = "#F7F7F7"; //F7F7F7
     public static String forgroundColor = "#242424"; // #242424
+    public static String unEditableBackgroundColor = "#AAAAAA";
 
     public static int sideBarWidth = 320;
     public static int roundAmount = 25;

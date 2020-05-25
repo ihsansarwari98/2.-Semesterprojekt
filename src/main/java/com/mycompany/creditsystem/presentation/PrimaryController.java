@@ -3,23 +3,20 @@ package com.mycompany.creditsystem.presentation;
 import com.mycompany.creditsystem.domain.logic.*;
 
 import java.net.URL;
-import java.sql.SQLOutput;
 import java.util.*;
 
 import com.mycompany.creditsystem.persistence.Production;
 import com.mycompany.creditsystem.persistence.User;
+
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -37,26 +34,17 @@ import javafx.util.Duration;
 public class PrimaryController implements Initializable {
 
     /*
-     * UserData:
-     * -1   = not a searchable textField
-     * 0    = productions
-     * 1    = credits
-     * 2    = roles
-     *
-     * AccessRole:
+     * AccessRoleInt:
      * 0    = publicUser
      * 1    = producer
      * 2    = productionCompany
      * 3    = admin
-     *
      */
 
     @FXML
     private VBox productionList;
     @FXML
     private TextField textFieldSearchBar;
-    @FXML
-    private StackPane closeButton;
     @FXML
     private AnchorPane menuCurve;
     @FXML
@@ -99,10 +87,6 @@ public class PrimaryController implements Initializable {
     private Circle loginCircle2;
     @FXML
     private Rectangle searchRectangleBG;
-    @FXML
-    private ScrollPane searchResultScrollPane;
-    @FXML
-    private VBox searchResults;
     @FXML
     private Label descriptionTitleText;
     @FXML
@@ -152,14 +136,6 @@ public class PrimaryController implements Initializable {
     @FXML
     private VBox descriptionTitleVBox;
     @FXML
-    private AnchorPane mineProduktionerProductionCompany;
-    @FXML
-    private AnchorPane mineProducereProductionCompany;
-    @FXML
-    private VBox programListProductionCompany;
-    @FXML
-    private VBox producerListProductionCompany;
-    @FXML
     private Rectangle addProducerRectangle1;
     @FXML
     private Rectangle addProducerRectangle2;
@@ -167,14 +143,6 @@ public class PrimaryController implements Initializable {
     private Rectangle addAdminRectangle1;
     @FXML
     private Rectangle addAdminRectangle2;
-    @FXML
-    private ScrollPane producerScrollPaneProductionCompany;
-    @FXML
-    private Label editProductionText;
-    @FXML
-    private Label cancelEditProductionText;
-    @FXML
-    private Label saveEditProductionText;
     @FXML
     private Rectangle editProductionRectangle;
     @FXML
@@ -193,12 +161,6 @@ public class PrimaryController implements Initializable {
     private StackPane deleteProductionButton;
     @FXML
     private VBox descriptionBodyVBox;
-    @FXML
-    private StackPane searchBarStackPane;
-    @FXML
-    private VBox searchBarVBox;
-    @FXML
-    private HBox searchBarHBox;
     @FXML
     private Circle addCreditButton;
     @FXML
@@ -221,18 +183,6 @@ public class PrimaryController implements Initializable {
     private BorderPane confirmDeletePane;
     @FXML
     private AnchorPane confirmPopUpBackground;
-    @FXML
-    private Rectangle cancelDeleteRectangle;
-    @FXML
-    private Rectangle deleteRectangle;
-    @FXML
-    private HBox titlebarButtonsHBox;
-    @FXML
-    private StackPane noConfirmationPane;
-    @FXML
-    private StackPane yesConfirmationPane;
-    @FXML
-    private Label messageConfirmationLabel;
     @FXML
     private VBox producerList;
     @FXML
@@ -258,12 +208,10 @@ public class PrimaryController implements Initializable {
 
     private boolean scrollableEdit = false;
     private String tempUserSearch = "";
-    private boolean selectBlank = true;
     private SystemFacade systemFacade = new SystemFacade();
     private TextField focusedTextField = null;
     private SearchField focusedSearchField = null;
     private SearchField lastSearchField = null;
-    private SearchField productionSearchField = new SearchField(searchBarStackPane, searchRectangleBG, searchBarVBox, searchBarBackground, searchBarHBox, textFieldSearchBar, searchResultScrollPane, searchResults);
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -469,6 +417,9 @@ public class PrimaryController implements Initializable {
         Label producerLabel = new Label("Responsible Producer");
         producerLabel.setTextFill(Info.accentGradient);
         producerLabel.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
+        Label deadlineLabel = new Label("Deadline (dd-MM-yyyy HH:mm)");
+        deadlineLabel.setTextFill(Info.accentGradient);
+        deadlineLabel.setStyle("-fx-font-weight: bold; -fx-font-size: " + Info.fontSizeDefault + ";");
 
         // Setting up HBOXes to create form.
         // Title and company name
@@ -499,12 +450,18 @@ public class PrimaryController implements Initializable {
         usernameAndPasswordHBox.getChildren().addAll(usernameVBox, passwordVBox);
 
         // associated producer
-        HBox associatedProducerHBox = new HBox();
+        HBox producerAndDeadlineHBox = new HBox();
+        producerAndDeadlineHBox.setSpacing(labelAndSearchFieldHBoxSpacing);
         VBox producerVBox = new VBox();
         producerVBox.setAlignment(Pos.TOP_CENTER);
         producerVBox.setSpacing(labelAndSearchFieldVBoxSpacing);
+        VBox deadlineVBox = new VBox();
+        deadlineVBox.setAlignment(Pos.TOP_CENTER);
+        deadlineVBox.setSpacing(labelAndSearchFieldVBoxSpacing);
+
         producerVBox.getChildren().add(producerLabel);
-        associatedProducerHBox.getChildren().add(producerVBox);
+        deadlineVBox.getChildren().add(deadlineLabel);
+        producerAndDeadlineHBox.getChildren().addAll(producerVBox, deadlineVBox);
 
         HBox submitAndCancelButtonHBox = new HBox();
 
@@ -569,6 +526,7 @@ public class PrimaryController implements Initializable {
             companyField.getTextField().setText(systemFacade.currentUser.getUser().getName());
             companyField.getTextField().setEditable(false);
             companyField.getTextField().setCursor(Cursor.DEFAULT);
+            companyField.getAnchorPaneBackground().setStyle("-fx-background-color: " + Info.unEditableBackgroundColor + "; -fx-background-radius: " + Info.roundAmount + "; -fx-border-radius: " + Info.roundAmount + ";");
         }
 
         // sets the usernameSearchField
@@ -598,6 +556,15 @@ public class PrimaryController implements Initializable {
         styleSearchResults(producerField);
         producerField.getTextField().setPromptText("Associated producer");
 
+        // sets the deadline
+        SearchField deadlineField = SearchField.createSearchField(SearchStatus.notSearchable,
+                "",
+                300,
+                NodeOrientation.LEFT_TO_RIGHT);
+        deadlineVBox.getChildren().add(deadlineField.getStackPane());
+        styleSearchResults(deadlineField);
+        deadlineField.getTextField().setPromptText("ex. 12-08-2022 12:00");
+
         // Action method for cancel button
         cancelButtonStackPane.setOnMouseClicked(e -> {
 
@@ -616,29 +583,44 @@ public class PrimaryController implements Initializable {
                 // TODO KODE BODY FOR METODER
                 case "production":
                     String productionTitle = titleField.getTextField().getText();
+                    String deadlineText = deadlineField.getTextField().getText();
 
-                    if (!productionTitle.isBlank()) {
+                    if (!productionTitle.isBlank() && !deadlineText.isBlank()) {
+
+                        boolean deadlineStatus = false;
+                        if (systemFacade.productionLogic.isDeadlineValid(deadlineText)) {
+                            deadlineStatus = true;
+                        }
 
                         // if the production doesn't exists
                         if (systemFacade.productionLogic.getProductions(productionTitle).size() <= 0) {
-                            systemFacade.productionLogic.createProduction(productionTitle);
+                            if (deadlineStatus) {
+                                if (systemFacade.userLogic.getProducers(producerField.getTextField().getText()).size() > 0) {
+                                    systemFacade.productionLogic.createProduction(productionTitle, deadlineText);
 
-                            //Links production to responsible producer
-                            userID = systemFacade.userLogic.getIDFromName(producerField.getTextField().getText());
-                            systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(productionTitle).getId(), userID);
-                            System.out.println(userID + " has been linked to production: " + productionTitle);
+                                    //Links production to responsible producer
+                                    userID = systemFacade.userLogic.getIDFromName(producerField.getTextField().getText());
+                                    systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(productionTitle).getId(), userID);
+                                    System.out.println(userID + " has been linked to production: " + productionTitle);
 
-                            //Links production-Company to responsible producer
-                            userID = systemFacade.userLogic.getIDFromName(companyField.getTextField().getText());
-                            systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(productionTitle).getId(), userID);
-                            System.out.println(userID + " has been linked to production: " + productionTitle);
+                                    //Links production-Company to responsible producer
+                                    userID = systemFacade.userLogic.getIDFromName(companyField.getTextField().getText());
+                                    systemFacade.productionLogic.linkProductionToUser(systemFacade.productionLogic.getProduction(productionTitle).getId(), userID);
+                                    System.out.println(userID + " has been linked to production: " + productionTitle);
 
-                            System.out.println(userID + " is the ID of Responsible Producer");
-                            System.out.println(titleField.getTextField().getText() + " has been added to the system!");
+                                    System.out.println(userID + " is the ID of Responsible Producer");
+                                    System.out.println(titleField.getTextField().getText() + " has been added to the system!");
 
-                            updateSidePanel();
-                            loadSearchElements(systemFacade.productionLogic.getProduction(productionTitle));
-
+                                    updateSidePanel();
+                                    loadSearchElements(systemFacade.productionLogic.getProduction(productionTitle));
+                                } else {
+                                    System.out.println("producer isn't valid");
+                                    actionDeniedColorChange(producerField);
+                                }
+                            } else {
+                                System.out.println("deadline isn't valid");
+                                actionDeniedColorChange(deadlineField);
+                            }
                         } else {
                             System.out.println("production already exists");
                             actionDeniedColorChange(titleField);
@@ -652,6 +634,9 @@ public class PrimaryController implements Initializable {
                         }
                         if (companyField.getTextField().getText().isBlank()) {
                             actionDeniedColorChange(companyField);
+                        }
+                        if (deadlineField.getTextField().getText().isBlank()) {
+                            actionDeniedColorChange(deadlineField);
                         }
                     }
 
@@ -811,7 +796,7 @@ public class PrimaryController implements Initializable {
         // Switch statement to add proper HBoxes depending on addType.
         switch (addType) {
             case "production":
-                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, associatedProducerHBox, submitAndCancelButtonHBox);
+                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, producerAndDeadlineHBox, submitAndCancelButtonHBox);
                 break;
             case "administrator":
                 descriptionVBox.getChildren().addAll(titleAndCompanyHBox, usernameAndPasswordHBox, submitAndCancelButtonHBox);
@@ -1682,7 +1667,6 @@ public class PrimaryController implements Initializable {
         }
 
         focusedSearchField = null;
-        selectBlank = true;
         backgroundAP.requestFocus();
 
     }
