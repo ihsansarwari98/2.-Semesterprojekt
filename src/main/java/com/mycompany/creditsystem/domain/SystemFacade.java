@@ -1,7 +1,6 @@
-package com.mycompany.creditsystem.domain.logic;
+package com.mycompany.creditsystem.domain;
 
 import com.mycompany.creditsystem.persistence.Production;
-import com.mycompany.creditsystem.persistence.RoleHandler;
 
 public class SystemFacade {
 

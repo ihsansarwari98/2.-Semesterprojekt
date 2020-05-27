@@ -1,9 +1,8 @@
-package com.mycompany.creditsystem.domain.logic;
+package com.mycompany.creditsystem.domain;
 
 import com.mycompany.creditsystem.persistence.User;
 import com.mycompany.creditsystem.persistence.UserHandler;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class UserLogic {

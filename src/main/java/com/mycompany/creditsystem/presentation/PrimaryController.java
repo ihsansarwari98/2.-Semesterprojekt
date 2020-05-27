@@ -1,5 +1,6 @@
 package com.mycompany.creditsystem.presentation;
 
+import com.mycompany.creditsystem.domain.SystemFacade;
 import com.mycompany.creditsystem.domain.logic.*;
 
 import java.net.URL;
@@ -796,22 +797,30 @@ public class PrimaryController implements Initializable {
         // Switch statement to add proper HBoxes depending on addType.
         switch (addType) {
             case "production":
-                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, producerAndDeadlineHBox, submitAndCancelButtonHBox);
+                descriptionVBox.getChildren().addAll(titleAndCompanyHBox,
+                        producerAndDeadlineHBox,
+                        submitAndCancelButtonHBox);
                 break;
             case "administrator":
-                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, usernameAndPasswordHBox, submitAndCancelButtonHBox);
+                descriptionVBox.getChildren().addAll(titleAndCompanyHBox,
+                        usernameAndPasswordHBox,
+                        submitAndCancelButtonHBox);
                 titleAndCompanyHBox.getChildren().remove(companyVBox);
                 titleLabel.setText("Name");
                 titleField.getTextField().setPromptText("Name");
                 break;
             case "company":
-                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, usernameAndPasswordHBox, submitAndCancelButtonHBox);
+                descriptionVBox.getChildren().addAll(titleAndCompanyHBox,
+                        usernameAndPasswordHBox,
+                        submitAndCancelButtonHBox);
                 titleAndCompanyHBox.getChildren().remove(companyVBox);
                 titleLabel.setText("Name");
                 titleField.getTextField().setPromptText("Name");
                 break;
             case "producer":
-                descriptionVBox.getChildren().addAll(titleAndCompanyHBox, usernameAndPasswordHBox, submitAndCancelButtonHBox);
+                descriptionVBox.getChildren().addAll(titleAndCompanyHBox,
+                        usernameAndPasswordHBox,
+                        submitAndCancelButtonHBox);
                 titleLabel.setText("Name");
                 titleField.getTextField().setPromptText("Name");
                 break;
