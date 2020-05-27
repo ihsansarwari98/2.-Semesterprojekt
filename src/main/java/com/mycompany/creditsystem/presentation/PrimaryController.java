@@ -1,7 +1,6 @@
 package com.mycompany.creditsystem.presentation;
 
 import com.mycompany.creditsystem.domain.SystemFacade;
-import com.mycompany.creditsystem.domain.logic.*;
 
 import java.net.URL;
 import java.util.*;

@@ -1,4 +1,4 @@
-package com.mycompany.creditsystem.domain;
+package com.mycompany.creditsystem.presentation;
 
 import com.mycompany.creditsystem.presentation.App;
 
