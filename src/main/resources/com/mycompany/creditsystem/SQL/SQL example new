@@ -37,8 +37,8 @@ CREATE TABLE company_producer_relation
 
 CREATE TABLE production_access_relation
 (
-    production_id        INTEGER REFERENCES productions (production_id) NOT NULL,
-    user_id INTEGER REFERENCES users (user_id)             NOT NULL,
+    production_id INTEGER REFERENCES productions (production_id) NOT NULL,
+    user_id       INTEGER REFERENCES users (user_id)             NOT NULL,
     PRIMARY KEY (production_id, user_id)
 );
 
@@ -55,7 +55,7 @@ INSERT INTO users (name, username, password)
 VALUES ('Steffen', '1', '1');
 
 INSERT INTO users (name, username, password, access_role)
-VALUES ('STEVEN LANGSTRØMPE', 'a', 'a','1');
+VALUES ('STEVEN LANGSTRØMPE', 'a', 'a', '1');
 
 INSERT INTO users (name, username, password)
 VALUES ('Jørgen', '2', '2');

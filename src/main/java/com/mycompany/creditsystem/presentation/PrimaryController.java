@@ -378,7 +378,6 @@ public class PrimaryController implements Initializable {
     // Sets up UI for adding a new entity.
     private void addNewHandler(String addType) {
 
-        // TODO Lav Labels over TextFields
         // Removes unnecessary elements
         descriptionTitleVBox.getChildren().remove(editOptionsHBox);
         titleAndDescriptionVBox.getChildren().remove(vBoxHeader);
@@ -387,7 +386,6 @@ public class PrimaryController implements Initializable {
         backgroundAP.getChildren().remove(logoVBox);
         backgroundAP.getChildren().remove(titleAndDescriptionBP);
         backgroundAP.getChildren().add(titleAndDescriptionBP);
-
 
         // Setting up layout for formula
         int searchFieldLength = 300;
@@ -580,7 +578,6 @@ public class PrimaryController implements Initializable {
         submitButtonStackPane.setOnMouseClicked(e -> {
             int userID = 0;
             switch (addType) {
-                // TODO KODE BODY FOR METODER
                 case "production":
                     String productionTitle = titleField.getTextField().getText();
                     String deadlineText = deadlineField.getTextField().getText();

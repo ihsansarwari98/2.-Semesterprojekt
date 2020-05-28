@@ -8,5 +8,5 @@ public enum SearchStatus {
     producers,
     productionCompanies,
     administrators,
-    user
+    users
 }
