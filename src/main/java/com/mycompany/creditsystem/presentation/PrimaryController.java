@@ -304,7 +304,7 @@ public class PrimaryController implements Initializable {
         logoText.setFill(Info.accentGradient);
         rectangleLogoSplitter.setFill(Info.accentGradient);
 
-        // Sets confirmation pop-up
+        // Sets delete-confirmation pop-up
         confirmPopUpBackground.setStyle("-fx-border-radius: 16 ; -fx-background-radius: 16 ; -fx-background-color:" + Info.backgroundColor + "; -fx-border-color: DFDFDF;");
         backgroundAP.getChildren().remove(confirmDeletePane);
 
@@ -662,7 +662,7 @@ public class PrimaryController implements Initializable {
                             System.out.println("username already in use, find another");
                             actionDeniedColorChange(usernameField);
                         }
-
+                        // if the user has filled in a useable name and username
                         if (usernameAvailable && nameAvailable) {
                             systemFacade.userLogic.createUser(companyName, companyUsername, companyPassword, 2);
                             System.out.println("User " + companyName + " has been added to the database");
@@ -843,6 +843,7 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void handleLogin() {
+        //Method for processing user-login
         if (systemFacade.userLogic.userLogin(usernameTextField.getText(), passwordTextField.getText())) {
             sidePanelBackground.getChildren().remove(loginAP);
             enableElements(systemFacade.currentUser.getUser().getAccessRoleInt());
@@ -855,6 +856,7 @@ public class PrimaryController implements Initializable {
             textFieldSearchBar.requestFocus();
 
         } else {
+            // in case of wrong username/password
             enableElements(0);
             System.out.println("password and username doesn't match");
         }
@@ -967,7 +969,7 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void addCredit() {
-
+        // Sets up a new textfield-pair, to write in a credit name, and role
         HBox hBox = new HBox();
         hBox.setSpacing(20);
 
@@ -1044,6 +1046,7 @@ public class PrimaryController implements Initializable {
     }
 
     private void styleSearchResults(SearchField searchField) {
+        // Styles the typeahead-options
         searchField.getRectangle().setFill(Info.accentGradient);
         searchField.getRectangle().setArcHeight(40);
         searchField.getRectangle().setArcWidth(40);
@@ -1091,6 +1094,7 @@ public class PrimaryController implements Initializable {
 
     // Calculates and sets the height of the search result tab
     private void calculateSearchResultsHeight(SearchField searchField, Label titleText) {
+        //Calculates the height of the typeahead-/result-bar
         if (searchField.getvBoxResults().getChildren().size() == 0) {
             searchField.getRectangle().setHeight(searchField.getAnchorPaneBackground().prefHeight(-1)); // no results
         } else if (searchField.getvBoxResults().getChildren().size() < Info.visibleResults) { // Maximum amount of search results shown
@@ -1359,6 +1363,7 @@ public class PrimaryController implements Initializable {
         });
     }
 
+    //Sets up the editing-aspect of a production
     private void editProduction() {
         if (systemFacade.getActiveProduction() != null) {
             int searchFieldLength = 300;
@@ -1496,6 +1501,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    // Updates the producer-pane, in the sidebar
     private void updateProducerList() {
         producerList.getChildren().clear();
         ArrayList producers = systemFacade.currentUser.getMyProducers();
@@ -1529,6 +1535,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    // Updates the administrator-pane, in the sidebar
     private void updateAdministatorList() {
         adminList.getChildren().clear();
         ArrayList admins = systemFacade.currentUser.getAllAdmins();
@@ -1562,6 +1569,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    // Updates the productioncompany-pane, in the sidebar
     private void updateProductionCompanyList() {
         companyList.getChildren().clear();
         ArrayList productionCompanies = systemFacade.currentUser.getMyProductionCompanies();
@@ -1595,6 +1603,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    //Updates everything in the sidebar, for the current-user
     private void updateSidePanel() {
         systemFacade.updateMyLists();
         if (systemFacade.currentUser.getUser().getAccessRoleInt() == 1) {
